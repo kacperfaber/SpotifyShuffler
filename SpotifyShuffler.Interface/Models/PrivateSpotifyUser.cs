@@ -29,6 +29,6 @@ namespace SpotifyShuffler.Interface
         public ProductType Product { get; set; }
         
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public SpotifyType Type { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SpotifyShuffler.Interface.Enums;
 
 namespace SpotifyShuffler.Interface
 {
@@ -23,7 +24,7 @@ namespace SpotifyShuffler.Interface
         public string Name { get; set; }
         
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public SpotifyType Type { get; set; }
         
         [JsonProperty("uri")]
         public string Uri { get; set; }
