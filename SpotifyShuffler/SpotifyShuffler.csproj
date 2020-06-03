@@ -4,4 +4,9 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\SpotifyShuffler.Database\SpotifyShuffler.Database.csproj" />
+      <ProjectReference Include="..\SpotifyShuffler.Interface\SpotifyShuffler.Interface.csproj" />
+    </ItemGroup>
+
 </Project>

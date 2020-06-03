@@ -5,11 +5,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Models" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="1.0.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="1.0.1" />
+      <ProjectReference Include="..\SpotifyShuffler.Interface\SpotifyShuffler.Interface.csproj" />
     </ItemGroup>
 
 </Project>
