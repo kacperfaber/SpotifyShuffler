@@ -30,7 +30,7 @@ namespace SpotifyShuffler.Interface
         public Paging<SimpleSpotifyTrack> Tracks { get; set; }
         
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public SpotifyType Type { get; set; }
         
         [JsonProperty("uri")]
         public string Uri { get; set; }

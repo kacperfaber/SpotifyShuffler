@@ -2,8 +2,14 @@
 
 namespace SpotifyShuffler.Interface
 {
-    public class SimpleSpotifyArtist
+    public class SpotifyArtist
     {
+        [JsonProperty("followers")]
+        public SpotifyFollowers Followers { get; set; }
+        
+        [JsonProperty("genres")]
+        public string[] Genres { get; set; }
+        
         [JsonProperty("href")]
         public string Href { get; set; }
         
@@ -12,11 +18,5 @@ namespace SpotifyShuffler.Interface
         
         [JsonProperty("name")]
         public string Name { get; set; }
-        
-        [JsonProperty("type")]
-        public SpotifyType Type { get; set; }
-        
-        [JsonProperty("uri")]
-        public string Uri { get; set; }
     }
 }
