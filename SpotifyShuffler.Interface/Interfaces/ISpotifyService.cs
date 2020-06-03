@@ -11,7 +11,5 @@
         Paging<SavedTrack> GetUserSavedTracks();
 
         Paging<SimpleSpotifyPlaylist> GetUserSavedPlaylists();
-        
-        
     }
 }
