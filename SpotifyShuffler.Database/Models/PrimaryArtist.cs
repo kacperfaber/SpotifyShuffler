@@ -14,7 +14,7 @@ namespace SpotifyShuffler.Database.Models
 
         public string Name { get; set; }
         
-        [InverseProperty("Artist")]
+        [InverseProperty("PrimaryArtist")]
         public List<Track> Tracks { get; set; }
     }
 }
