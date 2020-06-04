@@ -15,7 +15,7 @@ namespace SpotifyShuffler.Database.Models
 
         public Guid OwnerId { get; set; }
 
-        [InverseProperty("Playlist")]
+        [InverseProperty("PlaylistPrototype")]
         public List<Track> Tracks { get; set; }
 
         public string DisplayName { get; set; }
