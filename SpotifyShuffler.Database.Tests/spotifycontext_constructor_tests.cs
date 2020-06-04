@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using SpotifyShuffler.Database.Contexts;
+using SpotifyShuffler.Database.Models;
 
 namespace SpotifyShuffler.Database.Tests
 {
@@ -31,6 +34,33 @@ namespace SpotifyShuffler.Database.Tests
         public void dont_throws_exceptions_when_saving_no_changes()
         {
             Assert.DoesNotThrow(() => exec().SaveChanges());
+        }
+
+        [Test]
+        public void dont_throws_exception_when_adding_new_track()
+        {
+            Track track = new Track
+            {
+                Id = Guid.NewGuid(),
+                Name = "Somewhere i belong",
+                GeneratedAt = DateTime.Now,
+                PrimaryArtist = new PrimaryArtist()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Linkin Park",
+                    SpotifyId = "XD"
+                },
+                DurationMilliseconds = 95825,
+                SpotifyId = "spotify:xd"
+            };
+
+            SpotifyContext ctx = exec();
+            
+            Assert.DoesNotThrow(() =>
+            {
+                ctx.Tracks.Add(track);
+                ctx.SaveChanges();
+            });
         }
     }
 }
