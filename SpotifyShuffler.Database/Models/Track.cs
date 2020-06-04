@@ -17,19 +17,19 @@ namespace SpotifyShuffler.Database.Models
 
         public DateTime GeneratedAt { get; set; }
 
-        [ForeignKey("ArtistId")]
         public PrimaryArtist PrimaryArtist { get; set; }
 
+        [ForeignKey("PrimaryArtist")]
         public Guid ArtistId { get; set; }
 
-        [ForeignKey("PlaylistPrototypeId")]
         public PlaylistPrototype PlaylistPrototype { get; set; }
 
+        [ForeignKey("PlaylistPrototype")]
         public Guid PlaylistPrototypeId { get; set; }
 
-        [ForeignKey("PlaylistId")]
         public Playlist Playlist { get; set; }
 
+        [ForeignKey("PlaylistId")]
         public Guid PlaylistId { get; set; }
     }
 }
