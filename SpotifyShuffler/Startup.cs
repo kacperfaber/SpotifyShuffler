@@ -27,6 +27,8 @@ namespace SpotifyShuffler
             app.UseRouting();
 
             app.UseMvc(x => x.MapRoute("default", "{Controller}/{Action}"));
+
+            app.UseHttpsRedirection();
         }
     }
 }

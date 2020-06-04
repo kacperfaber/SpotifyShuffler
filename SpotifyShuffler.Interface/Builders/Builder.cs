@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpotifyShuffler.Interface.Builders
+namespace SpotifyShuffler.Interface
 {
     public class Builder<TModel, TBuilder>
         where TModel : class

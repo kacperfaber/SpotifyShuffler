@@ -1,6 +1,4 @@
-﻿using SpotifyShuffler.Interface.Interfaces;
-
-namespace SpotifyShuffler.Interface.Types
+﻿namespace SpotifyShuffler.Interface
 {
     public class SpotifyService
     {

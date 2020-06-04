@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SpotifyShuffler.Interface.Enums
+namespace SpotifyShuffler.Interface
 {
     public enum AlbumType
     {
