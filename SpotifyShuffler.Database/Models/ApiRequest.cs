@@ -18,19 +18,19 @@ namespace SpotifyShuffler.Database.Models
 
         public DateTime? SendedAt { get; set; }
 
-        [ForeignKey("ResponseId")]
         public ApiResponse Response { get; set; }
 
+        [ForeignKey("Response")]
         public Guid ResponseId { get; set; }
 
-        [ForeignKey("AuthorizationId")]
         public Authorization Authorization { get; set; }
 
+        [ForeignKey("Authorization")]
         public Guid AuthorizationId { get; set; }
 
-        [ForeignKey("AuthorizedUserId")]
         public User AuthorizedUser { get; set; }
 
+        [ForeignKey("AuthorizedUser")]
         public Guid AuthorizedUserId { get; set; }
     }
 }

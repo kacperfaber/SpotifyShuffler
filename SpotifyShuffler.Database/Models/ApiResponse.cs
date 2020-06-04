@@ -9,9 +9,9 @@ namespace SpotifyShuffler.Database.Models
         [Key]
         public Guid Id { get; set; }
 
-        [ForeignKey("RequestId")]
         public ApiRequest Request { get; set; }
 
+        [ForeignKey("Request")]
         public Guid RequestId { get; set; }
 
         public DateTime ResponsedAt { get; set; }

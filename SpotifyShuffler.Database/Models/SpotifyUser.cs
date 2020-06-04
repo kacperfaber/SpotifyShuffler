@@ -22,9 +22,9 @@ namespace SpotifyShuffler.Database.Models
 
         public string Country { get; set; }
 
-        [ForeignKey("UserId")]
         public User User { get; set; }
         
+        [ForeignKey("User")]
         public Guid UserId { get; set; }
     }
 }

@@ -10,9 +10,9 @@ namespace SpotifyShuffler.Database.Models
         [Key]
         public Guid Id { get; set; }
 
-        [ForeignKey("OwnerId")]
         public User Owner { get; set; }
 
+        [ForeignKey("Owner")]
         public Guid OwnerId { get; set; }
 
         [InverseProperty("PlaylistPrototype")]

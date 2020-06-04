@@ -16,14 +16,14 @@ namespace SpotifyShuffler.Database.Models
 
         public string Description { get; set; }
 
-        [ForeignKey("OwnerId")]
         public User Owner { get; set; }
 
+        [ForeignKey("Owner")]
         public Guid OwnerId { get; set; }
 
-        [ForeignKey("SpotifyOwnerId")]
         public SpotifyUser SpotifyOwner { get; set; }
 
+        [ForeignKey("SpotifyOwner")]
         public Guid SpotifyOwnerId { get; set; }
 
         public DateTime GeneratedAt { get; set; }
