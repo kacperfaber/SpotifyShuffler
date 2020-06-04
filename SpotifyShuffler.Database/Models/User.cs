@@ -21,6 +21,10 @@ namespace SpotifyShuffler.Database.Models
         [InverseProperty("Owner")]
         public List<Playlist> Playlists { get; set; }
 
+        [InverseProperty("AuthorizedUser")]
         public List<Authorization> Authorizations { get; set; }
+
+        [InverseProperty("")]
+        public List<ApiRequest> ApiRequests { get; set; }
     }
 }
