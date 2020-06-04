@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
-using SpotifyShuffler.Interface.Interfaces;
 
-namespace SpotifyShuffler.Interface.Types
+namespace SpotifyShuffler.Interface
 {
     public class JsonDeserializer : IJsonDeserializer
     {

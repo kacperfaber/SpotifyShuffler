@@ -1,6 +1,5 @@
 ﻿using System;
 using Newtonsoft.Json;
-using SpotifyShuffler.Interface.Enums;
 
 namespace SpotifyShuffler.Interface
 {

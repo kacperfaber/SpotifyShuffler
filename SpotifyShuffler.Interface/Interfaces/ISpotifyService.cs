@@ -1,4 +1,4 @@
-﻿namespace SpotifyShuffler.Interface.Interfaces
+﻿namespace SpotifyShuffler.Interface
 {
     public interface ISpotifyService
     {

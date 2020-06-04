@@ -1,6 +1,4 @@
-﻿using SpotifyShuffler.Interface.Types;
-
-namespace SpotifyShuffler.Interface.Builders
+﻿namespace SpotifyShuffler.Interface
 {
     public class AuthorizationBuilder : Builder<Authorization, AuthorizationBuilder>
     {
