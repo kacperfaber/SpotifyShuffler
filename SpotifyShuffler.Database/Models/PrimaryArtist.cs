@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SpotifyShuffler.Database.Models
 {
-    public class Artist
+    public class PrimaryArtist
     {
         [Key]
         public Guid Id { get; set; }

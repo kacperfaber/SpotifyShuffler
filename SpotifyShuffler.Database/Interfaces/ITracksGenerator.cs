@@ -6,6 +6,6 @@ namespace SpotifyShuffler.Database.Interfaces
 {
     public interface ITracksGenerator
     {
-        IEnumerable<Track> GenerateTracks(object n = null);
+        IEnumerable<Track> GenerateTracks(SpotifyPlaylist playlist);
     }
 }
