@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Net.Http;
+using SpotifyShuffler.Database.Enums;
 
 namespace SpotifyShuffler.Database.Models
 {
