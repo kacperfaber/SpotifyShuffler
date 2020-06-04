@@ -28,6 +28,7 @@ namespace SpotifyShuffler.Database.Models
 
         public DateTime GeneratedAt { get; set; }
 
+        [InverseProperty("Playlist")]
         public List<Track> Tracks { get; set; }
     }
 }
