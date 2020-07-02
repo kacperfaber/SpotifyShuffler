@@ -17,13 +17,11 @@ namespace SpotifyShuffler.Database.Contexts
 
         public DbSet<Playlist> Playlists { get; set; }
 
-        public DbSet<Authorization> Authorizations { get; set; }
+        public SpotifyContext(DbContextOptions options) : base(options)
+        {
+        }
 
-        public DbSet<ApiRequest> ApiRequests { get; set; }
-
-        public DbSet<ApiResponse> ApiResponses { get; set; }
-
-        public SpotifyContext(DbContextOptions<SpotifyContext> options) : base(options)
+        public SpotifyContext()
         {
         }
     }

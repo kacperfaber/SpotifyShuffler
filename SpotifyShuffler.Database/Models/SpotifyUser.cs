@@ -14,17 +14,10 @@ namespace SpotifyShuffler.Database.Models
 
         public string Name { get; set; }
 
-        public bool HasPrivateData { get; set; }
-
         public string Email { get; set; }
 
         public ProductType ProductType { get; set; }
 
         public string Country { get; set; }
-
-        public User User { get; set; }
-        
-        [ForeignKey("User")]
-        public Guid UserId { get; set; }
     }
 }

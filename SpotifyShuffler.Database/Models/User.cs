@@ -10,9 +10,9 @@ namespace SpotifyShuffler.Database.Models
         [Key]
         public Guid Id { get; set; }
 
+        [ForeignKey("SpotifyUserId")]
         public SpotifyUser SpotifyUser { get; set; }
 
-        [ForeignKey("SpotifyUser")]
         public Guid SpotifyUserId { get; set; }
 
         [InverseProperty("Owner")]
@@ -20,11 +20,5 @@ namespace SpotifyShuffler.Database.Models
 
         [InverseProperty("Owner")]
         public List<Playlist> Playlists { get; set; }
-
-        [InverseProperty("AuthorizedUser")]
-        public List<Authorization> Authorizations { get; set; }
-
-        [InverseProperty("AuthorizedUser")]
-        public List<ApiRequest> ApiRequests { get; set; }
     }
 }
