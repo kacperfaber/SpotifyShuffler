@@ -11,7 +11,7 @@ namespace SpotifyShuffler.Database.Tests
     {
         SpotifyContext exec()
         {
-            DbContextOptions<SpotifyContext> options = new DbContextOptionsBuilder<SpotifyContext>()
+            DbContextOptions options = new DbContextOptionsBuilder()
                 .UseInMemoryDatabase("testdb2")
                 .Options;
 

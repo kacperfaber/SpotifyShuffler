@@ -18,18 +18,25 @@ namespace SpotifyShuffler.Database.Tests
         }
 
         [Test]
-        public void SpotifyContext_has_no_empty_constructor()
+        public void SpotifyContext_has_empty_constructor()
         {
-            Assert.IsEmpty(typeof(SpotifyContext).GetConstructors().Where(x => x.GetParameters().Length == 0));
+            Assert.IsNotEmpty(typeof(SpotifyContext).GetConstructors().Where(x => x.GetParameters().Length == 0));
         }
 
         [Test]
-        public void SpotifyContext_has_constructor_with_DbContextOptions_or_DbContextOptions_of_SpotifyContext()
+        public void has_parametrized_constructor()
         {
-            ConstructorInfo[] constructors = typeof(SpotifyContext).GetConstructors();
-            ConstructorInfo ctor = constructors.SingleOrDefault(x => x.GetParameters().FirstOrDefault(x => x.ParameterType == typeof(DbContextOptions<SpotifyContext>) || x.ParameterType == typeof(DbContextOptions)) != null);
-            
-            Assert.IsNotNull(ctor);
+            Assert.IsNotEmpty(typeof(SpotifyContext).GetConstructors().Where(x => x.GetParameters().Any()));
+        }
+
+        [Test]
+        public void has_constructor_with_single_DbContextOptions_parameter()
+        {
+            object ctor = typeof(SpotifyContext)
+                .GetConstructors()
+                .SingleOrDefault(x => x.GetParameters().FirstOrDefault()?.ParameterType == typeof(DbContextOptions));
+
+            Assert.NotNull(ctor);
         }
 
         [TestCase(typeof(Track))]
@@ -38,14 +45,11 @@ namespace SpotifyShuffler.Database.Tests
         [TestCase(typeof(SpotifyUser))]
         [TestCase(typeof(PlaylistPrototype))]
         [TestCase(typeof(Playlist))]
-        [TestCase(typeof(SpotifyShuffler.Database.Models.Authorization))]
-        [TestCase(typeof(ApiRequest))]
-        [TestCase(typeof(ApiResponse))]
         public void SpotifyContext_has_DbSet_for(Type dbsetOf)
         {
             Type dbSet = typeof(DbSet<>).MakeGenericType(dbsetOf);
             PropertyInfo property = typeof(SpotifyContext).GetProperties().SingleOrDefault(x => x.PropertyType == dbSet);
-            
+
             Assert.NotNull(property);
         }
     }
