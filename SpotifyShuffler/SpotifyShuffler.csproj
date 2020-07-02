@@ -9,6 +9,8 @@
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
+      <ProjectReference Include="..\SpotifyShuffler.Database\SpotifyShuffler.Database.csproj" />
+      <ProjectReference Include="..\SpotifyShuffler.Interface\SpotifyShuffler.Interface.csproj" />
     </ItemGroup>
 
 </Project>
