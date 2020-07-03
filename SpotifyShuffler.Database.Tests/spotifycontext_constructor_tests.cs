@@ -37,28 +37,13 @@ namespace SpotifyShuffler.Database.Tests
         }
 
         [Test]
-        public void dont_throws_exception_when_adding_new_track()
+        public void dont_throws_exception_when_adding_new_PlaylistPrototypeData()
         {
-            Track track = new Track
-            {
-                Id = Guid.NewGuid(),
-                Name = "Somewhere i belong",
-                GeneratedAt = DateTime.Now,
-                PrimaryArtist = new PrimaryArtist()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Linkin Park",
-                    SpotifyId = "XD"
-                },
-                DurationMilliseconds = 95825,
-                SpotifyId = "spotify:xd"
-            };
-
             SpotifyContext ctx = exec();
             
             Assert.DoesNotThrow(() =>
             {
-                ctx.Tracks.Add(track);
+                ctx.PlaylistPrototypeDatas.Add(new PlaylistPrototypeData("title", "desc"));
                 ctx.SaveChanges();
             });
         }
