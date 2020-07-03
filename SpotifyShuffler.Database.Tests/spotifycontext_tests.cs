@@ -39,10 +39,7 @@ namespace SpotifyShuffler.Database.Tests
             Assert.NotNull(ctor);
         }
 
-        [TestCase(typeof(Track))]
-        [TestCase(typeof(PrimaryArtist))]
         [TestCase(typeof(User))]
-        [TestCase(typeof(SpotifyUser))]
         [TestCase(typeof(PlaylistPrototype))]
         [TestCase(typeof(Playlist))]
         public void SpotifyContext_has_DbSet_for(Type dbsetOf)
