@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +35,8 @@ namespace SpotifyShuffler
                 {
                     opts.ClientId = Configuration["Authentication:Spotify:ClientId"];
                     opts.ClientSecret = Configuration["Authentication:Spotify:ClientSecret"];
-                    
+                    opts.SaveTokens = true;
+
                     opts.Scope.Add("playlist-modify-private");
                     opts.Scope.Add("playlist-modify-public");
                     opts.Scope.Add("user-read-email");
@@ -61,6 +63,9 @@ namespace SpotifyShuffler
             app.UseMvc(x => x.MapRoute("default", "{Controller}/{Action}"));
 
             app.UseHttpsRedirection();
+            
+            app.UseAuthentication();
+            app.UseAuthorization();
         }
     }
 }

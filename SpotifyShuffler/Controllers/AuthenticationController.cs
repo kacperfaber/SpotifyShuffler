@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyShuffler.Database.Models;
+using SpotifyShuffler.Models;
 
 namespace SpotifyShuffler.Controllers
 {
@@ -17,23 +22,37 @@ namespace SpotifyShuffler.Controllers
             UserManager = userManager;
         }
 
-        [AllowAnonymous]
         [HttpGet("login")]
         public IActionResult Login()
         {
-            AuthenticationProperties properties = new AuthenticationProperties
-            {
-                RedirectUri = "/callback"
-            };
-            
+            AuthenticationProperties properties = SignInManager.ConfigureExternalAuthenticationProperties("Spotify", "/callback");
+
             return new ChallengeResult("Spotify", properties);
         }
 
-        [AllowAnonymous]
         [HttpGet("callback")]
-        public IActionResult ExternalCallback()
+        public async Task<IActionResult> ExternalCallback()
         {
-            return Content("callback");
+            ExternalLoginInfo loginInfo = await SignInManager.GetExternalLoginInfoAsync();
+
+            AuthenticationProperties properties = new AuthenticationProperties();
+            properties.StoreTokens(loginInfo.AuthenticationTokens);
+            properties.IsPersistent = true;
+
+            User user = new User
+            {
+                Id = Guid.NewGuid(),
+                Email = loginInfo.Principal.FindFirst(ClaimTypes.Email).Value,
+                UserName = loginInfo.Principal.FindFirst(ClaimTypes.Name).Value
+            };
+
+            UserLoginInfo userLoginInfo = new UserLoginInfo(loginInfo.LoginProvider, loginInfo.ProviderKey, loginInfo.ProviderDisplayName);
+
+            IdentityResult identityResult = await UserManager.CreateAsync(user);
+            await UserManager.AddLoginAsync(user, userLoginInfo);
+            await SignInManager.SignInAsync(user, properties);
+
+            return View("SuccessfullyLoggedIn", new SuccessfullyLoggedInModel {User = user});
         }
     }
 }
