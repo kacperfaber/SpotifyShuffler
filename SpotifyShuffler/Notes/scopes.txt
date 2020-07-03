@@ -1,0 +1,6 @@
+required scopes...
+
+playlist-modify-private // for creating private playlists, and changing playlist details. and others...
+playlist-modify-public 	// creating public playlists.
+user-read-private 		// reading subscription details - ACTUALLY REDUNDANT
+user-read-email 		// reading email
