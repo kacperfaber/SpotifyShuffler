@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SpotifyShuffler.Database.Contexts;
@@ -16,6 +17,13 @@ namespace SpotifyShuffler
 {
     public class Startup
     {
+        public IConfiguration Configuration;
+        
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+        
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<SpotifyContext>(builder => builder.UseSqlite("Data Source=app.db;"));
@@ -23,7 +31,18 @@ namespace SpotifyShuffler
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<SpotifyContext>();
 
-            services.AddAuthentication();
+            services
+                .AddAuthentication()
+                .AddSpotify(opts =>
+                {
+                    opts.ClientId = Configuration["Authentication:Spotify:ClientId"];
+                    opts.ClientSecret = Configuration["Authentication:Spotify:ClientSecret"];
+                    
+                    opts.Scope.Add("playlist-modify-private");
+                    opts.Scope.Add("playlist-modify-public");
+                    opts.Scope.Add("user-read-email");
+                    opts.Scope.Add("user-read-private");
+                });
                 
             services.AddMvc(mvc => mvc.EnableEndpointRouting = false);
         }
