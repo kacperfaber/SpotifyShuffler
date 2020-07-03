@@ -1,15 +1,18 @@
-﻿<!DOCTYPE html>
+﻿@model SpotifyShuffler.Models.LayoutModel
+
+<!DOCTYPE html>
 <html>
 <head>
     <title>@ViewData["Title"]</title>
+    <link href="/libs/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 
-<div>
-    <h2>
-        Hello!
-    </h2>
-</div>
+<nav class="navbar navbar-light bg-white border-bottom">
+    <span class="navbar-brand">
+        @Model.Title
+    </span>
+</nav>
 
 @RenderBody()
 

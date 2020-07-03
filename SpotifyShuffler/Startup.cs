@@ -55,6 +55,7 @@ namespace SpotifyShuffler
             }
 
             app.UseRouting();
+            app.UseStaticFiles();
 
             app.UseMvc(x => x.MapRoute("default", "{Controller}/{Action}"));
 
