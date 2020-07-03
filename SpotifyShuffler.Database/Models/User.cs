@@ -2,23 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace SpotifyShuffler.Database.Models
 {
-    public class User
+    public class User : IdentityUser<Guid>
     {
-        [Key]
-        public Guid Id { get; set; }
-
-        [ForeignKey("SpotifyUserId")]
-        public SpotifyUser SpotifyUser { get; set; }
-
-        public Guid SpotifyUserId { get; set; }
-
         [InverseProperty("Owner")]
         public List<PlaylistPrototype> PlaylistPrototypes { get; set; }
-
-        [InverseProperty("Owner")]
-        public List<Playlist> Playlists { get; set; }
     }
 }

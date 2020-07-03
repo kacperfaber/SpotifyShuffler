@@ -15,15 +15,11 @@ namespace SpotifyShuffler.Database.Models
 
         public Guid OwnerId { get; set; }
 
-        [InverseProperty("PlaylistPrototype")]
-        public List<Track> Tracks { get; set; }
+        public string OriginalPlaylistId { get; set; }
 
-        public string DisplayName { get; set; }
+        [ForeignKey("PrototypeDataId")]
+        public PlaylistPrototypeData PrototypeData { get; set; }
 
-        public string Description { get; set; }
-        
-        public bool IsVisible { get; set; }
-
-        public bool IsDeleted { get; set; }
+        public Guid PrototypeDataId { get; set; }
     }
 }
