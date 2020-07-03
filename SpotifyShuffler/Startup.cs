@@ -26,11 +26,8 @@ namespace SpotifyShuffler
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<SpotifyContext>(builder => builder.UseSqlite("Data Source=app.db;"));
-
-            services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<SpotifyContext>();
-
+            services.AddDbContext<SpotifyContext>(builder => builder.UseSqlite("Data Source=app.db;", b => b.MigrationsAssembly("SpotifyShuffler")));
+            
             services
                 .AddAuthentication()
                 .AddSpotify(opts =>
@@ -45,6 +42,10 @@ namespace SpotifyShuffler
                 });
                 
             services.AddMvc(mvc => mvc.EnableEndpointRouting = false);
+
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<SpotifyContext>()
+                .AddDefaultTokenProviders();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
