@@ -99,7 +99,7 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Update="Views\Authentication\ThatSpotifyUserIsNotRegistered.cshtml">
+    <Content Update="Pages\Login\FinishRegistration.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -112,6 +112,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Design" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\Login" />
     <Folder Include="wwwroot\libs" />
   </ItemGroup>
 </Project>
