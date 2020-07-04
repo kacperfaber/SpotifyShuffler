@@ -5,9 +5,10 @@ namespace SpotifyShuffler.Controllers
 {
     public class LoginController : Controller
     {
+        [HttpGet("regiter")]
         public IActionResult Register()
         {
-            throw new NotImplementedException();
+            return Content("register account");
         }
 
         public IActionResult Login()

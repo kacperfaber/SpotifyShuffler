@@ -13,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SpotifyShuffler.Database.Contexts;
 using SpotifyShuffler.Database.Models;
+using SpotifyShuffler.Interfaces;
+using SpotifyShuffler.Types;
 
 namespace SpotifyShuffler
 {
@@ -48,6 +50,8 @@ namespace SpotifyShuffler
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<SpotifyContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<IUserFinder, UserFinder>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

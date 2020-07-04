@@ -1,0 +1,14 @@
+﻿@model SpotifyShuffler.Models.LayoutModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="p-3">
+    <h1 class="h2">
+        Cannot find account related with that spotify account...
+    </h1>
+    <p>
+        Please, @Html.ActionLink("Register here", "Register", "Login", new object[] {}, new {@class = "btn btn-link"})
+    </p>
+</div>

@@ -23,7 +23,11 @@ namespace SpotifyShuffler.Controllers
         [HttpGet("home")]
         public IActionResult Home(string title)
         {
-            return View(new HomeModel() {Title = title, CurrentUser = (UserManager.GetUserAsync(HttpContext.User).Result ?? Context.Users.FirstOrDefault())});
+            return View(new HomeModel
+            {
+                Title = title, 
+                CurrentUser = UserManager.GetUserAsync(HttpContext.User).Result
+            });
         }
     }
 }
