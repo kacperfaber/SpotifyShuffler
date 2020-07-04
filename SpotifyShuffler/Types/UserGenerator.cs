@@ -12,7 +12,12 @@ namespace SpotifyShuffler.Types
             {
                 Email = emailAddress,
                 UserName = username,
-                Id = Guid.NewGuid()
+                Id = Guid.NewGuid(),
+                EmailAddress = new EmailAddress()
+                {
+                    Id = Guid.NewGuid(),
+                    CreatedAt = DateTime.Now
+                }
             };
         }
     }
