@@ -10,5 +10,10 @@ namespace SpotifyShuffler.Database.Models
     {
         [InverseProperty("Owner")]
         public List<PlaylistPrototype> PlaylistPrototypes { get; set; }
+
+        [ForeignKey("EmailAddressId")]
+        public EmailAddress EmailAddress { get; set; }
+
+        public Guid EmailAddressId { get; set; }
     }
 }
