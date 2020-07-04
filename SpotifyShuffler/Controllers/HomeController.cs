@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyShuffler.Database.Contexts;
@@ -21,12 +22,12 @@ namespace SpotifyShuffler.Controllers
         }
 
         [HttpGet("home")]
-        public IActionResult Home(string title)
+        public async Task<IActionResult> Home(string title)
         {
             return View(new HomeModel
             {
                 Title = title, 
-                CurrentUser = UserManager.GetUserAsync(HttpContext.User).Result
+                CurrentUser = await UserManager.GetUserAsync(HttpContext.User)
             });
         }
     }

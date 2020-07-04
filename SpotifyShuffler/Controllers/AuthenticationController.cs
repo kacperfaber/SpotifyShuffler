@@ -22,7 +22,8 @@ namespace SpotifyShuffler.Controllers
         public IUserFinder UserFinder;
         public IUserCreator UserCreator;
 
-        public AuthenticationController(SignInManager<User> signInManager, UserManager<User> userManager, SpotifyContext context, IUserFinder userFinder, IUserCreator userCreator)
+        public AuthenticationController(SignInManager<User> signInManager, UserManager<User> userManager, SpotifyContext context, IUserFinder userFinder,
+            IUserCreator userCreator)
         {
             SignInManager = signInManager;
             UserManager = userManager;
@@ -45,27 +46,41 @@ namespace SpotifyShuffler.Controllers
             ExternalLoginInfo loginInfo = await SignInManager.GetExternalLoginInfoAsync();
 
             User user = UserFinder.FindUserBySpotifyIdOrNull(loginInfo.ProviderKey);
-            
+
             if (user == null)
             {
                 string emailAddress = loginInfo.Principal.FindFirst(ClaimTypes.Email).Value;
-                string username =loginInfo.Principal.FindFirst(ClaimTypes.Name).Value;
-                
+                string username = loginInfo.Principal.FindFirst(ClaimTypes.Name).Value;
+
                 User createdUser = await UserCreator.CreateUser(emailAddress, username, loginInfo);
 
-                await SignInManager.SignInAsync(createdUser,false);
+                await SignInManager.SignInAsync(createdUser, true);
 
                 return Content($"Created new account...\nemail: {emailAddress}\nusername {username}");
             }
 
             else
             {
-                await SignInManager.SignInAsync(user, false);
-                
+                await SignInManager.SignInAsync(user, true);
+
                 return Content($"Signed in using existing account. ");
             }
 
             return View("SuccessfullyLoggedIn", new SuccessfullyLoggedInModel {User = user});
+        }
+
+        [HttpGet("current")]
+        public async Task<IActionResult> Current()
+        {
+            User user = await UserManager.GetUserAsync(HttpContext.User);
+
+            return Content(user.Email);
+        }
+
+        [HttpGet("check")]
+        public IActionResult Check()
+        {
+            return Content(Convert.ToString(HttpContext.User.Identity.IsAuthenticated));
         }
     }
 }
