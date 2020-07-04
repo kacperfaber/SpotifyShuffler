@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNet.Security.OAuth.Spotify;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,7 +33,11 @@ namespace SpotifyShuffler
             services.AddDbContext<SpotifyContext>(builder => builder.UseSqlite("Data Source=app.db;", b => b.MigrationsAssembly("SpotifyShuffler")));
             
             services
-                .AddAuthentication()
+                .AddAuthentication(opts =>
+                {
+                    opts.DefaultSignInScheme = SpotifyAuthenticationDefaults.AuthenticationScheme;
+                })
+                .AddCookie()
                 .AddSpotify(opts =>
                 {
                     opts.ClientId = Configuration["Authentication:Spotify:ClientId"];
@@ -65,13 +70,13 @@ namespace SpotifyShuffler
 
             app.UseRouting();
             app.UseStaticFiles();
-
-            app.UseMvc(x => x.MapRoute("default", "{Controller}/{Action}"));
-
-            app.UseHttpsRedirection();
             
+            app.UseHttpsRedirection();
+
             app.UseAuthentication();
             app.UseAuthorization();
+            
+            app.UseMvc(x => x.MapRoute("default", "{Controller}/{Action}"));
         }
     }
 }
