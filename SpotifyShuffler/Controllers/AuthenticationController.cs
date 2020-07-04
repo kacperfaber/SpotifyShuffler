@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SpotifyShuffler.Database.Contexts;
 using SpotifyShuffler.Database.Models;
 using SpotifyShuffler.Models;
 
@@ -15,11 +17,13 @@ namespace SpotifyShuffler.Controllers
     {
         public SignInManager<User> SignInManager;
         public UserManager<User> UserManager;
+        public SpotifyContext Context;
 
-        public AuthenticationController(SignInManager<User> signInManager, UserManager<User> userManager)
+        public AuthenticationController(SignInManager<User> signInManager, UserManager<User> userManager, SpotifyContext context)
         {
             SignInManager = signInManager;
             UserManager = userManager;
+            Context = context;
         }
 
         [HttpGet("login")]
@@ -48,9 +52,12 @@ namespace SpotifyShuffler.Controllers
 
             UserLoginInfo userLoginInfo = new UserLoginInfo(loginInfo.LoginProvider, loginInfo.ProviderKey, loginInfo.ProviderDisplayName);
 
-            IdentityResult identityResult = await UserManager.CreateAsync(user);
+            await UserManager.CreateAsync(user);
             await UserManager.AddLoginAsync(user, userLoginInfo);
-            await SignInManager.SignInAsync(user, properties);
+
+            User dbUser = Context.Users.FirstOrDefault();
+
+            await SignInManager.SignInAsync(dbUser, properties);
 
             return View("SuccessfullyLoggedIn", new SuccessfullyLoggedInModel {User = user});
         }

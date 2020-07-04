@@ -1,0 +1,30 @@
+﻿@model SpotifyShuffler.Database.Models.User
+
+@if (Model == null)
+{
+    <ul class="navbar-nav nav ml-auto">
+        <li class="nav-item">
+            @Html.ActionLink("Login", "Login", "Login", new object[0], new {@class = "nav-link"})
+        </li>
+
+        <li class="nav-item">
+            @Html.ActionLink("Register", "Register", "Login", new object[0], new {@class = "nav-link"})
+        </li>
+    </ul>
+}
+
+else
+{
+    <ul class="navbar-nav nav ml-auto">
+        <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                @Model.UserName
+            </a>
+            
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Settings</a>
+                <a class="dropdown-item" href="#">Logout</a>
+            </div>
+        </li>
+    </ul>
+}
