@@ -22,11 +22,10 @@ namespace SpotifyShuffler.Controllers
         }
 
         [HttpGet("home")]
-        public async Task<IActionResult> Home(string title)
+        public async Task<IActionResult> Home()
         {
             return View(new HomeModel
             {
-                Title = title, 
                 CurrentUser = await UserManager.GetUserAsync(HttpContext.User)
             });
         }

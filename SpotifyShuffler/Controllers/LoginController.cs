@@ -8,7 +8,7 @@ namespace SpotifyShuffler.Controllers
     {
         public IActionResult Login()
         {
-            throw new NotImplementedException();
+            return RedirectToAction("Login", "Authentication");
         }
     }
 }

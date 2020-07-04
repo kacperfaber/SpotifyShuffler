@@ -21,15 +21,17 @@ namespace SpotifyShuffler.Controllers
         public SpotifyContext Context;
         public IUserFinder UserFinder;
         public IUserCreator UserCreator;
+        public IAccessTokenStore AccessTokenStore;
 
         public AuthenticationController(SignInManager<User> signInManager, UserManager<User> userManager, SpotifyContext context, IUserFinder userFinder,
-            IUserCreator userCreator)
+            IUserCreator userCreator, IAccessTokenStore accessTokenStore)
         {
             SignInManager = signInManager;
             UserManager = userManager;
             Context = context;
             UserFinder = userFinder;
             UserCreator = userCreator;
+            AccessTokenStore = accessTokenStore;
         }
 
         [HttpGet("login")]
@@ -53,6 +55,8 @@ namespace SpotifyShuffler.Controllers
                 string username = loginInfo.Principal.FindFirst(ClaimTypes.Name).Value;
 
                 User createdUser = await UserCreator.CreateUser(emailAddress, username, loginInfo);
+                
+                AccessTokenStore.StoreAccessToken(createdUser, loginInfo.AuthenticationTokens);
 
                 await SignInManager.SignInAsync(createdUser, true);
 
@@ -61,19 +65,27 @@ namespace SpotifyShuffler.Controllers
 
             else
             {
+                AccessTokenStore.StoreAccessToken(user, loginInfo.AuthenticationTokens);
+                
                 await SignInManager.SignInAsync(user, true);
 
-                return Content($"Signed in using existing account. ");
+                return RedirectToAction("Home", "Home");
             }
+        }
 
-            return View("SuccessfullyLoggedIn", new SuccessfullyLoggedInModel {User = user});
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await SignInManager.SignOutAsync();
+            
+            return RedirectToAction("Home", "Home");
         }
 
         [HttpGet("current")]
         public async Task<IActionResult> Current()
         {
             User user = await UserManager.GetUserAsync(HttpContext.User);
-
+            
             return Content(user.Email);
         }
 
