@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AspNet.Security.OAuth.Spotify;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -48,6 +49,15 @@ namespace SpotifyShuffler
                     opts.Scope.Add("playlist-modify-public");
                     opts.Scope.Add("user-read-email");
                     opts.Scope.Add("user-read-private");
+
+                    opts.Events.OnCreatingTicket = delegate(OAuthCreatingTicketContext ctx)
+                    {
+                        List<AuthenticationToken> tokens = ctx.Properties.GetTokens().ToList();
+                        tokens.Add(new AuthenticationToken());
+                        ctx.Properties.StoreTokens(tokens);
+
+                        return Task.CompletedTask;
+                    };
                 });
                 
             services.AddMvc(mvc => mvc.EnableEndpointRouting = false);
@@ -59,6 +69,8 @@ namespace SpotifyShuffler
             services.AddScoped<IUserFinder, UserFinder>();
             services.AddScoped<IUserGenerator, UserGenerator>();
             services.AddScoped<IUserCreator, UserCreator>();
+            services.AddScoped<IAccessTokenStore, AccessTokenStore>();
+            services.AddScoped<IClaimGenerator, ClaimGenerator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

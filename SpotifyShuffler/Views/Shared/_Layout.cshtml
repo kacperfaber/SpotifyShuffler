@@ -10,19 +10,20 @@
     <link href="/libs/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 
     <style>
-        .navbar-nav > li 
-        {
-        position: relative;
-        display: block;
-        }
+            .navbar-nav > li 
+            {
+            position: relative;
+            display: block;
+            }
     </style>
+
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-    <span class="navbar-brand">
+    <a href="@Url.ActionLink("Home", "Home")" class="navbar-brand">
         @Model.Title
-    </span>
+    </a>
 
     <div class="collapse navbar-collapse">
         @await Html.PartialAsync("_CurrentUserController", Model.CurrentUser)

@@ -16,10 +16,10 @@ else
             <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 @Model.UserName
             </a>
-            
+
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="#">Settings</a>
-                <a class="dropdown-item" href="#">Logout</a>
+                @Html.ActionLink("Logout", "Logout", "Authentication", new object[0], new {@class = "dropdown-item"})
             </div>
         </li>
     </ul>
