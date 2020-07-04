@@ -52,6 +52,8 @@ namespace SpotifyShuffler
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IUserFinder, UserFinder>();
+            services.AddScoped<IUserGenerator, UserGenerator>();
+            services.AddScoped<IUserCreator, UserCreator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
