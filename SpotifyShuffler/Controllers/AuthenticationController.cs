@@ -50,7 +50,7 @@ namespace SpotifyShuffler.Controllers
             
             if (user == null)
             {
-                return View("ThatSpotifyUserIsNotRegistered", new LayoutModel());
+                
             }
 
             else
