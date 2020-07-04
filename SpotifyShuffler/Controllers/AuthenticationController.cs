@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyShuffler.Database.Contexts;
 using SpotifyShuffler.Database.Models;
+using SpotifyShuffler.Interfaces;
 using SpotifyShuffler.Models;
 
 namespace SpotifyShuffler.Controllers
@@ -18,12 +19,14 @@ namespace SpotifyShuffler.Controllers
         public SignInManager<User> SignInManager;
         public UserManager<User> UserManager;
         public SpotifyContext Context;
+        public IUserFinder UserFinder;
 
-        public AuthenticationController(SignInManager<User> signInManager, UserManager<User> userManager, SpotifyContext context)
+        public AuthenticationController(SignInManager<User> signInManager, UserManager<User> userManager, SpotifyContext context, IUserFinder userFinder)
         {
             SignInManager = signInManager;
             UserManager = userManager;
             Context = context;
+            UserFinder = userFinder;
         }
 
         [HttpGet("login")]
@@ -43,21 +46,17 @@ namespace SpotifyShuffler.Controllers
             properties.StoreTokens(loginInfo.AuthenticationTokens);
             properties.IsPersistent = true;
 
-            User user = new User
+            User user = UserFinder.FindUserBySpotifyIdOrNull(loginInfo.ProviderKey);
+            
+            if (user == null)
             {
-                Id = Guid.NewGuid(),
-                Email = loginInfo.Principal.FindFirst(ClaimTypes.Email).Value,
-                UserName = loginInfo.Principal.FindFirst(ClaimTypes.Name).Value
-            };
+                return View("ThatSpotifyUserIsNotRegistered", new LayoutModel());
+            }
 
-            UserLoginInfo userLoginInfo = new UserLoginInfo(loginInfo.LoginProvider, loginInfo.ProviderKey, loginInfo.ProviderDisplayName);
-
-            await UserManager.CreateAsync(user);
-            await UserManager.AddLoginAsync(user, userLoginInfo);
-
-            User dbUser = Context.Users.FirstOrDefault();
-
-            await SignInManager.SignInAsync(dbUser, properties);
+            else
+            {
+                await SignInManager.SignInAsync(user, false);
+            }
 
             return View("SuccessfullyLoggedIn", new SuccessfullyLoggedInModel {User = user});
         }
