@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace SpotifyShuffler.Database.Models
 {
-    public class User : IdentityUser<string>
+    public class User : IdentityUser<Guid>
     {
         [InverseProperty("Owner")]
         public List<PlaylistPrototype> PlaylistPrototypes { get; set; }

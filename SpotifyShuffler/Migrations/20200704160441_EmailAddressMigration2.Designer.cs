@@ -9,8 +9,8 @@ using SpotifyShuffler.Database.Contexts;
 namespace SpotifyShuffler.Migrations
 {
     [DbContext(typeof(SpotifyContext))]
-    [Migration("20200705092533_Initial")]
-    partial class Initial
+    [Migration("20200704160441_EmailAddressMigration2")]
+    partial class EmailAddressMigration2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -117,83 +117,24 @@ namespace SpotifyShuffler.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("SpotifyShuffler.Database.Models.ActivationCode", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Code")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("CodeSendedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("EmailAddress")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EmailAddressActivationId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("ExpiredAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("HasActivationCode")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("ValidatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmailAddressActivationId");
-
-                    b.ToTable("ActivationCodes");
-                });
-
             modelBuilder.Entity("SpotifyShuffler.Database.Models.EmailAddress", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("ActivatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ActivationId")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("HasEmail")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime?>("ValidatedAt")
+                        .HasColumnType("TEXT");
 
-                    b.HasIndex("ActivationId");
+                    b.HasKey("Id");
 
                     b.ToTable("EmailAddresses");
-                });
-
-            modelBuilder.Entity("SpotifyShuffler.Database.Models.EmailAddressActivation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("ActivatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsActivated")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EmailAddressActivations");
                 });
 
             modelBuilder.Entity("SpotifyShuffler.Database.Models.Playlist", b =>
@@ -285,31 +226,6 @@ namespace SpotifyShuffler.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("SpotifyShuffler.Database.Models.SpotifyEmailValidation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EmailAddressActivationId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsSuccessfullyValidated")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsValidated")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("ValidatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmailAddressActivationId");
-
-                    b.ToTable("SpotifyEmailValidations");
-                });
-
             modelBuilder.Entity("SpotifyShuffler.Database.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -327,11 +243,11 @@ namespace SpotifyShuffler.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
-                    b.Property<Guid>("EmailAddressId")
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("EmailId")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");
@@ -368,7 +284,7 @@ namespace SpotifyShuffler.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmailAddressId");
+                    b.HasIndex("EmailId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -431,24 +347,6 @@ namespace SpotifyShuffler.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SpotifyShuffler.Database.Models.ActivationCode", b =>
-                {
-                    b.HasOne("SpotifyShuffler.Database.Models.EmailAddressActivation", "EmailAddressActivation")
-                        .WithMany("ActivationCodes")
-                        .HasForeignKey("EmailAddressActivationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("SpotifyShuffler.Database.Models.EmailAddress", b =>
-                {
-                    b.HasOne("SpotifyShuffler.Database.Models.EmailAddressActivation", "Activation")
-                        .WithMany()
-                        .HasForeignKey("ActivationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("SpotifyShuffler.Database.Models.Playlist", b =>
                 {
                     b.HasOne("SpotifyShuffler.Database.Models.User", "Owner")
@@ -473,20 +371,11 @@ namespace SpotifyShuffler.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SpotifyShuffler.Database.Models.SpotifyEmailValidation", b =>
-                {
-                    b.HasOne("SpotifyShuffler.Database.Models.EmailAddressActivation", "EmailAddressActivation")
-                        .WithMany("SpotifyValidations")
-                        .HasForeignKey("EmailAddressActivationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("SpotifyShuffler.Database.Models.User", b =>
                 {
                     b.HasOne("SpotifyShuffler.Database.Models.EmailAddress", "EmailAddress")
                         .WithMany()
-                        .HasForeignKey("EmailAddressId")
+                        .HasForeignKey("EmailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

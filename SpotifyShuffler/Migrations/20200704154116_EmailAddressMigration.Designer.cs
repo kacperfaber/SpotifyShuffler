@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SpotifyShuffler.Database.Contexts;
 
 namespace SpotifyShuffler.Migrations
 {
     [DbContext(typeof(SpotifyContext))]
-    partial class SpotifyContextModelSnapshot : ModelSnapshot
+    [Migration("20200704154116_EmailAddressMigration")]
+    partial class EmailAddressMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -241,11 +243,11 @@ namespace SpotifyShuffler.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
+                    b.Property<Guid>("EmailAddressId")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
-
-                    b.Property<Guid>("EmailId")
-                        .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");
@@ -282,7 +284,7 @@ namespace SpotifyShuffler.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmailId");
+                    b.HasIndex("EmailAddressId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -373,7 +375,7 @@ namespace SpotifyShuffler.Migrations
                 {
                     b.HasOne("SpotifyShuffler.Database.Models.EmailAddress", "EmailAddress")
                         .WithMany()
-                        .HasForeignKey("EmailId")
+                        .HasForeignKey("EmailAddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

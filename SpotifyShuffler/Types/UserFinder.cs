@@ -21,7 +21,7 @@ namespace SpotifyShuffler.Types
             return SpotifyContext.Users.FirstOrDefault(x => x.Email.ToLower() == email.ToLower());
         }
 
-        public User FindUserByIdOrNull(string id)
+        public User FindUserByIdOrNull(Guid id)
         {
             return SpotifyContext.Users.FirstOrDefault(x => x.Id == id);
         }
@@ -33,7 +33,7 @@ namespace SpotifyShuffler.Types
 
         public User FindUserBySpotifyIdOrNull(string providerKey)
         {
-            IdentityUserLogin<string> userLogin = SpotifyContext.UserLogins
+            IdentityUserLogin<Guid> userLogin = SpotifyContext.UserLogins
                 .Where(x => x.ProviderDisplayName == "Spotify")
                 .FirstOrDefault(x => x.ProviderKey == providerKey);
 

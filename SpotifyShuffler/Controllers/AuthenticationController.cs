@@ -60,7 +60,7 @@ namespace SpotifyShuffler.Controllers
 
                 await SignInManager.SignInAsync(createdUser, true);
 
-                return RedirectToAction("EnterYourEmail", "Registration");
+                return Content($"Created new account...\nemail: {emailAddress}\nusername {username}");
             }
 
             else
