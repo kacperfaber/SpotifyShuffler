@@ -11,6 +11,9 @@ namespace SpotifyShuffler.Database.Contexts
         public DbSet<PlaylistPrototype> PlaylistPrototypes { get; set; }
         public DbSet<PlaylistPrototypeData> PlaylistPrototypeDatas { get; set; }
         public DbSet<EmailAddress> EmailAddresses { get; set; }
+        public DbSet<EmailAddressActivation> EmailAddressActivations { get; set; }
+        public DbSet<SpotifyEmailValidation> SpotifyEmailValidations { get; set; }
+        public DbSet<ActivationCode> ActivationCodes { get; set; }
         
         public SpotifyContext(DbContextOptions options) : base(options)
         {
