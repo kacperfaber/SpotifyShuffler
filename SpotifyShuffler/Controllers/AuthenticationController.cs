@@ -21,6 +21,7 @@ namespace SpotifyShuffler.Controllers
         public IUserFinder UserFinder;
         public IUserCreator UserCreator;
         public IAccessTokenStore AccessTokenStore;
+        public ISpotifyAccountGenerator SpotifyAccountGenerator;
 
         public AuthenticationController(SignInManager<User> signInManager, UserManager<User> userManager, SpotifyContext context, IUserFinder userFinder,
             IUserCreator userCreator, IAccessTokenStore accessTokenStore)
@@ -50,17 +51,17 @@ namespace SpotifyShuffler.Controllers
 
             if (user == null)
             {
-                string spotifyEmail = loginInfo.Principal.FindFirst(ClaimTypes.Email).Value;
+                SpotifyAccount spotifyAccount = await SpotifyAccountGenerator.GenerateAccount(loginInfo.Principal);
 
                 string username = loginInfo.Principal.FindFirst(ClaimTypes.Name).Value;
 
-                User createdUser = await UserCreator.CreateUser(spotifyEmail, username, loginInfo);
+                User createdUser = await UserCreator.CreateUser(username, loginInfo);
                 
                 AccessTokenStore.StoreAccessToken(createdUser, loginInfo.AuthenticationTokens);
 
                 await SignInManager.SignInAsync(createdUser, true);
 
-                return Content($"Created new account...\nemail: {spotifyEmail}\nusername {username}");
+                return Content($"Created new account...\nemail: empty\nusername {username}");
             }
 
             else
