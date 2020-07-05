@@ -48,15 +48,6 @@ namespace SpotifyShuffler
                     opts.Scope.Add("playlist-modify-public");
                     opts.Scope.Add("user-read-email");
                     opts.Scope.Add("user-read-private");
-
-                    opts.Events.OnCreatingTicket = delegate(OAuthCreatingTicketContext ctx)
-                    {
-                        List<AuthenticationToken> tokens = ctx.Properties.GetTokens().ToList();
-                        tokens.Add(new AuthenticationToken());
-                        ctx.Properties.StoreTokens(tokens);
-
-                        return Task.CompletedTask;
-                    };
                 });
                 
             services.AddMvc(mvc => mvc.EnableEndpointRouting = false);
