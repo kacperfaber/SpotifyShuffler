@@ -13,8 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SpotifyShuffler.Database.Contexts;
-using SpotifyShuffler.Database.Models;
+using SpotifyShuffler.Database;
 using SpotifyShuffler.Interfaces;
 using SpotifyShuffler.Types;
 

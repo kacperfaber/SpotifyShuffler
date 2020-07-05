@@ -2,8 +2,6 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using SpotifyShuffler.Database.Contexts;
-using SpotifyShuffler.Database.Models;
 
 namespace SpotifyShuffler.Database.Tests
 {

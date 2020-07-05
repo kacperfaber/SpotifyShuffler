@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
-using SpotifyShuffler.Database.Contexts;
-using SpotifyShuffler.Database.Models;
+using SpotifyShuffler.Database;
 using SpotifyShuffler.Interfaces;
 
 namespace SpotifyShuffler.Types

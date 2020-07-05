@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using NUnit.Framework;
-using SpotifyShuffler.Database.Models;
 
 namespace SpotifyShuffler.Database.Tests
 {

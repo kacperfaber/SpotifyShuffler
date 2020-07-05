@@ -1,5 +1,5 @@
 ﻿using System;
-using SpotifyShuffler.Database.Models;
+using SpotifyShuffler.Database;
 using SpotifyShuffler.Interfaces;
 
 namespace SpotifyShuffler.Types
@@ -8,16 +8,13 @@ namespace SpotifyShuffler.Types
     {
         public User GenerateUser(string emailAddress, string username)
         {
+            // TODO Add SpotifyAccount.
+            
             return new User
             {
                 Email = emailAddress,
                 UserName = username,
-                Id = Guid.NewGuid(),
-                EmailAddress = new EmailAddress()
-                {
-                    Id = Guid.NewGuid(),
-                    CreatedAt = DateTime.Now
-                }
+                Id = Guid.NewGuid()
             };
         }
     }
