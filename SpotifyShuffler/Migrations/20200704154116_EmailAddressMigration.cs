@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SpotifyShuffler.Migrations
 {
-    public partial class Initial : Migration
+    public partial class EmailAddressMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -22,16 +22,17 @@ namespace SpotifyShuffler.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmailAddressActivations",
+                name: "EmailAddresses",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    IsActivated = table.Column<bool>(nullable: false),
-                    ActivatedAt = table.Column<DateTime>(nullable: true)
+                    NormalizedEmail = table.Column<string>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    ValidatedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmailAddressActivations", x => x.Id);
+                    table.PrimaryKey("PK_EmailAddresses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -64,73 +65,6 @@ namespace SpotifyShuffler.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ActivationCodes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Code = table.Column<string>(nullable: true),
-                    EmailAddress = table.Column<string>(nullable: true),
-                    HasActivationCode = table.Column<bool>(nullable: false),
-                    CodeSendedAt = table.Column<DateTime>(nullable: true),
-                    ExpiredAt = table.Column<DateTime>(nullable: true),
-                    ValidatedAt = table.Column<DateTime>(nullable: true),
-                    EmailAddressActivationId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ActivationCodes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ActivationCodes_EmailAddressActivations_EmailAddressActivationId",
-                        column: x => x.EmailAddressActivationId,
-                        principalTable: "EmailAddressActivations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EmailAddresses",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    NormalizedEmail = table.Column<string>(nullable: true),
-                    HasEmail = table.Column<bool>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    ActivatedAt = table.Column<DateTime>(nullable: true),
-                    ActivationId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EmailAddresses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EmailAddresses_EmailAddressActivations_ActivationId",
-                        column: x => x.ActivationId,
-                        principalTable: "EmailAddressActivations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SpotifyEmailValidations",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    IsValidated = table.Column<bool>(nullable: false),
-                    ValidatedAt = table.Column<DateTime>(nullable: true),
-                    IsSuccessfullyValidated = table.Column<bool>(nullable: false),
-                    EmailAddressActivationId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SpotifyEmailValidations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SpotifyEmailValidations_EmailAddressActivations_EmailAddressActivationId",
-                        column: x => x.EmailAddressActivationId,
-                        principalTable: "EmailAddressActivations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -299,11 +233,6 @@ namespace SpotifyShuffler.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ActivationCodes_EmailAddressActivationId",
-                table: "ActivationCodes",
-                column: "EmailAddressActivationId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
@@ -346,11 +275,6 @@ namespace SpotifyShuffler.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmailAddresses_ActivationId",
-                table: "EmailAddresses",
-                column: "ActivationId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PlaylistPrototypes_OwnerId",
                 table: "PlaylistPrototypes",
                 column: "OwnerId");
@@ -364,18 +288,10 @@ namespace SpotifyShuffler.Migrations
                 name: "IX_Playlists_OwnerId",
                 table: "Playlists",
                 column: "OwnerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SpotifyEmailValidations_EmailAddressActivationId",
-                table: "SpotifyEmailValidations",
-                column: "EmailAddressActivationId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "ActivationCodes");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -398,9 +314,6 @@ namespace SpotifyShuffler.Migrations
                 name: "Playlists");
 
             migrationBuilder.DropTable(
-                name: "SpotifyEmailValidations");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -411,9 +324,6 @@ namespace SpotifyShuffler.Migrations
 
             migrationBuilder.DropTable(
                 name: "EmailAddresses");
-
-            migrationBuilder.DropTable(
-                name: "EmailAddressActivations");
         }
     }
 }

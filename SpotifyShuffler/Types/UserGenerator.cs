@@ -16,12 +16,7 @@ namespace SpotifyShuffler.Types
                 EmailAddress = new EmailAddress()
                 {
                     Id = Guid.NewGuid(),
-                    CreatedAt = DateTime.Now,
-                    Activation = new EmailAddressActivation()
-                    {
-                        Id = Guid.NewGuid(),
-                        IsActivated = false
-                    }
+                    CreatedAt = DateTime.Now
                 }
             };
         }
