@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SpotifyShuffler.Database.Contexts;
-using SpotifyShuffler.Database.Models;
+using SpotifyShuffler.Database;
 using SpotifyShuffler.Interfaces;
 using SpotifyShuffler.Models;
 

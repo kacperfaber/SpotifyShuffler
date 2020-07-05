@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using SpotifyShuffler.Database.Models;
+using SpotifyShuffler.Database;
 
 namespace SpotifyShuffler.Interfaces
 {

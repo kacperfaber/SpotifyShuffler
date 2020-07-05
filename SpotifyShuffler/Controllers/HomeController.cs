@@ -4,8 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SpotifyShuffler.Database.Contexts;
-using SpotifyShuffler.Database.Models;
+using SpotifyShuffler.Database;
 using SpotifyShuffler.Models;
 
 namespace SpotifyShuffler.Controllers

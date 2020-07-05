@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace SpotifyShuffler.Database.Models
+namespace SpotifyShuffler.Database
 {
     public class PlaylistPrototypeData
     {
