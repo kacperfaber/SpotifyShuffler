@@ -17,9 +17,9 @@ namespace SpotifyShuffler.Types
             UserGenerator = userGenerator;
         }
 
-        public async Task<User> CreateUser(string email, string username, UserLoginInfo loginInfo)
+        public async Task<User> CreateUser(string username, UserLoginInfo loginInfo)
         {
-            User user = UserGenerator.GenerateUser(email, username);
+            User user = UserGenerator.GenerateUser(username);
 
             IdentityResult createResult = await UserManager.CreateAsync(user);
             
