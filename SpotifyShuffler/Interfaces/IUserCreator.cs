@@ -6,6 +6,6 @@ namespace SpotifyShuffler.Interfaces
 {
     public interface IUserCreator
     {
-        Task<User> CreateUser(string username, UserLoginInfo loginInfo);
+        Task<User> CreateUserAsync(Registration registration);
     }
 }

@@ -63,6 +63,10 @@ namespace SpotifyShuffler
             services.AddScoped<IClaimGenerator, ClaimGenerator>();
             services.AddScoped<ISpotifyAccountGenerator, SpotifyAccountGenerator>();
             services.AddScoped<IRegistrationGenerator, RegistrationGenerator>();
+
+            services.AddScoped<IRegistrationValidator, RegistrationValidator>();
+            services.AddScoped<IRegistrationActivator, RegistrationActivator>();
+            services.AddScoped<IUserLoginInfoGenerator, UserLoginInfoGenerator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

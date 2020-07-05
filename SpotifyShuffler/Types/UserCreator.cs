@@ -9,26 +9,35 @@ namespace SpotifyShuffler.Types
     public class UserCreator : IUserCreator
     {
         public UserManager<User> UserManager;
+        public SignInManager<User> SignInManager;
         public IUserGenerator UserGenerator;
+        public IRegistrationValidator RegistrationValidator;
+        public IUserLoginInfoGenerator LoginInfoGenerator;
 
-        public UserCreator(UserManager<User> userManager, IUserGenerator userGenerator)
+        public UserCreator(UserManager<User> userManager, IUserGenerator userGenerator, IRegistrationValidator registrationValidator, IUserLoginInfoGenerator loginInfoGenerator)
         {
             UserManager = userManager;
             UserGenerator = userGenerator;
+            RegistrationValidator = registrationValidator;
+            LoginInfoGenerator = loginInfoGenerator;
         }
 
-        public async Task<User> CreateUser(string username, UserLoginInfo loginInfo)
+        public async Task<User> CreateUserAsync(Registration registration)
         {
-            User user = UserGenerator.GenerateUser(username);
-
-            IdentityResult createResult = await UserManager.CreateAsync(user);
-            
-            if (createResult.Succeeded)
+            if (RegistrationValidator.Validate(registration))
             {
-                await UserManager.AddLoginAsync(user, loginInfo);
+                User user = UserGenerator.GenerateUser(registration.UserName, registration.EmailAddress);
+                IdentityResult result = await UserManager.CreateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    await UserManager.AddLoginAsync(user, LoginInfoGenerator.GenerateLoginInfo(user.SpotifyAccount.SpotifyId));
+                }
+
+                return user;
             }
 
-            return user;
+            throw new InvalidOperationException($"Registration {registration.Id} is not validated successfully.");
         }
     }
 }

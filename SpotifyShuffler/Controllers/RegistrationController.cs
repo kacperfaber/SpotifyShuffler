@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SpotifyShuffler.Database;
+using SpotifyShuffler.Interfaces;
 using SpotifyShuffler.Models;
 
 namespace SpotifyShuffler.Controllers
@@ -12,6 +14,9 @@ namespace SpotifyShuffler.Controllers
     public class RegistrationController : Controller
     {
         public SpotifyContext SpotifyContext;
+        public IUserCreator UserCreator;
+        public SignInManager<User> SignInManager;
+        public IRegistrationActivator RegistrationActivator;
 
         public RegistrationController(SpotifyContext spotifyContext)
         {
@@ -48,7 +53,7 @@ namespace SpotifyShuffler.Controllers
             return RedirectToAction("ValidateEmail", new { });
         }
 
-        public Task<IActionResult> ValidateEmail([FromQuery(Name = "registration_id")] Guid registrationId, [FromQuery(Name = "spotify_id")] string spotifyId)
+        public async Task<IActionResult> ValidateEmail([FromQuery(Name = "registration_id")] Guid registrationId, [FromQuery(Name = "spotify_id")] string spotifyId)
         {
             Registration registration = SpotifyContext.Registrations
                 .Include(x => x.SpotifyAccount)
@@ -56,7 +61,11 @@ namespace SpotifyShuffler.Controllers
 
             if (registration.EmailAddress == registration.SpotifyAccount.EmailAddress)
             {
-                registration.ActivatedAt = DateTime.Now;
+                RegistrationActivator.Activate(registration);
+
+                User user = await UserCreator.CreateUserAsync(registration);
+                
+                await SignInManager.SignInAsync(user, false);
                 
                 return View("EmailValidatedThroughSpotify");
             }
@@ -68,7 +77,7 @@ namespace SpotifyShuffler.Controllers
         }
 
         [HttpGet("activate-email")]
-        public IActionResult ActivateEmail(
+        public async Task<IActionResult> ActivateEmail(
             [FromQuery(Name = "registration_id")] Guid registrationId, 
             [FromQuery(Name = "spotify_id")] string spotifyId,
             [FromQuery(Name = "code")] string code)
@@ -78,10 +87,11 @@ namespace SpotifyShuffler.Controllers
                 .Where(x => x.ActivationCode != null)
                 .FirstOrDefault(x => x.Id == registrationId && x.SpotifyAccount.SpotifyId == spotifyId && x.ActivationCode == code);
             
-            registration.ActivatedAt = DateTime.Now;
-            SpotifyContext.SaveChanges();
+            RegistrationActivator.Activate(registration);
             
-            
+            User user = await UserCreator.CreateUserAsync(registration);
+                
+            await SignInManager.SignInAsync(user, false);
 
             return View("SuccessfullyActivated");
         }

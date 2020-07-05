@@ -6,13 +6,13 @@ namespace SpotifyShuffler.Types
 {
     public class UserGenerator : IUserGenerator
     {
-        public User GenerateUser(string username)
+        public User GenerateUser(string username, string emailAddress)
         {
-            // TODO Add SpotifyAccount.
-            
             return new User
             {
                 UserName = username,
+                Email = emailAddress,
+                EmailConfirmed = true,
                 Id = Guid.NewGuid()
             };
         }
