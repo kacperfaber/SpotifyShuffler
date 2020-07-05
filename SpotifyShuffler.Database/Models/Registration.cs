@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SpotifyShuffler.Database
 {
@@ -7,8 +8,6 @@ namespace SpotifyShuffler.Database
     {
         [Key]
         public Guid Id { get; set; }
-
-        public string SpotifyId { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
@@ -23,5 +22,10 @@ namespace SpotifyShuffler.Database
         public string UserName { get; set; }
 
         public DateTime? UserCreatedAt { get; set; }
+
+        [ForeignKey("SpotifyAccountId")]
+        public SpotifyAccount SpotifyAccount { get; set; }
+
+        public string SpotifyAccountId { get; set; }
     }
 }
