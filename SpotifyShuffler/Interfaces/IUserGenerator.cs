@@ -5,6 +5,6 @@ namespace SpotifyShuffler.Interfaces
 {
     public interface IUserGenerator
     {
-        User GenerateUser(string username);
+        User GenerateUser(string username, string emailAddress);
     }
 }
