@@ -59,8 +59,9 @@ namespace SpotifyShuffler.Controllers
                 Registration registration = RegistrationGenerator.GenerateRegistration(spotifyAccount);
 
                 await Context.Registrations.AddAsync(registration);
+                await Context.SaveChangesAsync();
 
-                return Content($"id: {registration.Id}\nspotify: {spotifyAccount.SpotifyId}");
+                return RedirectToAction("CompleteUserData", "Registration", new {registration_id = registration.Id, spotify_id = spotifyAccount.SpotifyId});
             }
 
             else

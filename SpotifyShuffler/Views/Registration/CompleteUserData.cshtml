@@ -1,0 +1,39 @@
+﻿@model SpotifyShuffler.Models.CompleteUserDataModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="mx-2 p-3">
+            <h1 class="h3">
+                Complete your user data
+            </h1>
+            <p>
+                We'll never share your private data with anyone else, you can keep in calm
+                <br/>
+                Data cannot to be related with your spotify account
+            </p>
+
+            @using (Html.BeginForm("TakeCompletedUserData", "Registration", FormMethod.Post))
+            {
+                <div class="form-group">
+                    <input class="form-control" placeholder="@Model.SpotifyAccount.Name" readonly/>
+                    <small class="text-muted form-text">Spotify account related with this account.</small>
+                </div>
+
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.UserName, new {@class = "form-control", placeholder = "User Name"})
+                </div>
+
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.EmailAddress, new {@class = "form-control", placeholder = "Email Address"})
+                    <small class="text-muted form-text">We may want to verify this email.</small>
+                </div>
+
+                <input type="submit" class="btn btn-primary"/>
+            }
+        </div>
+    </div>
+</div>
