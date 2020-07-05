@@ -11,8 +11,15 @@ namespace SpotifyShuffler.Database.Models
 
         public string NormalizedEmail { get; set; }
 
+        public bool HasEmail { get; set; }
+        
         public DateTime CreatedAt { get; set; }
 
-        public DateTime? ValidatedAt { get; set; }
+        public DateTime? ActivatedAt { get; set; }
+
+        [ForeignKey("ActivationId")]
+        public EmailAddressActivation Activation { get; set; }
+
+        public Guid ActivationId { get; set; }
     }
 }
