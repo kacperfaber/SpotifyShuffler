@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SpotifyShuffler.Database.Models
+namespace SpotifyShuffler.Database
 {
     public class PlaylistPrototype
     {
