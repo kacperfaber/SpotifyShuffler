@@ -5,7 +5,7 @@ using SpotifyShuffler.Database.Models;
 
 namespace SpotifyShuffler.Database.Contexts
 {
-    public class SpotifyContext : IdentityDbContext<User, Role, Guid>
+    public class SpotifyContext : IdentityDbContext
     {
         public DbSet<Playlist> Playlists { get; set; }
         public DbSet<PlaylistPrototype> PlaylistPrototypes { get; set; }

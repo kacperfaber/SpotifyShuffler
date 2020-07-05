@@ -1,0 +1,17 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mx-md-3">
+            <h1 class="h3">
+                Your email is already activated!
+            </h1>
+            <p>
+                If you want to make change, use 
+                @Html.ActionLink("settings", "Settings", "Account", new object[]{}, new {@class = "btn btn-link"})
+            </p>
+        </div>
+    </div>
+</div>
