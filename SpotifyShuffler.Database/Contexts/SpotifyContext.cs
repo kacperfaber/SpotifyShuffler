@@ -10,6 +10,7 @@ namespace SpotifyShuffler.Database
         public DbSet<PlaylistPrototype> PlaylistPrototypes { get; set; }
         public DbSet<PlaylistPrototypeData> PlaylistPrototypeDatas { get; set; }
         public DbSet<SpotifyAccount> SpotifyAccounts { get; set; }
+        public DbSet<Registration> Registrations { get; set; }
         
         public SpotifyContext(DbContextOptions options) : base(options)
         {
