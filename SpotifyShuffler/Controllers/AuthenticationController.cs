@@ -25,7 +25,7 @@ namespace SpotifyShuffler.Controllers
         public IRegistrationGenerator RegistrationGenerator;
 
         public AuthenticationController(SignInManager<User> signInManager, UserManager<User> userManager, SpotifyContext context, IUserFinder userFinder,
-            IUserCreator userCreator, IAccessTokenStore accessTokenStore)
+            IUserCreator userCreator, IAccessTokenStore accessTokenStore, ISpotifyAccountGenerator spotifyAccountGenerator, IRegistrationGenerator registrationGenerator)
         {
             SignInManager = signInManager;
             UserManager = userManager;
@@ -33,6 +33,8 @@ namespace SpotifyShuffler.Controllers
             UserFinder = userFinder;
             UserCreator = userCreator;
             AccessTokenStore = accessTokenStore;
+            SpotifyAccountGenerator = spotifyAccountGenerator;
+            RegistrationGenerator = registrationGenerator;
         }
 
         [HttpGet("login")]
