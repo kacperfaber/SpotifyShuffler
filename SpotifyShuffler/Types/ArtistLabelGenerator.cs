@@ -14,7 +14,7 @@ namespace SpotifyShuffler.Types
             {
                 builder.Append(artists[i].Name);
 
-                if (i + 1 == artists.Length)
+                if (i + 1 < artists.Length)
                 {
                     builder.Append(", ");
                 }
