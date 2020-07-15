@@ -1,9 +1,8 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2d0bd8a1_002D4510_002D4384_002Da4cb_002Dcca1a1831eb7/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Setup" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::2D265035-A986-4D0D-827A-156A9D22A7F7::.NETCoreApp,Version=v3.1::SpotifyShuffler.Tests.Tests.Setup&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8b2f6560_002Dc763_002D4842_002D8779_002D271ca95f8fe7/@EntryIndexedValue">&lt;SessionState ContinuousTestingIsOn="True" ContinuousTestingMode="3" IsLocked="True" Name="All tests from &amp;lt;SpotifyShuffler.Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="C:\Users\Kacpii\Desktop\SpotifyShuffler\SpotifyShuffler.Tests" Presentation="&amp;lt;SpotifyShuffler.Tests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c297f85e_002Db0a7_002D4a8d_002Dbf49_002D946570ddaa27/@EntryIndexedValue">&lt;SessionState ContinuousTestingIsOn="True" ContinuousTestingMode="3" IsLocked="True" Name="db" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Project Location="C:\Users\Kacpii\Desktop\SpotifyShuffler\SpotifyShuffler.Database.Tests" Presentation="&amp;lt;SpotifyShuffler.Database.Tests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
