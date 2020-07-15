@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,5 +21,8 @@ namespace SpotifyShuffler.Database
         public PlaylistPrototypeData PrototypeData { get; set; }
 
         public Guid PrototypeDataId { get; set; }
+
+        [InverseProperty("PlaylistPrototype")]
+        public List<TrackPrototype> Tracks { get; set; }
     }
 }
