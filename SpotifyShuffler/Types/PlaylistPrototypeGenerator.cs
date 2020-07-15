@@ -8,11 +8,11 @@ namespace SpotifyShuffler.Types
 {
     public class PlaylistPrototypeGenerator : IPlaylistPrototypeGenerator
     {
-        public IPrototypeDataGenerator DataGenerator;
+        public IPlaylistPrototypeDataGenerator DataGenerator;
         public ITrackPrototypesGenerator PrototypesGenerator;
         public ITrackPrototypesGenerator TrackPrototypesGenerator;
 
-        public PlaylistPrototypeGenerator(IPrototypeDataGenerator dataGenerator, ITrackPrototypesGenerator trackPrototypesGenerator)
+        public PlaylistPrototypeGenerator(IPlaylistPrototypeDataGenerator dataGenerator, ITrackPrototypesGenerator trackPrototypesGenerator)
         {
             DataGenerator = dataGenerator;
             TrackPrototypesGenerator = trackPrototypesGenerator;

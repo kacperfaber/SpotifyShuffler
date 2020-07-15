@@ -8,7 +8,7 @@ namespace SpotifyShuffler.Database
         [Key]
         public Guid Id { get; set; }
 
-        public string Title { get; set; }
+        public string Name { get; set; }
 
         public string Description { get; set; }
 
@@ -16,9 +16,9 @@ namespace SpotifyShuffler.Database
         {
         }
 
-        public PlaylistPrototypeData(string title, string description)
+        public PlaylistPrototypeData(string name, string description)
         {
-            Title = title;
+            Name = name;
             Description = description;
         }
     }

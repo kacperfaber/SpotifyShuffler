@@ -3,7 +3,7 @@ using SpotifyShuffler.Database;
 
 namespace SpotifyShuffler.Interfaces
 {
-    public interface IPrototypeDataGenerator
+    public interface IPlaylistPrototypeDataGenerator
     {
         Task<PlaylistPrototypeData> GenerateAsync(string name, string description);
     }
