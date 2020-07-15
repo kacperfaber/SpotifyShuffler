@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyShuffler.Interface",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyShuffler.Database.Tests", "SpotifyShuffler.Database.Tests\SpotifyShuffler.Database.Tests.csproj", "{31A23ECA-DD08-4637-B8F0-CB7768D67222}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyShuffler.Tests", "SpotifyShuffler.Tests\SpotifyShuffler.Tests.csproj", "{2D265035-A986-4D0D-827A-156A9D22A7F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{31A23ECA-DD08-4637-B8F0-CB7768D67222}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31A23ECA-DD08-4637-B8F0-CB7768D67222}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31A23ECA-DD08-4637-B8F0-CB7768D67222}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D265035-A986-4D0D-827A-156A9D22A7F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D265035-A986-4D0D-827A-156A9D22A7F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D265035-A986-4D0D-827A-156A9D22A7F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D265035-A986-4D0D-827A-156A9D22A7F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
