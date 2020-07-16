@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +12,9 @@ namespace SpotifyShuffler.Interface
     {
         public Authorization Authorization { get; set; }
 
+        public ITrackUriGenerator TrackUriGenerator;
+        public SpotifyClient SpotifyClient;
+
         public Paging<SimpleSpotifyPlaylist> GetPlaylists(string spotifyId)
         {
             throw new NotImplementedException();
@@ -20,38 +25,28 @@ namespace SpotifyShuffler.Interface
             throw new NotImplementedException();
         }
 
-        public async Task<SpotifyPlaylist> CreatePlaylist(string userId, string name, string description, bool @public)
+        public async Task<SpotifyPlaylist> CreatePlaylist(string userId, string name, string description, bool @public, bool collaborative)
         {
             CreatePlaylistPayload payload = new CreatePlaylistPayload
             {
-                Collaborative = false,
+                Collaborative = collaborative,
                 Description = description,
                 Name = name,
                 IsPublic = @public
             };
 
-            string requestBody = JsonConvert.SerializeObject(payload);
-
-            using (HttpClient http = new HttpClient())
-            {
-                StringContent stringContent = new StringContent(requestBody, Encoding.UTF8, "application/json");
-
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"https://api.spotify.com/v1/users/{userId}/playlists")
-                {
-                    Content = stringContent
-                };
-                
-                request.Headers.Add("Authorization", Authorization.GetToken());
-
-                HttpResponseMessage responseMessage = await http.SendAsync(request);
-
-                return JsonConvert.DeserializeObject<SpotifyPlaylist>(await responseMessage.Content.ReadAsStringAsync());
-            }
+            return await SpotifyClient.SendAsync<SpotifyPlaylist>($"https://api.spotify.com/v1/users/{userId}/playlists", payload, HttpMethod.Post, Authorization);
         }
 
-        public void AddTracks(SpotifyPlaylist playlist, params SimpleSpotifyTrack[] tracks)
+        public async Task AddTracks(string playlistId, params SimpleSpotifyTrack[] tracks)
         {
-            throw new NotImplementedException();
+            AddPlaylistItemsPayload payload = new AddPlaylistItemsPayload
+            {
+                Position = 0,
+                Uris = TrackUriGenerator.Generate(tracks).ToList()
+            };
+
+            await SpotifyClient.SendAsync($"https://api.spotify.com/v1/playlists/{playlistId}/tracks", payload, HttpMethod.Post, Authorization);
         }
     }
 }
