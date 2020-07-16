@@ -35,7 +35,7 @@ namespace SpotifyShuffler.Tests
         [TestCase(53)]
         [TestCase(68)]
         [TestCase(25)]
-        public void returns_excepted_Age_value_gived_in_anonymous_object(int ageParam)
+        public void returns_expected_Age_value_gived_in_anonymous_object(int ageParam)
         {
             object age = exec(new {Age = ageParam}).SingleOrDefault(x => x.Key == "Age").Value;
             

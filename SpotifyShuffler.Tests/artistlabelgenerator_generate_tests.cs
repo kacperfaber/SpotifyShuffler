@@ -33,7 +33,7 @@ namespace SpotifyShuffler.Tests
         [TestCase("Linkin Park", "CB")]
         [TestCase("Serj Tankian", "Daron Malakian")]
         [TestCase("Seether", "Amy Lee")]
-        public void returns_excepted_string(string artist1, string artist2)
+        public void returns_expected_string(string artist1, string artist2)
         {
             string s = exec(new SimpleSpotifyArtist() {Name = artist1}, new SimpleSpotifyArtist() {Name = artist2});
             
