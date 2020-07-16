@@ -35,7 +35,8 @@ namespace SpotifyShuffler.Interface
                 IsPublic = @public
             };
 
-            return await SpotifyClient.SendAsync<SpotifyPlaylist>($"https://api.spotify.com/v1/users/{userId}/playlists", payload, HttpMethod.Post, Authorization);
+            return await SpotifyClient.SendAsync<SpotifyPlaylist>($"https://api.spotify.com/v1/users/{userId}/playlists", payload, HttpMethod.Post,
+                Authorization);
         }
 
         public async Task AddTracks(string playlistId, params SimpleSpotifyTrack[] tracks)
@@ -47,6 +48,11 @@ namespace SpotifyShuffler.Interface
             };
 
             await SpotifyClient.SendAsync($"https://api.spotify.com/v1/playlists/{playlistId}/tracks", payload, HttpMethod.Post, Authorization);
+        }
+
+        public async Task<List<SimpleSpotifyTrack>> GetTracks(string playlistId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
