@@ -5,13 +5,13 @@ namespace SpotifyShuffler.Interface
 {
     public class InstanceToDictionaryConverter : IInstanceToDictionaryConverter
     {
-        public Dictionary<string, object> Convert(object instance)
+        public Dictionary<string, object> Convert(object instance, bool toLower = true)
         {
-            Dictionary<string,object> dictionary = new Dictionary<string, object>();
+            Dictionary<string, object> dictionary = new Dictionary<string, object>();
 
             foreach (PropertyInfo property in instance.GetType().GetProperties())
             {
-                dictionary.Add(property.Name, property.GetValue(instance));
+                dictionary.Add(toLower ? property.Name : property.Name.ToLower(), property.GetValue(instance));
             }
 
             return dictionary;
