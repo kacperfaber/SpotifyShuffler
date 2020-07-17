@@ -54,7 +54,8 @@ namespace SpotifyShuffler
 
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<SpotifyContext>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders()
+                .AddUserManager<UserManager>();
 
             services.AddScoped<IUserFinder, UserFinder>();
             services.AddScoped<IUserGenerator, UserGenerator>();
