@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace SpotifyShuffler.Interface
 {
@@ -25,9 +22,13 @@ namespace SpotifyShuffler.Interface
         {
             string url = "https://api.spotify.com/v1/me/playlists";
 
-            object queryParameters = new {Limit = limit, Offset = offset};
+            object queryParameters = new
+            {
+                Limit = limit,
+                Offset = offset
+            };
 
-            return await SpotifyClient.SendAsync<Paging<SimpleSpotifyPlaylist>>(url, queryParameters, new object(), HttpMethod.Get, Authorization);
+            return await SpotifyClient.SendAsync<Paging<SimpleSpotifyPlaylist>>(url, queryParameters, null, HttpMethod.Get, Authorization);
         }
 
         public async Task<SpotifyPlaylist> GetPlaylist(string playlistId)
@@ -39,7 +40,7 @@ namespace SpotifyShuffler.Interface
                 Fields = "fields=tracks.items(track(name,href,album(name,href)))"
             };
             
-            return await SpotifyClient.SendAsync<SpotifyPlaylist>(url, query, new object(), HttpMethod.Get, Authorization);
+            return await SpotifyClient.SendAsync<SpotifyPlaylist>(url, query, null, HttpMethod.Get, Authorization);
         }
 
         public async Task<SpotifyPlaylist> CreatePlaylist(string userId, string name, string description, bool @public, bool collaborative)
@@ -67,7 +68,7 @@ namespace SpotifyShuffler.Interface
             await SpotifyClient.SendAsync($"https://api.spotify.com/v1/playlists/{playlistId}/tracks", payload, HttpMethod.Post, Authorization);
         }
 
-        public async Task<List<SimpleSpotifyTrack>> GetTracks(string playlistId, int limit = 100)
+        public async Task<Paging<PlaylistTrackObject>> GetTracks(string playlistId, int limit = 100)
         {
             object query = new
             {
@@ -77,7 +78,7 @@ namespace SpotifyShuffler.Interface
 
             string url = $"https://api.spotify.com/v1/playlists/{playlistId}/tracks";
 
-            return await SpotifyClient.SendAsync<List<SimpleSpotifyTrack>>(url, query, new object(), HttpMethod.Get, Authorization);
+            return await SpotifyClient.SendAsync<Paging<PlaylistTrackObject>>(url, query, null, HttpMethod.Get, Authorization);
         }
     }
 }
