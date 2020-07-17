@@ -27,6 +27,10 @@ namespace SpotifyShuffler.Database
 
         public string CreatedPlaylistId { get; set; }
 
+        public string PlaylistName { get; set; }
+
+        public string PlaylistDescription { get; set; }
+
         public User User { get; set; }
     }
 }

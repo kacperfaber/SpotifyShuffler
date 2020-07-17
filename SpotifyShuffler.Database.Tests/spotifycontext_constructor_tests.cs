@@ -35,13 +35,13 @@ namespace SpotifyShuffler.Database.Tests
         }
 
         [Test]
-        public void dont_throws_exception_when_adding_new_PlaylistPrototypeData()
+        public void dont_throws_exception_when_adding_new_SpotifyAccount()
         {
             SpotifyContext ctx = exec();
             
             Assert.DoesNotThrow(() =>
             {
-                ctx.PlaylistPrototypeDatas.Add(new PlaylistPrototypeData("title", "desc"));
+                ctx.SpotifyAccounts.Add(new SpotifyAccount {SpotifyId = "00"});
                 ctx.SaveChanges();
             });
         }

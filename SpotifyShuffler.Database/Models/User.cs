@@ -7,9 +7,6 @@ namespace SpotifyShuffler.Database
 {
     public class User : IdentityUser<Guid>
     {
-        [InverseProperty("Owner")]
-        public List<PlaylistPrototype> PlaylistPrototypes { get; set; }
-            
         [ForeignKey("SpotifyAccountId")]
         public SpotifyAccount SpotifyAccount { get; set; }
 
