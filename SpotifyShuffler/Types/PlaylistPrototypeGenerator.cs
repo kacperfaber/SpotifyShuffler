@@ -16,7 +16,7 @@ namespace SpotifyShuffler.Types
             TrackPrototypesGenerator = trackPrototypesGenerator;
         }
 
-        public async Task<PlaylistPrototype> GenerateAsync(SpotifyPlaylist playlist, Operation operation, string playlistName, string playlistDescription)
+        public async Task<PlaylistPrototype> GenerateAsync(SpotifyPlaylist playlist, Operation operation)
         {
             return new PlaylistPrototype
             {
