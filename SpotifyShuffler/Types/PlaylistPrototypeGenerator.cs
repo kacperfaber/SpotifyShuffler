@@ -18,16 +18,15 @@ namespace SpotifyShuffler.Types
             TrackPrototypesGenerator = trackPrototypesGenerator;
         }
 
-        public async Task<PlaylistPrototype> GenerateAsync(SpotifyPlaylist playlist, User user, string playlistName, string playlistDescription)
+        public async Task<PlaylistPrototype> GenerateAsync(SpotifyPlaylist playlist, Operation operation, string playlistName, string playlistDescription)
         {
             PlaylistPrototypeData data = await DataGenerator.GenerateAsync(playlistName, playlistDescription);
 
             return new PlaylistPrototype
             {
                 Id = Guid.NewGuid(),
-                Owner = user,
+                Operation = operation,
                 PrototypeData = data,
-                OriginalPlaylistId = playlist.Id,
                 Tracks = await TrackPrototypesGenerator.GenerateAsync(playlist)
             };
         }
