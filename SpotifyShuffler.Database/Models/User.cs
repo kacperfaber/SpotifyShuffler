@@ -14,5 +14,8 @@ namespace SpotifyShuffler.Database
         public SpotifyAccount SpotifyAccount { get; set; }
 
         public string SpotifyAccountId { get; set; }
+
+        [InverseProperty("User")]
+        public List<Operation> Operations { get; set; }
     }
 }
