@@ -11,13 +11,6 @@ namespace SpotifyShuffler.Database
         public Guid Id { get; set; }
 
         public Operation Operation { get; set; }
-        
-        
-
-        [ForeignKey("PrototypeDataId")]
-        public PlaylistPrototypeData PrototypeData { get; set; }
-
-        public Guid PrototypeDataId { get; set; }
 
         [InverseProperty("PlaylistPrototype")]
         public List<TrackPrototype> Tracks { get; set; }

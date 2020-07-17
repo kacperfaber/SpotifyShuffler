@@ -21,9 +21,9 @@ namespace SpotifyShuffler.Database.Tests
         }
 
         [Test]
-        public void has_list_of_PlaylistPrototype()
+        public void has_list_of_Operation()
         {
-            Assert.IsNotEmpty(typeof(User).GetProperties().Where(x => x.PropertyType == typeof(List<PlaylistPrototype>)));
+            Assert.IsNotEmpty(typeof(User).GetProperties().Where(x => x.PropertyType == typeof(List<Operation>)));
         }
     }
 }
