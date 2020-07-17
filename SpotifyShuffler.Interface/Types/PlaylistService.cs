@@ -15,14 +15,31 @@ namespace SpotifyShuffler.Interface
         public ITrackUriGenerator TrackUriGenerator;
         public SpotifyClient SpotifyClient;
 
-        public Paging<SimpleSpotifyPlaylist> GetPlaylists(string spotifyId)
+        public PlaylistService(SpotifyClient spotifyClient, ITrackUriGenerator trackUriGenerator)
         {
-            throw new NotImplementedException();
+            SpotifyClient = spotifyClient;
+            TrackUriGenerator = trackUriGenerator;
         }
 
-        public SpotifyPlaylist GetPlaylist(string playlistId)
+        public async Task<Paging<SimpleSpotifyPlaylist>> GetPlaylists(int limit = 20, int offset = 0)
         {
-            throw new NotImplementedException();
+            string url = "https://api.spotify.com/v1/me/playlists";
+
+            object queryParameters = new {Limit = limit, Offset = offset};
+
+            return await SpotifyClient.SendAsync<Paging<SimpleSpotifyPlaylist>>(url, queryParameters, new object(), HttpMethod.Get, Authorization);
+        }
+
+        public async Task<SpotifyPlaylist> GetPlaylist(string playlistId)
+        {
+            string url = $"https://api.spotify.com/v1/playlists/{playlistId}";
+
+            object query = new
+            {
+                Fields = "fields=tracks.items(track(name,href,album(name,href)))"
+            };
+            
+            return await SpotifyClient.SendAsync<SpotifyPlaylist>(url, query, new object(), HttpMethod.Get, Authorization);
         }
 
         public async Task<SpotifyPlaylist> CreatePlaylist(string userId, string name, string description, bool @public, bool collaborative)
@@ -50,9 +67,17 @@ namespace SpotifyShuffler.Interface
             await SpotifyClient.SendAsync($"https://api.spotify.com/v1/playlists/{playlistId}/tracks", payload, HttpMethod.Post, Authorization);
         }
 
-        public async Task<List<SimpleSpotifyTrack>> GetTracks(string playlistId)
+        public async Task<List<SimpleSpotifyTrack>> GetTracks(string playlistId, int limit = 100)
         {
-            throw new NotImplementedException();
+            object query = new
+            {
+                Fields = "fields=items(track(name,href,album(name,href)))",
+                Limit = limit
+            };
+
+            string url = $"https://api.spotify.com/v1/playlists/{playlistId}/tracks";
+
+            return await SpotifyClient.SendAsync<List<SimpleSpotifyTrack>>(url, query, new object(), HttpMethod.Get, Authorization);
         }
     }
 }

@@ -8,7 +8,16 @@ namespace SpotifyShuffler.Interface
 {
     public class SpotifyClient
     {
-        HttpClient Http = new System.Net.Http.HttpClient();
+        HttpClient Http = new HttpClient();
+
+        public IQueryGenerator QueryGenerator;
+        public IInstanceToDictionaryConverter InstanceToDictionaryConverter;
+
+        public SpotifyClient(IInstanceToDictionaryConverter instanceToDictionaryConverter, IQueryGenerator queryGenerator)
+        {
+            InstanceToDictionaryConverter = instanceToDictionaryConverter;
+            QueryGenerator = queryGenerator;
+        }
 
         public async Task<HttpResponseMessage> SendAsync(string url, object body, HttpMethod method, Authorization authorization)
         {
@@ -42,7 +51,18 @@ namespace SpotifyShuffler.Interface
 
         public async Task<TResult> SendAsync<TResult>(string url, object queryParameters, object body, HttpMethod method, Authorization authorization)
         {
-            throw new NotImplementedException();
+            HttpRequestMessage request = new HttpRequestMessage
+            {
+                Method = method,
+                Content = new StringContent(JsonConvert.SerializeObject(body)),
+                RequestUri = new Uri(QueryGenerator.Generate(url, InstanceToDictionaryConverter.Convert(queryParameters)))
+            };
+            
+            request.Headers.Add("Authorization", authorization.GetToken());
+
+            HttpResponseMessage response = await Http.SendAsync(request);
+
+            return JsonConvert.DeserializeObject<TResult>(response.Content.ReadAsStringAsync().Result);
         }
     }
 }
