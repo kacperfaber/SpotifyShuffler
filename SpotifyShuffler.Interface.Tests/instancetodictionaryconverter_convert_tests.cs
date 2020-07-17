@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using SpotifyShuffler.Interface;
 
-namespace SpotifyShuffler.Tests
+namespace SpotifyShuffler.Interface.Tests
 {
     public class instancetodictionaryconverter_convert_tests
     {
@@ -28,7 +27,7 @@ namespace SpotifyShuffler.Tests
         [Test]
         public void returns_field_name_equals_to_Age_if_Age_was_gived()
         {
-            Assert.NotNull(exec(new {Age = 1}).SingleOrDefault(x => x.Key == "Age"));
+            Assert.NotNull(exec(new {Age = 1}).SingleOrDefault(x => x.Key == "age"));
         }
 
         [TestCase(5)]
@@ -37,7 +36,7 @@ namespace SpotifyShuffler.Tests
         [TestCase(25)]
         public void returns_expected_Age_value_gived_in_anonymous_object(int ageParam)
         {
-            object age = exec(new {Age = ageParam}).SingleOrDefault(x => x.Key == "Age").Value;
+            object age = exec(new {Age = ageParam}).SingleOrDefault(x => x.Key == "age").Value;
             
             Assert.IsTrue((int) age == ageParam);
         }
