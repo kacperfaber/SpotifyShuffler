@@ -8,7 +8,7 @@ namespace SpotifyShuffler.Database
     public class Operation
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
@@ -16,7 +16,7 @@ namespace SpotifyShuffler.Database
 
         public DateTime? CanceledAt { get; set; }
 
-        public string SpotifyId { get; set; }
+        public string OriginalPlaylistId { get; set; }
 
         [InverseProperty("Operation")]
         public List<PlaylistPrototype> Prototypes { get; set; }
