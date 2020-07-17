@@ -51,17 +51,33 @@ namespace SpotifyShuffler.Controllers
             ExternalLoginInfo loginInfo = await SignInManager.GetExternalLoginInfoAsync();
 
             User user = UserFinder.FindUserBySpotifyIdOrNull(loginInfo.ProviderKey);
-
+            
             if (user == null)
             {
                 SpotifyAccount spotifyAccount = await SpotifyAccountGenerator.GenerateAccount(loginInfo.Principal);
                 
-                Registration registration = RegistrationGenerator.GenerateRegistration(spotifyAccount);
+                // Registration registration = RegistrationGenerator.GenerateRegistration(spotifyAccount);
+                //
+                // await Context.Registrations.AddAsync(registration);
+                // await Context.SaveChangesAsync();
 
-                await Context.Registrations.AddAsync(registration);
-                await Context.SaveChangesAsync();
+                User createdUser = new User
+                {
+                    Id = Guid.NewGuid(),
+                    Email = spotifyAccount.EmailAddress,
+                    UserName = spotifyAccount.Name,
+                    SpotifyAccount = spotifyAccount
+                };
 
-                return RedirectToAction("CompleteUserData", "Registration", new {registration_id = registration.Id, spotify_id = spotifyAccount.SpotifyId});
+                _ = await UserManager.CreateAsync(createdUser);
+
+                _ = await UserManager.AddLoginAsync(createdUser, loginInfo);
+
+                AccessTokenStore.StoreAccessToken(createdUser, loginInfo.AuthenticationTokens);
+                
+                await SignInManager.SignInAsync(createdUser, true);
+
+                return RedirectToAction("Home", "Home");
             }
 
             else
@@ -72,6 +88,7 @@ namespace SpotifyShuffler.Controllers
 
                 return RedirectToAction("Home", "Home");
             }
+
         }
 
         [HttpGet("logout")]
