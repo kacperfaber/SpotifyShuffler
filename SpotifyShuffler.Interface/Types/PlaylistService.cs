@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -39,7 +40,7 @@ namespace SpotifyShuffler.Interface
             {
                 Fields = "fields=tracks.items(track(name,href,album(name,href)))"
             };
-            
+
             return await SpotifyClient.SendAsync<SpotifyPlaylist>(url, query, null, HttpMethod.Get, Authorization);
         }
 
@@ -68,17 +69,42 @@ namespace SpotifyShuffler.Interface
             await SpotifyClient.SendAsync($"https://api.spotify.com/v1/playlists/{playlistId}/tracks", payload, HttpMethod.Post, Authorization);
         }
 
-        public async Task<Paging<PlaylistTrackObject>> GetTracks(string playlistId, int limit = 100)
+        public async Task<Paging<PlaylistTrackObject>> GetTracks(string playlistId, int limit = 100, int offset = 0)
         {
             object query = new
             {
                 Fields = "fields=items(track(name,href,album(name,href)))",
-                Limit = limit
+                Limit = limit,
+                Offset = offset
             };
 
             string url = $"https://api.spotify.com/v1/playlists/{playlistId}/tracks";
 
             return await SpotifyClient.SendAsync<Paging<PlaylistTrackObject>>(url, query, null, HttpMethod.Get, Authorization);
+        }
+
+        public async Task<List<SpotifyTrack>> GetAllTracks(string playlistId, int total)
+        {
+            int fullLoops = total / 100;
+            int left = total % 100;
+            
+            List<SpotifyTrack> tracks = new List<SpotifyTrack>(total);
+
+            for (int i = 0; i < fullLoops; i++)
+            {
+                int offset = i * 100;
+                const int limit = 100;
+
+                PlaylistTrackObject[] items = (await GetTracks(playlistId, limit, offset)).Items;
+                
+                tracks.AddRange(Array.ConvertAll(items, x => x.Track));
+            }
+            
+            PlaylistTrackObject[] leftItems = (await GetTracks(playlistId, left, total / 100)).Items;
+                
+            tracks.AddRange(Array.ConvertAll(leftItems, x => x.Track));
+
+            return tracks;
         }
     }
 }
