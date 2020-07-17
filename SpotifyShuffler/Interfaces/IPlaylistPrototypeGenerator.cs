@@ -6,6 +6,6 @@ namespace SpotifyShuffler.Interfaces
 {
     public interface IPlaylistPrototypeGenerator
     {
-        Task<PlaylistPrototype> GenerateAsync(SpotifyPlaylist playlist, User user, string playlistName, string playlistDescription);
+        Task<PlaylistPrototype> GenerateAsync(SpotifyPlaylist playlist, Operation operation, string playlistName, string playlistDescription);
     }
 }
