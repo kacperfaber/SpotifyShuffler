@@ -11,7 +11,7 @@ namespace SpotifyShuffler.Interface
 
             foreach (PropertyInfo property in instance.GetType().GetProperties())
             {
-                dictionary.Add(toLower ? property.Name : property.Name.ToLower(), property.GetValue(instance));
+                dictionary.Add(toLower ? property.Name.ToLower() : property.Name, property.GetValue(instance));
             }
 
             return dictionary;

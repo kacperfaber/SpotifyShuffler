@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -54,12 +56,13 @@ namespace SpotifyShuffler.Interface
             HttpRequestMessage request = new HttpRequestMessage
             {
                 Method = method,
-                Content = new StringContent(JsonConvert.SerializeObject(body)),
+                Content = body != null ? new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json") : new StringContent(string.Empty),
                 RequestUri = new Uri(QueryGenerator.Generate(url, InstanceToDictionaryConverter.Convert(queryParameters)))
             };
             
             request.Headers.Add("Authorization", authorization.GetToken());
-
+            request.Headers.Add("Accept", "*/*");
+            
             HttpResponseMessage response = await Http.SendAsync(request);
 
             return JsonConvert.DeserializeObject<TResult>(response.Content.ReadAsStringAsync().Result);

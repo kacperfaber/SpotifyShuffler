@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace SpotifyShuffler.Interface.Tests
@@ -30,7 +31,7 @@ namespace SpotifyShuffler.Interface.Tests
 
             Assert.AreEqual(s, $@"{url}?{keyName}={value}");
         }
-        
+
         [TestCase("localhost:2222", "value_x", 0, "helo", "world")]
         [TestCase("localhost", "name", "kacper", "update", false)]
         [TestCase("http://www.google.com/redirect", "x", false, "y", 0)]
