@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SpotifyShuffler.Database;
+using SpotifyShuffler.Interface.Extension;
 using SpotifyShuffler.Interfaces;
 using SpotifyShuffler.Types;
 
@@ -32,6 +33,8 @@ namespace SpotifyShuffler
         {
             services.AddDbContext<SpotifyContext>(builder => builder.UseSqlite("Data Source=app.db;", b => b.MigrationsAssembly("SpotifyShuffler")));
             
+            services.AddSpotify();
+
             services
                 .AddAuthentication(opts =>
                 {
@@ -56,7 +59,7 @@ namespace SpotifyShuffler
                 .AddEntityFrameworkStores<SpotifyContext>()
                 .AddDefaultTokenProviders()
                 .AddUserManager<UserManager>();
-
+            
             services.AddScoped<IUserFinder, UserFinder>();
             services.AddScoped<IUserGenerator, UserGenerator>();
             services.AddScoped<IUserCreator, UserCreator>();
