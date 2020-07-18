@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Spencer.NET;
 
 namespace SpotifyShuffler.Interface.Tests
 {
@@ -42,6 +43,36 @@ namespace SpotifyShuffler.Interface.Tests
             string s = exec(url, new KeyValuePair<string, object>(k1, v1), new KeyValuePair<string, object>(k2, v2));
 
             Assert.AreEqual(s, $@"{url}?{k1}={v1}&{k2}={v2}");
+        }
+
+        class Dependency
+        {
+        }
+
+        class SpService : ServiceBase
+        {
+            public Dependency Depencency;
+            
+            public SpService(Dependency depencency)
+            {
+                Depencency = depencency;
+            }
+        }
+
+        [Test]
+        public async Task xxx()
+        {
+            Authorization auth = new Authorization()
+            {
+                AccessToken = "token"
+            };
+            
+            IContainer container = ContainerFactory.Container();
+
+            SpotifyService service = new SpotifyService();
+            SpService sp = await service.GetAsync<SpService>(auth);
+            
+            Assert.AreEqual(auth, sp.Authorization);
         }
     }
 }
