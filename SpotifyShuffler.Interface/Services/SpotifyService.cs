@@ -19,7 +19,7 @@ namespace SpotifyShuffler.Interface
         {
             return await Task.Run(() =>
             {
-                TService service = (TService) Container.ResolveOrAuto<InstancesCreator>().CreateInstance(typeof(TService));
+                TService service = (TService) Container.ResolveOrAuto<InstancesCreator>().CreateInstance(typeof(TService), Container);
                 service.SpotifyAuthorization = authorization;
 
                 return service;

@@ -44,35 +44,5 @@ namespace SpotifyShuffler.Interface.Tests
 
             Assert.AreEqual(s, $@"{url}?{k1}={v1}&{k2}={v2}");
         }
-
-        class Dependency
-        {
-        }
-
-        class SpService : ServiceBase
-        {
-            public Dependency Depencency;
-            
-            public SpService(Dependency depencency)
-            {
-                Depencency = depencency;
-            }
-        }
-
-        [Test]
-        public async Task xxx()
-        {
-            SpotifyAuthorization auth = new SpotifyAuthorization()
-            {
-                AccessToken = "token"
-            };
-            
-            IContainer container = ContainerFactory.Container();
-
-            SpotifyService service = new SpotifyService();
-            SpService sp = await service.GetAsync<SpService>(auth);
-            
-            Assert.AreEqual(auth, sp.SpotifyAuthorization);
-        }
     }
 }
