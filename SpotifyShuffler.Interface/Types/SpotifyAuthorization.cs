@@ -1,6 +1,6 @@
 ﻿namespace SpotifyShuffler.Interface
 {
-    public class Authorization : ISpotifyAuthorization
+    public class SpotifyAuthorization : ISpotifyAuthorization
     {
         public string AccessToken { get; set; }
         

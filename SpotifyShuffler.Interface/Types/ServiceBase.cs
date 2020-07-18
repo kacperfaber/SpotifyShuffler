@@ -2,6 +2,6 @@
 {
     public class ServiceBase
     {
-        public Authorization Authorization { get; set; }
+        public SpotifyAuthorization SpotifyAuthorization { get; set; }
     }
 }

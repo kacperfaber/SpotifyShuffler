@@ -1,6 +1,6 @@
 ﻿namespace SpotifyShuffler.Interface
 {
-    public class AuthorizationBuilder : Builder<Authorization, AuthorizationBuilder>
+    public class AuthorizationBuilder : Builder<SpotifyAuthorization, AuthorizationBuilder>
     {
         public AuthorizationBuilder AccessToken(string accessToken, string accessTokenType = "Bearer")
         {
