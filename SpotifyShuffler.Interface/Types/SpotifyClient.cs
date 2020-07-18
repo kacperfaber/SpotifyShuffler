@@ -21,7 +21,7 @@ namespace SpotifyShuffler.Interface
             QueryGenerator = queryGenerator;
         }
 
-        public async Task<HttpResponseMessage> SendAsync(string url, object body, HttpMethod method, Authorization authorization)
+        public async Task<HttpResponseMessage> SendAsync(string url, object body, HttpMethod method, SpotifyAuthorization spotifyAuthorization)
         {
             HttpRequestMessage request = new HttpRequestMessage
             {
@@ -30,12 +30,12 @@ namespace SpotifyShuffler.Interface
                 RequestUri = new Uri(url)
             };
 
-            request.Headers.Add("Authorization", authorization.GetToken());
+            request.Headers.Add("Authorization", spotifyAuthorization.GetToken());
 
             return await Http.SendAsync(request);
         }
 
-        public async Task<TResult> SendAsync<TResult>(string url, object body, HttpMethod method, Authorization authorization)
+        public async Task<TResult> SendAsync<TResult>(string url, object body, HttpMethod method, SpotifyAuthorization spotifyAuthorization)
         {
             HttpRequestMessage request = new HttpRequestMessage
             {
@@ -44,14 +44,14 @@ namespace SpotifyShuffler.Interface
                 RequestUri = new Uri(url)
             };
 
-            request.Headers.Add("Authorization", authorization.GetToken());
+            request.Headers.Add("Authorization", spotifyAuthorization.GetToken());
 
             HttpResponseMessage response = await Http.SendAsync(request);
 
             return JsonConvert.DeserializeObject<TResult>(response.Content.ReadAsStringAsync().Result);
         }
 
-        public async Task<TResult> SendAsync<TResult>(string url, object queryParameters, object body, HttpMethod method, Authorization authorization)
+        public async Task<TResult> SendAsync<TResult>(string url, object queryParameters, object body, HttpMethod method, SpotifyAuthorization spotifyAuthorization)
         {
             HttpRequestMessage request = new HttpRequestMessage
             {
@@ -60,7 +60,7 @@ namespace SpotifyShuffler.Interface
                 RequestUri = new Uri(QueryGenerator.Generate(url, InstanceToDictionaryConverter.Convert(queryParameters)))
             };
             
-            request.Headers.Add("Authorization", authorization.GetToken());
+            request.Headers.Add("Authorization", spotifyAuthorization.GetToken());
             request.Headers.Add("Accept", "*/*");
             
             HttpResponseMessage response = await Http.SendAsync(request);

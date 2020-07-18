@@ -8,7 +8,7 @@ namespace SpotifyShuffler.Interface
 {
     public class PlaylistService
     {
-        public Authorization Authorization { get; set; }
+        public SpotifyAuthorization Authorization { get; set; }
 
         public ITrackUriGenerator TrackUriGenerator;
         public SpotifyClient SpotifyClient;

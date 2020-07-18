@@ -32,12 +32,12 @@ namespace SpotifyShuffler.Controllers
 
             string accessToken = await AccessTokenStore.GetAccessToken(user);
 
-            Authorization authorization = new Authorization() {AccessToken = accessToken};
+            SpotifyAuthorization spotifyAuthorization = new SpotifyAuthorization() {AccessToken = accessToken};
 
             PlaylistService service =
                 new PlaylistService(new SpotifyClient(new InstanceToDictionaryConverter(), new QueryGenerator(new QueryParameterGenerator())),
                     new TrackUriGenerator());
-            service.Authorization = authorization;
+            service.Authorization = spotifyAuthorization;
 
             SpotifyPlaylist playlist = await service.GetPlaylist(playlistId);
 

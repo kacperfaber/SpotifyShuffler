@@ -62,7 +62,7 @@ namespace SpotifyShuffler.Interface.Tests
         [Test]
         public async Task xxx()
         {
-            Authorization auth = new Authorization()
+            SpotifyAuthorization auth = new SpotifyAuthorization()
             {
                 AccessToken = "token"
             };
@@ -72,7 +72,7 @@ namespace SpotifyShuffler.Interface.Tests
             SpotifyService service = new SpotifyService();
             SpService sp = await service.GetAsync<SpService>(auth);
             
-            Assert.AreEqual(auth, sp.Authorization);
+            Assert.AreEqual(auth, sp.SpotifyAuthorization);
         }
     }
 }
