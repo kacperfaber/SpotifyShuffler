@@ -18,13 +18,16 @@ namespace SpotifyShuffler.Controllers
         public OperationManager OperationManager;
         public IAccessTokenStore AccessTokenStore;
         public SpotifyService SpotifyService;
+        public IPlaylistPrototypeGenerator PlaylistPrototypeGenerator;
 
-        public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore, SpotifyService spotifyService)
+        public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
+            SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator)
         {
             OperationManager = operationManager;
             UserManager = userManager;
             AccessTokenStore = accessTokenStore;
             SpotifyService = spotifyService;
+            PlaylistPrototypeGenerator = playlistPrototypeGenerator;
         }
 
         [HttpGet("operation/begin-new")]
@@ -33,7 +36,7 @@ namespace SpotifyShuffler.Controllers
             User user = UserManager.GetUserAsync(HttpContext.User).Result;
 
             SpotifyAuthorization authorization = new SpotifyAuthorization {AccessToken = await AccessTokenStore.GetAccessToken(user)};
-            
+
             PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(authorization);
 
             SpotifyPlaylist playlist = await playlistService.GetPlaylist(playlistId);
@@ -47,19 +50,26 @@ namespace SpotifyShuffler.Controllers
 
             await OperationManager.CreateAsync(operation);
 
-            return Content($"created new operation {operation.Id},\n related with {playlist.Name} playlist owned by {playlist.Owner.Name}");
+            return RedirectToAction("MakePrototype", new {operation_id = operation.Id, playlist_id = playlist.Id});
         }
 
         [HttpGet("operation/make-prototype")]
         public async Task<IActionResult> MakePrototype(MakePrototypePayload payload)
         {
             Operation operation = await OperationManager.GetAsync(payload.OperationId);
+            User user = await UserManager.GetUserAsync(HttpContext.User);
 
-            // Generate prototype,
-            // Show to user in form, and ask 'Do you accept' or something.
-            // If not refresh page.
+            SpotifyAuthorization auth = new SpotifyAuthorization
+            {
+                AccessToken = await AccessTokenStore.GetAccessToken(user)
+            };
+            
+            PlaylistService playlistService =
+                await SpotifyService.GetAsync<PlaylistService>(auth);
 
-            return Content("Do you accept that prototype?");
+            PlaylistPrototype proto = await PlaylistPrototypeGenerator.GenerateAsync(await playlistService.GetPlaylist(operation.OriginalPlaylistId), operation);
+
+            return Json(proto);
         }
 
         [HttpGet("operation/name-your-playlist")]

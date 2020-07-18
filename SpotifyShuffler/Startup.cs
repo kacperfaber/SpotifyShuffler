@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using SpotifyShuffler.Database;
 using SpotifyShuffler.Interface.Extension;
 using SpotifyShuffler.Interfaces;
@@ -53,8 +54,11 @@ namespace SpotifyShuffler
                     opts.Scope.Add("user-read-private");
                 });
                 
-            services.AddMvc(mvc => mvc.EnableEndpointRouting = false);
-
+            services.AddMvc(mvc => mvc.EnableEndpointRouting = false).AddNewtonsoftJson(o =>
+            {
+                o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+            
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<SpotifyContext>()
                 .AddDefaultTokenProviders()
@@ -72,6 +76,12 @@ namespace SpotifyShuffler
             services.AddScoped<IRegistrationActivator, RegistrationActivator>();
             services.AddScoped<IUserLoginInfoGenerator, UserLoginInfoGenerator>();
 
+            services.AddScoped<IPlaylistPrototypeGenerator, PlaylistPrototypeGenerator>();
+            services.AddScoped<IPrototypesSorter, PrototypesSorter>();
+            services.AddScoped<ITrackPrototypeGenerator, TrackPrototypeGenerator>();
+            services.AddScoped<ITrackPrototypesGenerator, TrackPrototypesGenerator>();
+            services.AddScoped<IArtistLabelGenerator, ArtistLabelGenerator>();
+            
             services.AddScoped(typeof(OperationManager));
         }
 
