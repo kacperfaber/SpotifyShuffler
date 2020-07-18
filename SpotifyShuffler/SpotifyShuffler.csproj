@@ -10,7 +10,6 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <ProjectReference Include="..\SpotifyShuffler.Database\SpotifyShuffler.Database.csproj" />
-    <ProjectReference Include="..\SpotifyShuffler.Interface\SpotifyShuffler.Interface.csproj" />
     <Content Update="wwwroot\libs\css\bootstrap-grid.css">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -99,6 +98,7 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <ProjectReference Include="..\SpotifyShuffler.Interface.Extension\SpotifyShuffler.Interface.Extension.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.Spotify" Version="3.1.1" />

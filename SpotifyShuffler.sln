@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyShuffler.Tests", "Sp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyShuffler.Interface.Tests", "SpotifyShuffler.Interface.Tests\SpotifyShuffler.Interface.Tests.csproj", "{C48F1E3F-1042-49A2-90F8-C8DFFE6B6B9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyShuffler.Interface.Extension", "SpotifyShuffler.Interface.Extension\SpotifyShuffler.Interface.Extension.csproj", "{1D0B2CAD-9838-4206-9713-368FF96CB774}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{C48F1E3F-1042-49A2-90F8-C8DFFE6B6B9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C48F1E3F-1042-49A2-90F8-C8DFFE6B6B9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C48F1E3F-1042-49A2-90F8-C8DFFE6B6B9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D0B2CAD-9838-4206-9713-368FF96CB774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D0B2CAD-9838-4206-9713-368FF96CB774}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D0B2CAD-9838-4206-9713-368FF96CB774}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D0B2CAD-9838-4206-9713-368FF96CB774}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
