@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace SpotifyShuffler.Interface
 {
-    public class PlaylistService
+    public class PlaylistService : ServiceBase
     {
-        public SpotifyAuthorization Authorization { get; set; }
-
         public ITrackUriGenerator TrackUriGenerator;
         public SpotifyClient SpotifyClient;
 
@@ -21,7 +19,7 @@ namespace SpotifyShuffler.Interface
 
         public async Task<Paging<SimpleSpotifyPlaylist>> GetPlaylists(int limit = 20, int offset = 0)
         {
-            string url = "https://api.spotify.com/v1/me/playlists";
+            const string url = "https://api.spotify.com/v1/me/playlists";
 
             object queryParameters = new
             {
@@ -29,7 +27,7 @@ namespace SpotifyShuffler.Interface
                 Offset = offset
             };
 
-            return await SpotifyClient.SendAsync<Paging<SimpleSpotifyPlaylist>>(url, queryParameters, null, HttpMethod.Get, Authorization);
+            return await SpotifyClient.SendAsync<Paging<SimpleSpotifyPlaylist>>(url, queryParameters, null, HttpMethod.Get, SpotifyAuthorization);
         }
 
         public async Task<SpotifyPlaylist> GetPlaylist(string playlistId)
@@ -41,7 +39,7 @@ namespace SpotifyShuffler.Interface
                 Fields = "fields=tracks.items(track(name,href,album(name,href)))"
             };
 
-            return await SpotifyClient.SendAsync<SpotifyPlaylist>(url, query, null, HttpMethod.Get, Authorization);
+            return await SpotifyClient.SendAsync<SpotifyPlaylist>(url, query, null, HttpMethod.Get, SpotifyAuthorization);
         }
 
         public async Task<SpotifyPlaylist> CreatePlaylist(string userId, string name, string description, bool @public, bool collaborative)
@@ -55,7 +53,7 @@ namespace SpotifyShuffler.Interface
             };
 
             return await SpotifyClient.SendAsync<SpotifyPlaylist>($"https://api.spotify.com/v1/users/{userId}/playlists", payload, HttpMethod.Post,
-                Authorization);
+                SpotifyAuthorization);
         }
 
         public async Task AddTracks(string playlistId, params SimpleSpotifyTrack[] tracks)
@@ -66,7 +64,7 @@ namespace SpotifyShuffler.Interface
                 Uris = TrackUriGenerator.Generate(tracks).ToList()
             };
 
-            await SpotifyClient.SendAsync($"https://api.spotify.com/v1/playlists/{playlistId}/tracks", payload, HttpMethod.Post, Authorization);
+            await SpotifyClient.SendAsync($"https://api.spotify.com/v1/playlists/{playlistId}/tracks", payload, HttpMethod.Post, SpotifyAuthorization);
         }
 
         public async Task<Paging<PlaylistTrackObject>> GetTracks(string playlistId, int limit = 100, int offset = 0)
@@ -80,7 +78,7 @@ namespace SpotifyShuffler.Interface
 
             string url = $"https://api.spotify.com/v1/playlists/{playlistId}/tracks";
 
-            return await SpotifyClient.SendAsync<Paging<PlaylistTrackObject>>(url, query, null, HttpMethod.Get, Authorization);
+            return await SpotifyClient.SendAsync<Paging<PlaylistTrackObject>>(url, query, null, HttpMethod.Get, SpotifyAuthorization);
         }
 
         public async Task<List<SpotifyTrack>> GetAllTracks(string playlistId, int total)

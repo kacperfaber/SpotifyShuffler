@@ -37,7 +37,7 @@ namespace SpotifyShuffler.Controllers
             PlaylistService service =
                 new PlaylistService(new SpotifyClient(new InstanceToDictionaryConverter(), new QueryGenerator(new QueryParameterGenerator())),
                     new TrackUriGenerator());
-            service.Authorization = spotifyAuthorization;
+            service.SpotifyAuthorization = spotifyAuthorization;
 
             SpotifyPlaylist playlist = await service.GetPlaylist(playlistId);
 

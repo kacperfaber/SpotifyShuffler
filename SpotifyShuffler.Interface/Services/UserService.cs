@@ -2,10 +2,8 @@
 
 namespace SpotifyShuffler.Interface
 {
-    public class UserService
+    public class UserService : ServiceBase
     {
-        public ISpotifyAuthorization Authorization { get; set; }
-
         public PrivateSpotifyUser CurrentUser()
         {
             throw new NotImplementedException();
