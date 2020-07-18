@@ -17,12 +17,14 @@ namespace SpotifyShuffler.Controllers
         public UserManager UserManager;
         public OperationManager OperationManager;
         public IAccessTokenStore AccessTokenStore;
+        public SpotifyService SpotifyService;
 
-        public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore)
+        public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore, SpotifyService spotifyService)
         {
             OperationManager = operationManager;
             UserManager = userManager;
             AccessTokenStore = accessTokenStore;
+            SpotifyService = spotifyService;
         }
 
         [HttpGet("operation/begin-new")]
@@ -30,16 +32,11 @@ namespace SpotifyShuffler.Controllers
         {
             User user = UserManager.GetUserAsync(HttpContext.User).Result;
 
-            string accessToken = await AccessTokenStore.GetAccessToken(user);
+            SpotifyAuthorization authorization = new SpotifyAuthorization {AccessToken = await AccessTokenStore.GetAccessToken(user)};
+            
+            PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(authorization);
 
-            SpotifyAuthorization spotifyAuthorization = new SpotifyAuthorization() {AccessToken = accessToken};
-
-            PlaylistService service =
-                new PlaylistService(new SpotifyClient(new InstanceToDictionaryConverter(), new QueryGenerator(new QueryParameterGenerator())),
-                    new TrackUriGenerator());
-            service.SpotifyAuthorization = spotifyAuthorization;
-
-            SpotifyPlaylist playlist = await service.GetPlaylist(playlistId);
+            SpotifyPlaylist playlist = await playlistService.GetPlaylist(playlistId);
 
             Operation operation = new Operation
             {
@@ -84,7 +81,7 @@ namespace SpotifyShuffler.Controllers
         {
             // Show all data we have about new playlist,
             // Author, Is public, name, description, original playlist and ask 'Do You Confirm?'
-            
+
             throw new NotImplementedException();
         }
 
@@ -93,8 +90,8 @@ namespace SpotifyShuffler.Controllers
         {
             // Job accepted.
             // CreatePlaylist and AddTracks.
-            
-            
+
+
             throw new NotImplementedException();
         }
     }
