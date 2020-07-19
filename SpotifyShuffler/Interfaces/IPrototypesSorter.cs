@@ -5,6 +5,6 @@ namespace SpotifyShuffler.Interfaces
 {
     public interface IPrototypesSorter
     {
-        void Sort(ref IEnumerable<TrackPrototype> prototypes);
+        void Sort(PlaylistPrototype prototype);
     }
 }

@@ -22,10 +22,11 @@ namespace SpotifyShuffler.Controllers
         public SpotifyService SpotifyService;
         public IPlaylistPrototypeGenerator PlaylistPrototypeGenerator;
         public SpotifyContext SpotifyContext;
-        public IModelIndexer ModelIndexer;
+
+        public IPrototypesSorter PrototypesSorter;
 
         public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
-            SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator, SpotifyContext spotifyContext, IModelIndexer modelIndexer)
+            SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator, SpotifyContext spotifyContext, IPrototypesSorter prototypesSorter)
         {
             OperationManager = operationManager;
             UserManager = userManager;
@@ -33,7 +34,7 @@ namespace SpotifyShuffler.Controllers
             SpotifyService = spotifyService;
             PlaylistPrototypeGenerator = playlistPrototypeGenerator;
             SpotifyContext = spotifyContext;
-            ModelIndexer = modelIndexer;
+            PrototypesSorter = prototypesSorter;
         }
 
         [HttpGet("operation/begin-new")]
@@ -66,7 +67,7 @@ namespace SpotifyShuffler.Controllers
             User user = await UserManager.GetUserAsync(HttpContext.User);
 
             PlaylistPrototype prototype = operation.Prototype;
-            
+
             if (prototype == null)
             {
                 SpotifyAuthorization auth = new SpotifyAuthorization
@@ -77,26 +78,24 @@ namespace SpotifyShuffler.Controllers
                 PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(auth);
 
                 operation.Prototype = await PlaylistPrototypeGenerator.GenerateAsync(await playlistService.GetPlaylist(operation.OriginalPlaylistId), operation);
+                PrototypesSorter.Sort(operation.Prototype);
+
+                operation.Prototype.Tracks.ForEach(x => x.PlaylistPrototype = operation.Prototype);
                 
-                SpotifyContext.Update(operation);
-                _ =  SpotifyContext.SaveChangesAsync();
+                SpotifyContext.Add(operation.Prototype);
+                _ = SpotifyContext.SaveChangesAsync();
 
                 return Json(operation.Prototype);
             }
 
             else
             {
-                List<TrackPrototype> tracks = prototype.Tracks
-                    .OrderBy(x => new Random().Next(0, 10000))
-                    .ForEach(x => x.PlaylistPrototype = prototype)
-                    .ToList();
-                
-                ModelIndexer.Index(tracks, x => x.Index);
+                PrototypesSorter.Sort(prototype);
 
-                SpotifyContext.UpdateRange(tracks);
+                SpotifyContext.Update(prototype);
                 _ = SpotifyContext.SaveChangesAsync();
-                
-                TrackPrototype track = tracks.FirstOrDefault();
+
+                TrackPrototype track = prototype.Tracks.FirstOrDefault();
 
                 return Content($"Updating existing prototype.\n Now first position is {track.Author} - \"{track.Name}\"");
             }

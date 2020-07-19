@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SpotifyShuffler.Migrations
 {
-    public partial class IndexMigration : Migration
+    public partial class SorterMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,6 +19,17 @@ namespace SpotifyShuffler.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PlaylistPrototypes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlaylistPrototypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,6 +69,28 @@ namespace SpotifyShuffler.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TrackPrototype",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    PlaylistPrototypeId = table.Column<Guid>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Author = table.Column<string>(nullable: true),
+                    Album = table.Column<string>(nullable: true),
+                    Index = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TrackPrototype", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TrackPrototype_PlaylistPrototypes_PlaylistPrototypeId",
+                        column: x => x.PlaylistPrototypeId,
+                        principalTable: "PlaylistPrototypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -211,6 +244,7 @@ namespace SpotifyShuffler.Migrations
                     IsCanceled = table.Column<bool>(nullable: false),
                     CanceledAt = table.Column<DateTime>(nullable: true),
                     OriginalPlaylistId = table.Column<string>(nullable: true),
+                    PlaylistPrototypeId = table.Column<Guid>(nullable: true),
                     IsSubmitted = table.Column<bool>(nullable: false),
                     SubmittedAt = table.Column<DateTime>(nullable: true),
                     CreatedPlaylistId = table.Column<string>(nullable: true),
@@ -221,6 +255,12 @@ namespace SpotifyShuffler.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Operations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Operations_PlaylistPrototypes_PlaylistPrototypeId",
+                        column: x => x.PlaylistPrototypeId,
+                        principalTable: "PlaylistPrototypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Operations_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -247,46 +287,6 @@ namespace SpotifyShuffler.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PlaylistPrototypes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    OperationId = table.Column<Guid>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PlaylistPrototypes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PlaylistPrototypes_Operations_OperationId",
-                        column: x => x.OperationId,
-                        principalTable: "Operations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TrackPrototype",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    PlaylistPrototypeId = table.Column<Guid>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Author = table.Column<string>(nullable: true),
-                    Album = table.Column<string>(nullable: true),
-                    Index = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TrackPrototype", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TrackPrototype_PlaylistPrototypes_PlaylistPrototypeId",
-                        column: x => x.PlaylistPrototypeId,
-                        principalTable: "PlaylistPrototypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -332,14 +332,14 @@ namespace SpotifyShuffler.Migrations
                 column: "SpotifyAccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Operations_PlaylistPrototypeId",
+                table: "Operations",
+                column: "PlaylistPrototypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Operations_UserId",
                 table: "Operations",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlaylistPrototypes_OperationId",
-                table: "PlaylistPrototypes",
-                column: "OperationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Playlists_OwnerId",
@@ -375,6 +375,9 @@ namespace SpotifyShuffler.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Operations");
+
+            migrationBuilder.DropTable(
                 name: "Playlists");
 
             migrationBuilder.DropTable(
@@ -387,13 +390,10 @@ namespace SpotifyShuffler.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "PlaylistPrototypes");
-
-            migrationBuilder.DropTable(
-                name: "Operations");
-
-            migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "PlaylistPrototypes");
 
             migrationBuilder.DropTable(
                 name: "SpotifyAccounts");
