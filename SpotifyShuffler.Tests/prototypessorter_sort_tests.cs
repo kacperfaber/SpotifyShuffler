@@ -10,7 +10,7 @@ namespace SpotifyShuffler.Tests
 
         IEnumerable<TrackPrototype> exec(ref IEnumerable<TrackPrototype> prototypes)
         {
-            new PrototypesSorter().Sort(ref prototypes);
+            // new PrototypesSorter().Sort(ref prototypes);
 
             return prototypes;
         }

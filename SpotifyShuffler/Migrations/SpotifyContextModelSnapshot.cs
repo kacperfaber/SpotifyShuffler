@@ -145,6 +145,9 @@ namespace SpotifyShuffler.Migrations
                     b.Property<string>("PlaylistName")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("PlaylistPrototypeId")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime?>("SubmittedAt")
                         .HasColumnType("TEXT");
 
@@ -152,6 +155,8 @@ namespace SpotifyShuffler.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PlaylistPrototypeId");
 
                     b.HasIndex("UserId");
 
@@ -185,12 +190,7 @@ namespace SpotifyShuffler.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("OperationId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("OperationId");
 
                     b.ToTable("PlaylistPrototypes");
                 });
@@ -441,6 +441,10 @@ namespace SpotifyShuffler.Migrations
 
             modelBuilder.Entity("SpotifyShuffler.Database.Operation", b =>
                 {
+                    b.HasOne("SpotifyShuffler.Database.PlaylistPrototype", "Prototype")
+                        .WithMany()
+                        .HasForeignKey("PlaylistPrototypeId");
+
                     b.HasOne("SpotifyShuffler.Database.User", "User")
                         .WithMany("Operations")
                         .HasForeignKey("UserId");
@@ -453,13 +457,6 @@ namespace SpotifyShuffler.Migrations
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SpotifyShuffler.Database.PlaylistPrototype", b =>
-                {
-                    b.HasOne("SpotifyShuffler.Database.Operation", "Operation")
-                        .WithMany("Prototypes")
-                        .HasForeignKey("OperationId");
                 });
 
             modelBuilder.Entity("SpotifyShuffler.Database.Registration", b =>
