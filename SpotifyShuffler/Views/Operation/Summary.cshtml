@@ -1,0 +1,42 @@
+﻿@model SpotifyShuffler.Models.SummaryOperationModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-6 col-xl-4 offset-md-3 offset-xl-4">
+            <h1 class="h2">
+                Submit Your Operation
+            </h1>
+            <p>
+                Please confirm your new playlist data.
+            </p>
+
+            @using (Html.BeginForm("ConfirmOperationPost", "Operation", FormMethod.Post))
+            {
+                @Html.HiddenFor(x => x.OperationId)
+                
+                <div class="form-group">
+                    <label>Playlist Name</label>
+                    @Html.TextBoxFor(x => x.Operation.PlaylistName, new {@readonly = true})
+                </div>
+
+                <div class="form-group">
+                    <label>Playlist Description</label>
+                    @Html.TextAreaFor(x => x.Operation.PlaylistDescription, new {@readonly = true})
+                </div>
+
+                <div class="form-group">
+                    <label>Total</label>
+                    @Html.TextBoxFor(x => x.Operation.Prototype.Tracks.Count, new {@readonly = true})
+                </div>
+
+                <a href="#" class="btn btn-secondary">Cancel</a>
+                <input type="submit" value="Submit" class="btn float-left btn-primary">
+            }
+
+        </div>
+    </div>
+</div>
