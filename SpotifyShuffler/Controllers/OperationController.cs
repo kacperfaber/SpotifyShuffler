@@ -23,8 +23,10 @@ namespace SpotifyShuffler.Controllers
         public SpotifyService SpotifyService;
         public IPlaylistPrototypeGenerator PlaylistPrototypeGenerator;
         public SpotifyContext SpotifyContext;
-
         public IPrototypesSorter PrototypesSorter;
+
+        public IOperationValidator OperationValidator { get; set; }
+        public ISpotifyUrisGenerator SpotifyUrisGenerator;
 
         public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
             SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator, SpotifyContext spotifyContext,
@@ -88,7 +90,7 @@ namespace SpotifyShuffler.Controllers
                 SpotifyContext.Add(operation.Prototype);
                 _ = SpotifyContext.SaveChangesAsync();
 
-                return RedirectToAction("NameYourPlaylist", new 
+                return RedirectToAction("NameYourPlaylist", new
                 {
                     operation_id = (Guid) operation.Id,
                     playlist_id = operation.OriginalPlaylistId
@@ -144,13 +146,28 @@ namespace SpotifyShuffler.Controllers
         }
 
         [HttpPost("operation/execute")]
-        public async Task<IActionResult> SubmitOperationPost()
+        public async Task<IActionResult> ExecuteOperation(ExecuteOperationPayload payload)
         {
-            // Job accepted.
-            // CreatePlaylist and AddTracks.
+            Operation operation = await OperationManager.GetAsync(payload.OperationId);
+            User user = await UserManager.GetUserAsync(HttpContext.User);
 
+            if (await OperationValidator.ValidateAsync(operation))
+            {
+                SpotifyAuthorization auth = new SpotifyAuthorization
+                {
+                    AccessToken = await AccessTokenStore.GetAccessToken(user)
+                };
+                
+                PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(auth);
 
-            throw new NotImplementedException();
+                SpotifyPlaylist playlist = await playlistService.CreatePlaylist(user.SpotifyAccountId, operation.PlaylistName, operation.PlaylistDescription, true, false);
+
+                IEnumerable<string> uris = SpotifyUrisGenerator.Generate(operation.Prototype.Tracks);
+                
+                await playlistService.AddTracks(playlist.Id, uris);
+            }
+
+            return Content($"Could not validate operation {operation.Id}");
         }
     }
 }

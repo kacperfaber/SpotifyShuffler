@@ -17,5 +17,11 @@ namespace SpotifyShuffler.Database
         public string Album { get; set; }
         
         public int Index { get; set; }
+        
+        public string SpotifyId { get; set; }
+        
+        public string SpotifyUri { get; set; }
+        
+        public int DurationMs { get; set; }
     }
 }

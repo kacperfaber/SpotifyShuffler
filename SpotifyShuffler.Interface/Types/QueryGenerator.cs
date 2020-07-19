@@ -16,7 +16,9 @@ namespace SpotifyShuffler.Interface
         public string Generate(string url, Dictionary<string, object> queryParameters)
         {
             StringBuilder stringBuilder = new StringBuilder(url);
-            List<KeyValuePair<string,object>> list = queryParameters.ToList();
+            List<KeyValuePair<string,object>> list = queryParameters
+                .Where(x => x.Value != null)
+                .ToList();
 
             for (int i = 0; i < queryParameters.Count; i++)
             {
