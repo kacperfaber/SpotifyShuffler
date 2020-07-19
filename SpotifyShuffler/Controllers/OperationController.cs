@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using SpotifyShuffler.Database;
 using SpotifyShuffler.Interface;
 using SpotifyShuffler.Interfaces;
+using SpotifyShuffler.Models;
 using SpotifyShuffler.Payloads;
 using SpotifyShuffler.Types;
 
@@ -26,7 +27,8 @@ namespace SpotifyShuffler.Controllers
         public IPrototypesSorter PrototypesSorter;
 
         public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
-            SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator, SpotifyContext spotifyContext, IPrototypesSorter prototypesSorter)
+            SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator, SpotifyContext spotifyContext,
+            IPrototypesSorter prototypesSorter)
         {
             OperationManager = operationManager;
             UserManager = userManager;
@@ -77,11 +79,12 @@ namespace SpotifyShuffler.Controllers
 
                 PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(auth);
 
-                operation.Prototype = await PlaylistPrototypeGenerator.GenerateAsync(await playlistService.GetPlaylist(operation.OriginalPlaylistId), operation);
+                operation.Prototype =
+                    await PlaylistPrototypeGenerator.GenerateAsync(await playlistService.GetPlaylist(operation.OriginalPlaylistId), operation);
                 PrototypesSorter.Sort(operation.Prototype);
 
                 operation.Prototype.Tracks.ForEach(x => x.PlaylistPrototype = operation.Prototype);
-                
+
                 SpotifyContext.Add(operation.Prototype);
                 _ = SpotifyContext.SaveChangesAsync();
 
@@ -102,17 +105,28 @@ namespace SpotifyShuffler.Controllers
         }
 
         [HttpGet("operation/name-your-playlist")]
-        public async Task<IActionResult> NameYourPlaylist()
+        public IActionResult NameYourPlaylist(NameYourPlaylistPayload payload)
         {
-            // Set name and description of new spotify playlist.
-
-            throw new NotImplementedException();
+            NameYourPlaylist model = new NameYourPlaylist
+            {
+                PlaylistId = payload.PlaylistId,
+                OperationId = payload.OperationId
+            };
+            
+            return View(model);
         }
 
         [HttpPost("operation/name-your-playlist/post")]
-        public async Task<IActionResult> NameYourPlaylistPost()
+        public async Task<IActionResult> NameYourPlaylistPost(NameYourPlaylist payload)
         {
-            throw new NotImplementedException();
+            Operation operation = await OperationManager.GetAsync(payload.OperationId);
+
+            operation.PlaylistName = payload.PlaylistName;
+            operation.PlaylistDescription = payload.PlaylistDescription;
+
+            await OperationManager.UpdateAsync(operation);
+
+            return Content("accepted.");
         }
 
         [HttpGet("operation/submit")]

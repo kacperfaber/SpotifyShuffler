@@ -18,6 +18,10 @@ namespace SpotifyShuffler.Database
 
         public string OriginalPlaylistId { get; set; }
 
+        public string OriginalPlaylistName { get; set; }
+        
+        public string OriginalPlaylistDescription { get; set; }
+
         [ForeignKey("PlaylistPrototypeId")]
         public PlaylistPrototype Prototype { get; set; }
 

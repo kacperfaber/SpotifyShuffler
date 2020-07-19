@@ -1,0 +1,25 @@
+﻿@model SpotifyShuffler.Models.NameYourPlaylist
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+@using (Html.BeginForm("NameYourPlaylistPost", "Operation", FormMethod.Post))
+{
+    <div>
+        <div class="form-group">
+            @Html.TextBoxFor(x => x.PlaylistName, new {@class = "form-control", placeholder = "Playlist Name"})
+        </div>
+
+        <div class="form-group">
+            @Html.TextAreaFor(x => x.PlaylistDescription, new {@class = "form-control", placeholder = "Playlist Description"})
+        </div>
+
+        <div class="form-group">
+            @Html.CheckBoxFor(x => x.IsPublicPlaylist, new {@class = "form-control"})
+        </div>
+        
+        <input type="submit" class="btn btn-primary" value="SUBMIT" style="padding: 10px;">
+    </div>
+}
