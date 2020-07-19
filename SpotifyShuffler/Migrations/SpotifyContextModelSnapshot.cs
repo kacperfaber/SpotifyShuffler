@@ -302,6 +302,9 @@ namespace SpotifyShuffler.Migrations
                     b.Property<string>("Author")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Index")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 

@@ -12,12 +12,12 @@ namespace SpotifyShuffler.Types
     {
         public ITrackPrototypesGenerator PrototypesGenerator;
         public ITrackPrototypesGenerator TrackPrototypesGenerator;
-        public IPrototypesSorter Sorter;
+        public IModelIndexer ModelIndexer;
 
-        public PlaylistPrototypeGenerator(ITrackPrototypesGenerator trackPrototypesGenerator, IPrototypesSorter sorter)
+        public PlaylistPrototypeGenerator(ITrackPrototypesGenerator trackPrototypesGenerator, IPrototypesSorter sorter, IModelIndexer modelIndexer)
         {
             TrackPrototypesGenerator = trackPrototypesGenerator;
-            Sorter = sorter;
+            ModelIndexer = modelIndexer;
         }
 
         public async Task<PlaylistPrototype> GenerateAsync(SpotifyPlaylist playlist, Operation operation)
@@ -25,6 +25,8 @@ namespace SpotifyShuffler.Types
             List<TrackPrototype> tracks = (await TrackPrototypesGenerator.GenerateAsync(playlist))
                 .OrderBy(x => new Random().Next(0, 10000))
                 .ToList();
+            
+            ModelIndexer.Index(tracks, x => x.Index);
             
             PlaylistPrototype proto = new PlaylistPrototype
             {

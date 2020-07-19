@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SpotifyShuffler.Migrations
 {
-    public partial class Initial : Migration
+    public partial class IndexMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -275,7 +275,8 @@ namespace SpotifyShuffler.Migrations
                     PlaylistPrototypeId = table.Column<Guid>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Author = table.Column<string>(nullable: true),
-                    Album = table.Column<string>(nullable: true)
+                    Album = table.Column<string>(nullable: true),
+                    Index = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
