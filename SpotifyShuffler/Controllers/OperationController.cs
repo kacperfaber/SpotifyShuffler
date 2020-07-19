@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,15 +21,19 @@ namespace SpotifyShuffler.Controllers
         public IAccessTokenStore AccessTokenStore;
         public SpotifyService SpotifyService;
         public IPlaylistPrototypeGenerator PlaylistPrototypeGenerator;
+        public SpotifyContext SpotifyContext;
+        public IModelIndexer ModelIndexer;
 
         public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
-            SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator)
+            SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator, SpotifyContext spotifyContext, IModelIndexer modelIndexer)
         {
             OperationManager = operationManager;
             UserManager = userManager;
             AccessTokenStore = accessTokenStore;
             SpotifyService = spotifyService;
             PlaylistPrototypeGenerator = playlistPrototypeGenerator;
+            SpotifyContext = spotifyContext;
+            ModelIndexer = modelIndexer;
         }
 
         [HttpGet("operation/begin-new")]
@@ -59,16 +65,42 @@ namespace SpotifyShuffler.Controllers
             Operation operation = await OperationManager.GetAsync(payload.OperationId);
             User user = await UserManager.GetUserAsync(HttpContext.User);
 
-            SpotifyAuthorization auth = new SpotifyAuthorization
-            {
-                AccessToken = await AccessTokenStore.GetAccessToken(user)
-            };
+            PlaylistPrototype prototype = operation.Prototypes.SingleOrDefault();
             
-            PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(auth);
+            if (prototype == null)
+            {
+                SpotifyAuthorization auth = new SpotifyAuthorization
+                {
+                    AccessToken = await AccessTokenStore.GetAccessToken(user)
+                };
 
-            PlaylistPrototype proto = await PlaylistPrototypeGenerator.GenerateAsync(await playlistService.GetPlaylist(operation.OriginalPlaylistId), operation);
+                PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(auth);
 
-            return Json(proto);
+                PlaylistPrototype newPrototype = await PlaylistPrototypeGenerator.GenerateAsync(await playlistService.GetPlaylist(operation.OriginalPlaylistId), operation);
+                newPrototype.Operation = operation;
+                
+                SpotifyContext.Add(newPrototype);
+                _ =  SpotifyContext.SaveChangesAsync();
+
+                return Json(newPrototype);
+            }
+
+            else
+            {
+                List<TrackPrototype> tracks = prototype.Tracks
+                    .OrderBy(x => new Random().Next(0, 10000))
+                    .ForEach(x => x.PlaylistPrototype = prototype)
+                    .ToList();
+                
+                ModelIndexer.Index(tracks, x => x.Index);
+
+                SpotifyContext.UpdateRange(tracks);
+                _ = SpotifyContext.SaveChangesAsync();
+                
+                TrackPrototype track = tracks.FirstOrDefault();
+
+                return Content($"Updating existing prototype.\n Now first position is {track.Author} - \"{track.Name}\"");
+            }
         }
 
         [HttpGet("operation/name-your-playlist")]
