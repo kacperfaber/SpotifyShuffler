@@ -33,7 +33,7 @@ namespace SpotifyShuffler.Types
         public async Task<Operation> GetAsync(Guid operationId)
         {
             return await SpotifyContext.Operations
-                .Include(x => x.Prototypes)
+                .Include(x => x.Prototype)
                 .ThenInclude(x => x.Tracks)
                 .Include(x => x.User)
                 .FirstOrDefaultAsync(x => x.Id == operationId);

@@ -31,7 +31,6 @@ namespace SpotifyShuffler.Types
             PlaylistPrototype proto = new PlaylistPrototype
             {
                 Id = Guid.NewGuid(),
-                Operation = operation,
                 Tracks = tracks
             };
             

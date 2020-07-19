@@ -65,7 +65,7 @@ namespace SpotifyShuffler.Controllers
             Operation operation = await OperationManager.GetAsync(payload.OperationId);
             User user = await UserManager.GetUserAsync(HttpContext.User);
 
-            PlaylistPrototype prototype = operation.Prototypes.SingleOrDefault();
+            PlaylistPrototype prototype = operation.Prototype;
             
             if (prototype == null)
             {
@@ -76,13 +76,12 @@ namespace SpotifyShuffler.Controllers
 
                 PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(auth);
 
-                PlaylistPrototype newPrototype = await PlaylistPrototypeGenerator.GenerateAsync(await playlistService.GetPlaylist(operation.OriginalPlaylistId), operation);
-                newPrototype.Operation = operation;
+                operation.Prototype = await PlaylistPrototypeGenerator.GenerateAsync(await playlistService.GetPlaylist(operation.OriginalPlaylistId), operation);
                 
-                SpotifyContext.Add(newPrototype);
+                SpotifyContext.Update(operation);
                 _ =  SpotifyContext.SaveChangesAsync();
 
-                return Json(newPrototype);
+                return Json(operation.Prototype);
             }
 
             else
