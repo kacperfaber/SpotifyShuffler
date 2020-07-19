@@ -5,6 +5,6 @@ namespace SpotifyShuffler.Interfaces
 {
     public interface IOperationValidator
     {
-        Task<bool> ValidateAsync(Operation operation);
+        Task<OperationValidationResult> ValidateAsync(Operation operation);
     }
 }

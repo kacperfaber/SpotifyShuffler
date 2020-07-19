@@ -92,11 +92,7 @@ namespace SpotifyShuffler.Controllers
                 SpotifyContext.Add(operation.Prototype);
                 _ = SpotifyContext.SaveChangesAsync();
 
-                return RedirectToAction("NameYourPlaylist", new
-                {
-                    operation_id = (Guid) operation.Id,
-                    playlist_id = operation.OriginalPlaylistId
-                });
+                return Json(operation.Prototype.Tracks);
             }
 
             else
@@ -135,16 +131,18 @@ namespace SpotifyShuffler.Controllers
 
             await OperationManager.UpdateAsync(operation);
 
-            return Content("accepted.");
+            return RedirectToAction("Summary", new {operation_id = operation.Id});
         }
 
-        [HttpGet("operation/submit")]
-        public async Task<IActionResult> SubmitOperation()
+        [HttpGet("operation/summary")]
+        public async Task<IActionResult> Summary([FromQuery(Name = "operation_id")] Guid operationId)
         {
-            // Show all data we have about new playlist,
-            // Author, Is public, name, description, original playlist and ask 'Do You Confirm?'
-
-            throw new NotImplementedException();
+            return View("Summary", new SummaryOperationModel
+            {
+                Operation = await OperationManager.GetAsync(operationId),
+                OperationId = operationId,
+                CurrentUser = await UserManager.GetUserAsync(HttpContext.User)
+            });
         }
 
         [HttpGet("operation/execute")]
@@ -153,25 +151,34 @@ namespace SpotifyShuffler.Controllers
             Operation operation = await OperationManager.GetAsync(payload.OperationId);
             User user = await UserManager.GetUserAsync(HttpContext.User);
 
-            if (await OperationValidator.ValidateAsync(operation))
+            OperationValidationResult validationResult = await OperationValidator.ValidateAsync(operation);
+
+            if (validationResult == OperationValidationResult.Ok)
             {
                 SpotifyAuthorization auth = new SpotifyAuthorization
                 {
                     AccessToken = await AccessTokenStore.GetAccessToken(user)
                 };
-                
+
                 PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(auth);
 
-                SpotifyPlaylist playlist = await playlistService.CreatePlaylist(user.SpotifyAccountId, operation.PlaylistName, operation.PlaylistDescription, true, false);
+                SpotifyPlaylist playlist =
+                    await playlistService.CreatePlaylist(user.SpotifyAccountId, operation.PlaylistName, operation.PlaylistDescription, true, false);
 
                 IEnumerable<string> uris = SpotifyUrisGenerator.Generate(operation.Prototype.Tracks);
-                
-                await playlistService.AddAllTracks(playlist.Id, uris);
 
-                return Content("ve done");
+                _ = playlistService.AddAllTracks(playlist.Id, uris);
+
+                return Content("Thank you, your new playlist will be filled out in a few seconds :>");
             }
 
-            return Content($"Could not validate operation {operation.Id}");
+            return Content($"Could not validate operation {operation.Id}.\n{validationResult.ToString()}");
+        }
+
+        [HttpPost("operation/confirm")]
+        public IActionResult ConfirmOperationPost(SummaryOperationModel model)
+        {
+            return RedirectToAction("ExecuteOperation", "Operation", new {operation_id = model.OperationId});
         }
     }
 }
