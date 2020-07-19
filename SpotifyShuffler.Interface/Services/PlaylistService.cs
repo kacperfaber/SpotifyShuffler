@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -55,6 +56,17 @@ namespace SpotifyShuffler.Interface
             return await SpotifyClient.SendAsync<SpotifyPlaylist>($"https://api.spotify.com/v1/users/{userId}/playlists", payload, HttpMethod.Post,
                 SpotifyAuthorization);
         }
+        
+        public async Task AddTracks(string playlistId, IEnumerable<string> uris)
+        {
+            AddPlaylistItemsPayload payload = new AddPlaylistItemsPayload
+            {
+                Position = 0,
+                Uris = uris.ToList()
+            };
+
+            await SpotifyClient.SendAsync($"https://api.spotify.com/v1/playlists/{playlistId}/tracks", payload, HttpMethod.Post, SpotifyAuthorization);
+        }
 
         public async Task AddTracks(string playlistId, params SimpleSpotifyTrack[] tracks)
         {
@@ -104,5 +116,6 @@ namespace SpotifyShuffler.Interface
 
             return tracks;
         }
+
     }
 }

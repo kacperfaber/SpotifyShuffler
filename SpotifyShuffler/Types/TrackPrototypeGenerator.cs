@@ -22,7 +22,10 @@ namespace SpotifyShuffler.Types
                 Album = track.Album.Name,
                 Author = ArtistLabelGenerator.Generate(track.Artists),
                 Id = Guid.NewGuid(),
-                Name = track.Name
+                Name = track.Name,
+                SpotifyId = track.Id,
+                SpotifyUri = track.Uri,
+                DurationMs = track.DurationMs
             });
         }
     }
