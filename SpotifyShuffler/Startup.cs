@@ -57,6 +57,7 @@ namespace SpotifyShuffler
             services.AddMvc(mvc => mvc.EnableEndpointRouting = false).AddNewtonsoftJson(o =>
             {
                 o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                o.SerializerSettings.Formatting = Formatting.Indented;
             });
             
             services.AddIdentity<User, Role>()
