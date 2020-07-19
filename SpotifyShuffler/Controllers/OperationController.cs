@@ -83,8 +83,9 @@ namespace SpotifyShuffler.Controllers
 
                 PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(auth);
 
-                operation.Prototype =
-                    await PlaylistPrototypeGenerator.GenerateAsync(await playlistService.GetPlaylist(operation.OriginalPlaylistId), operation);
+                SpotifyPlaylist playlist = await playlistService.GetPlaylist(operation.OriginalPlaylistId);
+                
+                operation.Prototype = await PlaylistPrototypeGenerator.GenerateAsync(playlist, operation);
                 PrototypesSorter.Sort(operation.Prototype);
 
                 operation.Prototype.Tracks.ForEach(x => x.PlaylistPrototype = operation.Prototype);
@@ -175,9 +176,15 @@ namespace SpotifyShuffler.Controllers
             return Content($"Could not validate operation {operation.Id}.\n{validationResult.ToString()}");
         }
 
-        [HttpPost("operation/confirm")]
-        public IActionResult ConfirmOperationPost(SummaryOperationModel model)
+        [HttpPost("operation/summary/confirm")]
+        public async Task<IActionResult> ConfirmOperationPost(SummaryOperationModel model)
         {
+            Operation op = await OperationManager.GetAsync(model.OperationId);
+            op.IsSubmitted = true;
+            op.SubmittedAt = DateTime.Now;
+
+            await OperationManager.UpdateAsync(op);
+
             return RedirectToAction("ExecuteOperation", "Operation", new {operation_id = model.OperationId});
         }
     }
