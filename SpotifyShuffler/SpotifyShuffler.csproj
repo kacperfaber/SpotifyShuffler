@@ -99,6 +99,10 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <ProjectReference Include="..\SpotifyShuffler.Interface.Extension\SpotifyShuffler.Interface.Extension.csproj" />
+    <Content Update="Views\Operation\NameYourPlaylist.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.Spotify" Version="3.1.1" />
