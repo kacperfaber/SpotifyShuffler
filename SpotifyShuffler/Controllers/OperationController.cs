@@ -165,7 +165,7 @@ namespace SpotifyShuffler.Controllers
                 SpotifyPlaylist playlist =
                     await playlistService.CreatePlaylist(user.SpotifyAccountId, operation.PlaylistName, operation.PlaylistDescription, true, false);
 
-                IEnumerable<string> uris = SpotifyUrisGenerator.Generate(operation.Prototype.Tracks);
+                IEnumerable<string> uris = SpotifyUrisGenerator.Generate(operation.Prototype.Tracks.OrderBy(x => x.Index));
 
                 _ = playlistService.AddAllTracks(playlist.Id, uris);
 
