@@ -25,12 +25,12 @@ namespace SpotifyShuffler.Controllers
         public SpotifyContext SpotifyContext;
         public IPrototypesSorter PrototypesSorter;
 
-        public IOperationValidator OperationValidator { get; set; }
+        public IOperationValidator OperationValidator;
         public ISpotifyUrisGenerator SpotifyUrisGenerator;
 
         public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
             SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator, SpotifyContext spotifyContext,
-            IPrototypesSorter prototypesSorter)
+            IPrototypesSorter prototypesSorter, ISpotifyUrisGenerator spotifyUrisGenerator, IOperationValidator operationValidator)
         {
             OperationManager = operationManager;
             UserManager = userManager;
@@ -39,6 +39,8 @@ namespace SpotifyShuffler.Controllers
             PlaylistPrototypeGenerator = playlistPrototypeGenerator;
             SpotifyContext = spotifyContext;
             PrototypesSorter = prototypesSorter;
+            SpotifyUrisGenerator = spotifyUrisGenerator;
+            OperationValidator = operationValidator;
         }
 
         [HttpGet("operation/begin-new")]
@@ -145,7 +147,7 @@ namespace SpotifyShuffler.Controllers
             throw new NotImplementedException();
         }
 
-        [HttpPost("operation/execute")]
+        [HttpGet("operation/execute")]
         public async Task<IActionResult> ExecuteOperation(ExecuteOperationPayload payload)
         {
             Operation operation = await OperationManager.GetAsync(payload.OperationId);
@@ -165,6 +167,8 @@ namespace SpotifyShuffler.Controllers
                 IEnumerable<string> uris = SpotifyUrisGenerator.Generate(operation.Prototype.Tracks);
                 
                 await playlistService.AddTracks(playlist.Id, uris);
+
+                return Content("ve done");
             }
 
             return Content($"Could not validate operation {operation.Id}");

@@ -85,6 +85,7 @@ namespace SpotifyShuffler
             services.AddScoped<IArtistLabelGenerator, ArtistLabelGenerator>();
 
             services.AddScoped<IOperationValidator, OperationValidator>();
+            services.AddScoped<ISpotifyUrisGenerator, SpotifyUrisGenerator>();
             
             services.AddScoped(typeof(OperationManager));
         }

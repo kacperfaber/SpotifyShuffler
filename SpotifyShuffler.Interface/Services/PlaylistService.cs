@@ -61,11 +61,26 @@ namespace SpotifyShuffler.Interface
         {
             AddPlaylistItemsPayload payload = new AddPlaylistItemsPayload
             {
-                Position = 0,
+                Position = null,
                 Uris = uris.ToList()
             };
 
             await SpotifyClient.SendAsync($"https://api.spotify.com/v1/playlists/{playlistId}/tracks", payload, HttpMethod.Post, SpotifyAuthorization);
+        }
+        
+        public async Task AddAllTracks(string playlistId, IEnumerable<string> uris)
+        {
+            int count = uris.Count();
+            int totalLoops = count / 100;
+            int left = count % 100;
+
+            for (int i = 0; i < totalLoops; i++)
+            {
+                await AddTracks(playlistId, uris.Skip(100 * i).Take(100));
+            }
+
+            if (left > 0)
+                await AddTracks(playlistId, uris.TakeLast(left));
         }
 
         public async Task AddTracks(string playlistId, params SimpleSpotifyTrack[] tracks)
