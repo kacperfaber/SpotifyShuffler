@@ -26,7 +26,7 @@ namespace SpotifyShuffler.Interface
             HttpRequestMessage request = new HttpRequestMessage
             {
                 Method = method,
-                Content = new StringContent(JsonConvert.SerializeObject(body)),
+                Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8),
                 RequestUri = new Uri(url)
             };
 

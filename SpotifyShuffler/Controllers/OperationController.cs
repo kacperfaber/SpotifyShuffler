@@ -166,7 +166,7 @@ namespace SpotifyShuffler.Controllers
 
                 IEnumerable<string> uris = SpotifyUrisGenerator.Generate(operation.Prototype.Tracks);
                 
-                await playlistService.AddTracks(playlist.Id, uris);
+                await playlistService.AddAllTracks(playlist.Id, uris);
 
                 return Content("ve done");
             }

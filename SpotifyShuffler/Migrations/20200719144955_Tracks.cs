@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SpotifyShuffler.Migrations
 {
-    public partial class IndexMigration5 : Migration
+    public partial class Tracks : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -11,11 +11,13 @@ namespace SpotifyShuffler.Interface
     {
         public ITrackUriGenerator TrackUriGenerator;
         public SpotifyClient SpotifyClient;
+        public IUriFilter UriFilter;
 
-        public PlaylistService(SpotifyClient spotifyClient, ITrackUriGenerator trackUriGenerator)
+        public PlaylistService(SpotifyClient spotifyClient, ITrackUriGenerator trackUriGenerator, IUriFilter uriFilter)
         {
             SpotifyClient = spotifyClient;
             TrackUriGenerator = trackUriGenerator;
+            UriFilter = uriFilter;
         }
 
         public async Task<Paging<SimpleSpotifyPlaylist>> GetPlaylists(int limit = 20, int offset = 0)
@@ -56,31 +58,34 @@ namespace SpotifyShuffler.Interface
             return await SpotifyClient.SendAsync<SpotifyPlaylist>($"https://api.spotify.com/v1/users/{userId}/playlists", payload, HttpMethod.Post,
                 SpotifyAuthorization);
         }
-        
+
         public async Task AddTracks(string playlistId, IEnumerable<string> uris)
         {
             AddPlaylistItemsPayload payload = new AddPlaylistItemsPayload
             {
-                Position = null,
+                Position = 0,
                 Uris = uris.ToList()
             };
 
-            await SpotifyClient.SendAsync($"https://api.spotify.com/v1/playlists/{playlistId}/tracks", payload, HttpMethod.Post, SpotifyAuthorization);
+            HttpResponseMessage response = await SpotifyClient.SendAsync($"https://api.spotify.com/v1/playlists/{playlistId}/tracks", payload, HttpMethod.Post,
+                SpotifyAuthorization);
         }
-        
+
         public async Task AddAllTracks(string playlistId, IEnumerable<string> uris)
         {
-            int count = uris.Count();
+            IEnumerable<string> filteredUris = UriFilter.Filter(uris);
+
+            int count = filteredUris.Count();
             int totalLoops = count / 100;
             int left = count % 100;
 
             for (int i = 0; i < totalLoops; i++)
             {
-                await AddTracks(playlistId, uris.Skip(100 * i).Take(100));
+                await AddTracks(playlistId, filteredUris.Skip(100 * i).Take(100));
             }
 
             if (left > 0)
-                await AddTracks(playlistId, uris.TakeLast(left));
+                await AddTracks(playlistId, filteredUris.TakeLast(left));
         }
 
         public async Task AddTracks(string playlistId, params SimpleSpotifyTrack[] tracks)
@@ -112,7 +117,7 @@ namespace SpotifyShuffler.Interface
         {
             int fullLoops = total / 100;
             int left = total % 100;
-            
+
             List<SpotifyTrack> tracks = new List<SpotifyTrack>(total);
 
             for (int i = 0; i < fullLoops; i++)
@@ -121,16 +126,15 @@ namespace SpotifyShuffler.Interface
                 const int limit = 100;
 
                 PlaylistTrackObject[] items = (await GetTracks(playlistId, limit, offset)).Items;
-                
+
                 tracks.AddRange(Array.ConvertAll(items, x => x.Track));
             }
-            
+
             PlaylistTrackObject[] leftItems = (await GetTracks(playlistId, left, total / 100)).Items;
-                
+
             tracks.AddRange(Array.ConvertAll(leftItems, x => x.Track));
 
             return tracks;
         }
-
     }
 }
