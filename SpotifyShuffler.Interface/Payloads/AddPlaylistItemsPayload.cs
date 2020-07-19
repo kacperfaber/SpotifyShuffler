@@ -9,6 +9,7 @@ namespace SpotifyShuffler.Interface
         public List<string> Uris { get; set; }
 
         [JsonProperty("position")]
+        [JsonIgnore]
         public int Position { get; set; }
 
         public AddPlaylistItemsPayload()
