@@ -2,7 +2,7 @@
 
 namespace SpotifyShuffler.Models
 {
-    public class NameYourPlaylist
+    public class NameYourPlaylist : LayoutModel
     {
         public string PlaylistName { get; set; }
 
