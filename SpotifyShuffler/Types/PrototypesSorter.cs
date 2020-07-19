@@ -10,11 +10,9 @@ namespace SpotifyShuffler.Types
     {
         public Random Random = new Random();
 
-        public void Sort(ref List<TrackPrototype> prototypes)
+        public void Sort(ref IEnumerable<TrackPrototype> prototypes)
         {
-            int count = prototypes.Count;
-
-            prototypes = prototypes.OrderBy(x => Random.Next(count)).ToList();
+            prototypes = prototypes.OrderBy(x => Random.Next(0, 1000000));
         }
     }
 }

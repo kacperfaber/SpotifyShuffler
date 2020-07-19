@@ -64,8 +64,7 @@ namespace SpotifyShuffler.Controllers
                 AccessToken = await AccessTokenStore.GetAccessToken(user)
             };
             
-            PlaylistService playlistService =
-                await SpotifyService.GetAsync<PlaylistService>(auth);
+            PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(auth);
 
             PlaylistPrototype proto = await PlaylistPrototypeGenerator.GenerateAsync(await playlistService.GetPlaylist(operation.OriginalPlaylistId), operation);
 

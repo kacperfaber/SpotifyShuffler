@@ -8,17 +8,33 @@ namespace SpotifyShuffler.Tests
     public class prototypessorter_sort_tests
     {
 
-        void exec(ref List<TrackPrototype> prototypes)
+        IEnumerable<TrackPrototype> exec(ref IEnumerable<TrackPrototype> prototypes)
         {
             new PrototypesSorter().Sort(ref prototypes);
+
+            return prototypes;
         }
 
         [Test]
         public void dont_throws_exceptions()
         {
-            List<TrackPrototype> prototypes = new List<TrackPrototype>();
-            
-            Assert.DoesNotThrow(() => exec(ref prototypes));
+            IEnumerable<TrackPrototype> prototypes = new List<TrackPrototype>()
+            {
+                new TrackPrototype()
+                {
+                    Author = "1"
+                },
+                new TrackPrototype()
+                {
+                    Author = "2"
+                },
+                new TrackPrototype()
+                {
+                    Author = "3"
+                }
+            };
+
+            exec(ref prototypes);
         }
     }
 }
