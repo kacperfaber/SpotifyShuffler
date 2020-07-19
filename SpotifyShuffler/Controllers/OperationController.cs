@@ -88,7 +88,11 @@ namespace SpotifyShuffler.Controllers
                 SpotifyContext.Add(operation.Prototype);
                 _ = SpotifyContext.SaveChangesAsync();
 
-                return Json(operation.Prototype);
+                return RedirectToAction("NameYourPlaylist", new 
+                {
+                    operation_id = (Guid) operation.Id,
+                    playlist_id = operation.OriginalPlaylistId
+                });
             }
 
             else
@@ -110,9 +114,10 @@ namespace SpotifyShuffler.Controllers
             NameYourPlaylist model = new NameYourPlaylist
             {
                 PlaylistId = payload.PlaylistId,
-                OperationId = payload.OperationId
+                OperationId = payload.OperationId,
+                CurrentUser = UserManager.GetUserAsync(HttpContext.User).Result
             };
-            
+
             return View(model);
         }
 
