@@ -9,8 +9,8 @@ using SpotifyShuffler.Database;
 namespace SpotifyShuffler.Migrations
 {
     [DbContext(typeof(SpotifyContext))]
-    [Migration("20200717152023_Initial")]
-    partial class Initial
+    [Migration("20200719090146_IndexMigration")]
+    partial class IndexMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -303,6 +303,9 @@ namespace SpotifyShuffler.Migrations
 
                     b.Property<string>("Author")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Index")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
