@@ -14,7 +14,7 @@ namespace SpotifyShuffler.Database
 
         public User Owner { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime GeneratedAt { get; set; }
 
         [ForeignKey("PlaylistPrototypeId")]
         public PlaylistPrototype PlaylistPrototype { get; set; }
