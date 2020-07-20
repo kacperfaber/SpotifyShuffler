@@ -24,9 +24,9 @@ namespace SpotifyShuffler.Controllers
         public IPlaylistPrototypeGenerator PlaylistPrototypeGenerator;
         public SpotifyContext SpotifyContext;
         public IPrototypesSorter PrototypesSorter;
-
         public IOperationValidator OperationValidator;
         public ISpotifyUrisGenerator SpotifyUrisGenerator;
+        public IPlaylistValidator PlaylistValidator;
 
         public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
             SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator, SpotifyContext spotifyContext,
@@ -54,16 +54,26 @@ namespace SpotifyShuffler.Controllers
 
             SpotifyPlaylist playlist = await playlistService.GetPlaylist(playlistId);
 
-            Operation operation = new Operation
+            PlaylistValidationResult validation = await PlaylistValidator.ValidateAsync(playlist);
+
+            if (validation == PlaylistValidationResult.Ok)
             {
-                CreatedAt = DateTime.Now,
-                OriginalPlaylistId = playlistId,
-                User = user
-            };
+                Operation operation = new Operation
+                {
+                    CreatedAt = DateTime.Now,
+                    OriginalPlaylistId = playlistId,
+                    User = user
+                };
 
-            await OperationManager.CreateAsync(operation);
+                await OperationManager.CreateAsync(operation);
 
-            return RedirectToAction("MakePrototype", new {operation_id = operation.Id, playlist_id = playlist.Id});
+                return RedirectToAction("MakePrototype", new {operation_id = operation.Id, playlist_id = playlist.Id});
+            }
+
+            else if (validation == PlaylistValidationResult.TooLarge)
+            {
+                return Content("Playlist is too large.\nAllowed playlist items count is 300.");
+            }
         }
 
         [HttpGet("operation/make-prototype")]
@@ -84,7 +94,7 @@ namespace SpotifyShuffler.Controllers
                 PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(auth);
 
                 SpotifyPlaylist playlist = await playlistService.GetPlaylist(operation.OriginalPlaylistId);
-                
+
                 operation.Prototype = await PlaylistPrototypeGenerator.GenerateAsync(playlist, operation);
                 PrototypesSorter.Sort(operation.Prototype);
 
