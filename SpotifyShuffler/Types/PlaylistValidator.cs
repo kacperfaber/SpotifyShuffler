@@ -17,7 +17,7 @@ namespace SpotifyShuffler.Types
         {
             return await Task.Run(() =>
             {
-                if (SizeValidator.Validate(playlist.Tracks.Total))
+                if (!SizeValidator.Validate(playlist.Tracks.Total))
                 {
                     return PlaylistValidationResult.TooLarge;
                 }
