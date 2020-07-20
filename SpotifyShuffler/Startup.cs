@@ -74,6 +74,7 @@ namespace SpotifyShuffler
             services.AddScoped<IRegistrationGenerator, RegistrationGenerator>();
             services.AddScoped<IPlaylistValidator, PlaylistValidator>();
             services.AddScoped<IPlaylistSizeValidator, PlaylistSizeValidator>();
+            services.AddScoped<IOrderedPrototypesProvider, OrderedPrototypesProvider>();
 
             services.AddScoped<IRegistrationValidator, RegistrationValidator>();
             services.AddScoped<IRegistrationActivator, RegistrationActivator>();
