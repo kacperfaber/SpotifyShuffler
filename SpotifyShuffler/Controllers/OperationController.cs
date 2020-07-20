@@ -30,7 +30,7 @@ namespace SpotifyShuffler.Controllers
 
         public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
             SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator, SpotifyContext spotifyContext,
-            IPrototypesSorter prototypesSorter, ISpotifyUrisGenerator spotifyUrisGenerator, IOperationValidator operationValidator)
+            IPrototypesSorter prototypesSorter, ISpotifyUrisGenerator spotifyUrisGenerator, IOperationValidator operationValidator, IPlaylistValidator playlistValidator)
         {
             OperationManager = operationManager;
             UserManager = userManager;
@@ -41,6 +41,7 @@ namespace SpotifyShuffler.Controllers
             PrototypesSorter = prototypesSorter;
             SpotifyUrisGenerator = spotifyUrisGenerator;
             OperationValidator = operationValidator;
+            PlaylistValidator = playlistValidator;
         }
 
         [HttpGet("operation/begin-new")]
@@ -74,6 +75,8 @@ namespace SpotifyShuffler.Controllers
             {
                 return Content("Playlist is too large.\nAllowed playlist items count is 300.");
             }
+
+            return Ok();
         }
 
         [HttpGet("operation/make-prototype")]
@@ -93,9 +96,14 @@ namespace SpotifyShuffler.Controllers
 
                 PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(auth);
 
+                // TODO can be copy playlist into database.
                 SpotifyPlaylist playlist = await playlistService.GetPlaylist(operation.OriginalPlaylistId);
 
-                operation.Prototype = await PlaylistPrototypeGenerator.GenerateAsync(playlist, operation);
+                // int total??
+                // Without him i ll be able to left behind SpotifyPlaylist (upper)
+                List<SpotifyTrack> tracks = await playlistService.GetAllTracks(playlist.Id, playlist.Tracks.Total);
+
+                operation.Prototype = await PlaylistPrototypeGenerator.GenerateAsync(tracks, operation);
                 PrototypesSorter.Sort(operation.Prototype);
 
                 operation.Prototype.Tracks.ForEach(x => x.PlaylistPrototype = operation.Prototype);

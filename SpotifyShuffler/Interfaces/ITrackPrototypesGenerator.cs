@@ -7,6 +7,6 @@ namespace SpotifyShuffler.Interfaces
 {
     public interface ITrackPrototypesGenerator
     {
-        Task<List<TrackPrototype>> GenerateAsync(SpotifyPlaylist playlist);
+        Task<List<TrackPrototype>> GenerateAsync(IEnumerable<SpotifyTrack> tracks);
     }
 }
