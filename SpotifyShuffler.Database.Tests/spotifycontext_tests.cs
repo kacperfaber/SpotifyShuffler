@@ -39,7 +39,6 @@ namespace SpotifyShuffler.Database.Tests
 
         [TestCase(typeof(User))]
         [TestCase(typeof(PlaylistPrototype))]
-        [TestCase(typeof(Playlist))]
         public void SpotifyContext_has_DbSet_for(Type dbsetOf)
         {
             Type dbSet = typeof(DbSet<>).MakeGenericType(dbsetOf);
