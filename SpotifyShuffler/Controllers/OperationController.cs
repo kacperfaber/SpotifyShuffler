@@ -28,10 +28,12 @@ namespace SpotifyShuffler.Controllers
         public ISpotifyUrisGenerator SpotifyUrisGenerator;
         public IPlaylistValidator PlaylistValidator;
         public IOrderedPrototypesProvider OrderedPrototypesProvider;
+        public ICompletedPlaylistGenerator CompletedPlaylistGenerator;
 
         public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
             SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator, SpotifyContext spotifyContext,
-            IPrototypesSorter prototypesSorter, ISpotifyUrisGenerator spotifyUrisGenerator, IOperationValidator operationValidator, IPlaylistValidator playlistValidator)
+            IPrototypesSorter prototypesSorter, ISpotifyUrisGenerator spotifyUrisGenerator, IOperationValidator operationValidator,
+            IPlaylistValidator playlistValidator, IOrderedPrototypesProvider orderedPrototypesProvider, ICompletedPlaylistGenerator completedPlaylistGenerator)
         {
             OperationManager = operationManager;
             UserManager = userManager;
@@ -43,6 +45,8 @@ namespace SpotifyShuffler.Controllers
             SpotifyUrisGenerator = spotifyUrisGenerator;
             OperationValidator = operationValidator;
             PlaylistValidator = playlistValidator;
+            OrderedPrototypesProvider = orderedPrototypesProvider;
+            CompletedPlaylistGenerator = completedPlaylistGenerator;
         }
 
         [HttpGet("operation/begin-new")]
@@ -184,16 +188,28 @@ namespace SpotifyShuffler.Controllers
 
                 PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(auth);
 
-                SpotifyPlaylist playlist = 
+                SpotifyPlaylist playlist =
                     await playlistService.CreatePlaylist(user.SpotifyAccountId, operation.PlaylistName, operation.PlaylistDescription, true, false);
 
+                CompletedPlaylist completedPlaylist = await CompletedPlaylistGenerator.GenerateAsync(operation.Prototype, playlist, user);
+                await SpotifyContext.AddAsync(completedPlaylist);
+                _ = SpotifyContext.SaveChangesAsync();
+
                 IOrderedEnumerable<TrackPrototype> tracks = OrderedPrototypesProvider.Provide(operation.Prototype);
-                
+
                 IEnumerable<string> uris = SpotifyUrisGenerator.Generate(tracks);
 
                 _ = playlistService.AddAllTracks(playlist.Id, uris);
 
-                return Content("Thank you, your new playlist will be filled out in a few seconds :>");
+                ExecuteSuccessfullyModel model = new ExecuteSuccessfullyModel
+                {
+                    Operation = operation,
+                    CurrentUser = user,
+                    CompletedPlaylist = completedPlaylist,
+                    SpotifyPlaylist = playlist
+                };
+                
+                return View("ExecutedSuccessfully", model);
             }
 
             return Content($"Could not validate operation {operation.Id}.\n{validationResult.ToString()}");
