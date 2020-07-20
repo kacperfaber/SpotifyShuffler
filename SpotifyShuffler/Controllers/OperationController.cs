@@ -27,6 +27,7 @@ namespace SpotifyShuffler.Controllers
         public IOperationValidator OperationValidator;
         public ISpotifyUrisGenerator SpotifyUrisGenerator;
         public IPlaylistValidator PlaylistValidator;
+        public IOrderedPrototypesProvider OrderedPrototypesProvider;
 
         public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
             SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator, SpotifyContext spotifyContext,
@@ -63,7 +64,9 @@ namespace SpotifyShuffler.Controllers
                 {
                     CreatedAt = DateTime.Now,
                     OriginalPlaylistId = playlistId,
-                    User = user
+                    User = user,
+                    OriginalPlaylistDescription = playlist.Description,
+                    OriginalPlaylistName = playlist.Name
                 };
 
                 await OperationManager.CreateAsync(operation);
@@ -181,10 +184,12 @@ namespace SpotifyShuffler.Controllers
 
                 PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(auth);
 
-                SpotifyPlaylist playlist =
+                SpotifyPlaylist playlist = 
                     await playlistService.CreatePlaylist(user.SpotifyAccountId, operation.PlaylistName, operation.PlaylistDescription, true, false);
 
-                IEnumerable<string> uris = SpotifyUrisGenerator.Generate(operation.Prototype.Tracks.OrderBy(x => x.Index));
+                IOrderedEnumerable<TrackPrototype> tracks = OrderedPrototypesProvider.Provide(operation.Prototype);
+                
+                IEnumerable<string> uris = SpotifyUrisGenerator.Generate(tracks);
 
                 _ = playlistService.AddAllTracks(playlist.Id, uris);
 
