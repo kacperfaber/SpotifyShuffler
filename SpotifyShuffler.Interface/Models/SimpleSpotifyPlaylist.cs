@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace SpotifyShuffler.Interface
 {
@@ -30,5 +31,8 @@ namespace SpotifyShuffler.Interface
         
         [JsonProperty("uri")]
         public string Uri { get; set; }
+        
+        [JsonProperty("images")]
+        public List<Image> Images { get; set; }
     }
 }

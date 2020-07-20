@@ -30,7 +30,9 @@ namespace SpotifyShuffler.Types
             if (string.IsNullOrEmpty(id))
                 return null;
 
-            return await SpotifyContext.Users.FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
+            return await SpotifyContext.Users
+                .Include(x => x.CompletedPlaylists)
+                .FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
         }
     }
 }
