@@ -12,28 +12,27 @@
     <title>title</title>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-10 offset-1">
-            <div class="card-deck">
-                @foreach (SimpleSpotifyPlaylist playlist in Model.SpotifyPlaylists)
-                {
-                    <div class="card mx-3" style="max-width: 130px;">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                @playlist.Name
-                            </h5>
-                            <p class="card-text">
-                                @playlist.Description
-                            </p>
-                            @Html.ActionLink("Shuffle", "BeginNewOperation", "Operation", new {playlist_id = playlist.Id}, new {@class = "btn btn-primary"})
-                        </div>
-                    </div>
-                }
-            </div>
+        <div class="col-xs-12 col-md-10 col-xl-8 offset-md-1 offset-xl-2">
+            <h1 class="h2">
+                Playlists
+            </h1>
+            @foreach (SimpleSpotifyPlaylist playlist in Model.SpotifyPlaylists)
+            {
+                <div class="m-1 mt-3 p-3" style="width: 100%;">
+                    <h1 class="h3">
+                        @playlist.Name
+                    </h1>
+                    <h1 class="h6 text-muted"> @@@playlist.Owner.Name</h1>
+                    <p class="text-muted">
+                        @playlist.Description
+                    </p>
 
+                    <a href="#" class="btn btn-primary">Shuffle</a>
+                </div>
+            }
         </div>
-
     </div>
 </div>
 </body>
