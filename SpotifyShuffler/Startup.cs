@@ -52,6 +52,8 @@ namespace SpotifyShuffler
                     opts.Scope.Add("playlist-modify-public");
                     opts.Scope.Add("user-read-email");
                     opts.Scope.Add("user-read-private");
+                    opts.Scope.Add("user-library-modify");
+                    opts.Scope.Add("user-library-read");
                 });
 
             services.AddMvc(mvc => mvc.EnableEndpointRouting = false).AddNewtonsoftJson(o =>
