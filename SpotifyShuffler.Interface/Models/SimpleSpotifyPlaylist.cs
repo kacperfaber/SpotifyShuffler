@@ -32,6 +32,7 @@ namespace SpotifyShuffler.Interface
         [JsonProperty("uri")]
         public string Uri { get; set; }
         
+        [JsonIgnore]
         [JsonProperty("images")]
         public List<Image> Images { get; set; }
     }

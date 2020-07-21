@@ -32,6 +32,12 @@ namespace SpotifyShuffler.Types
 
             return await SpotifyContext.Users
                 .Include(x => x.CompletedPlaylists)
+                .ThenInclude(x => x.PlaylistPrototype)
+                .ThenInclude(x => x.Tracks)
+                .Include(x => x.Operations)
+                .ThenInclude(x => x.Prototype)
+                .ThenInclude(x => x.Tracks)
+                .Include(x => x.SpotifyAccount)
                 .FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
         }
     }

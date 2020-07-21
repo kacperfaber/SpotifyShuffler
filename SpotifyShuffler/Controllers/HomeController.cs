@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -28,19 +29,30 @@ namespace SpotifyShuffler.Controllers
         public async Task<IActionResult> Home()
         {
             User user = await UserManager.GetUserAsync(HttpContext.User);
-            
-            PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(new SpotifyAuthorization
-            {
-                AccessToken = await AccessTokenStore.GetAccessToken(user)
-            });
 
-            SimpleSpotifyPlaylist[] playlists = playlistService.GetPlaylists().Result.Items;
-            
-            return View(new HomeModel
+            if (user != null)
             {
-                CurrentUser = user,
-                SpotifyPlaylists = playlists,
-                CompletedPlaylists = user.CompletedPlaylists
+                PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(new SpotifyAuthorization
+                {
+                    AccessToken = await AccessTokenStore.GetAccessToken(user)
+                });
+
+                Paging<SimpleSpotifyPlaylist> paging = playlistService.GetPlaylists(20, 0).Result;
+                SimpleSpotifyPlaylist[] playlists = paging.Items;
+
+                return View(new HomeModel
+                {
+                    CurrentUser = user,
+                    SpotifyPlaylists = playlists,
+                    CompletedPlaylists = user.CompletedPlaylists
+                });
+            }
+
+            return View(new HomeModel()
+            {
+                CurrentUser = null,
+                CompletedPlaylists = new List<CompletedPlaylist>(),
+                SpotifyPlaylists = new SimpleSpotifyPlaylist[0]
             });
         }
     }

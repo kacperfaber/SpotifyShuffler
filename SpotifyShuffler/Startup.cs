@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using SpotifyShuffler.Database;
@@ -24,23 +25,20 @@ namespace SpotifyShuffler
     public class Startup
     {
         public IConfiguration Configuration;
-        
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<SpotifyContext>(builder => builder.UseSqlite("Data Source=app.db;", b => b.MigrationsAssembly("SpotifyShuffler")));
-            
+
             services.AddSpotify();
 
             services
-                .AddAuthentication(opts =>
-                {
-                    opts.DefaultSignInScheme = SpotifyAuthenticationDefaults.AuthenticationScheme;
-                })
+                .AddAuthentication(opts => { opts.DefaultSignInScheme = SpotifyAuthenticationDefaults.AuthenticationScheme; })
                 .AddCookie()
                 .AddSpotify(opts =>
                 {
@@ -48,23 +46,24 @@ namespace SpotifyShuffler
                     opts.ClientSecret = Configuration["Authentication:Spotify:ClientSecret"];
                     opts.SaveTokens = true;
 
+                    opts.Scope.Add("playlist-read-collaborative");
+                    opts.Scope.Add("playlist-read-private");
                     opts.Scope.Add("playlist-modify-private");
                     opts.Scope.Add("playlist-modify-public");
                     opts.Scope.Add("user-read-email");
                     opts.Scope.Add("user-read-private");
                 });
-                
+
             services.AddMvc(mvc => mvc.EnableEndpointRouting = false).AddNewtonsoftJson(o =>
             {
                 o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 o.SerializerSettings.Formatting = Formatting.Indented;
             });
-            
-            services.AddIdentity<User, Role>()
+
+            services.AddIdentity<User, Role>(options => { options.User.AllowedUserNameCharacters += " "; })
                 .AddEntityFrameworkStores<SpotifyContext>()
-                .AddDefaultTokenProviders()
                 .AddUserManager<UserManager>();
-            
+
             services.AddScoped<IUserFinder, UserFinder>();
             services.AddScoped<IUserGenerator, UserGenerator>();
             services.AddScoped<IUserCreator, UserCreator>();
@@ -90,7 +89,7 @@ namespace SpotifyShuffler
 
             services.AddScoped<IOperationValidator, OperationValidator>();
             services.AddScoped<ISpotifyUrisGenerator, SpotifyUrisGenerator>();
-            
+
             services.AddScoped(typeof(OperationManager));
         }
 
@@ -103,12 +102,12 @@ namespace SpotifyShuffler
 
             app.UseRouting();
             app.UseStaticFiles();
-            
+
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             app.UseMvc(x => x.MapRoute("default", "{Controller}/{Action}"));
         }
     }
