@@ -14,14 +14,11 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-xs-12 col-md-10 col-xl-8 offset-xl-2 offset-md-1">
-            <h1 class="h2">
-                Playlists
-            </h1>
+        <div class="col-10 offset-1">
             <div class="card-deck">
                 @foreach (SimpleSpotifyPlaylist playlist in Model.SpotifyPlaylists)
                 {
-                    <div class="card float-left">
+                    <div class="card mx-3" style="max-width: 130px;">
                         <div class="card-body">
                             <h5 class="card-title">
                                 @playlist.Name
@@ -36,6 +33,7 @@
             </div>
 
         </div>
+
     </div>
 </div>
 </body>

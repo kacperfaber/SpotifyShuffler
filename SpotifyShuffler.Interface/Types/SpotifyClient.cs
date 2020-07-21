@@ -64,8 +64,9 @@ namespace SpotifyShuffler.Interface
             request.Headers.Add("Accept", "*/*");
             
             HttpResponseMessage response = await Http.SendAsync(request);
+            string result = response.Content.ReadAsStringAsync().Result;
 
-            return JsonConvert.DeserializeObject<TResult>(response.Content.ReadAsStringAsync().Result);
+            return JsonConvert.DeserializeObject<TResult>(result);
         }
     }
 }

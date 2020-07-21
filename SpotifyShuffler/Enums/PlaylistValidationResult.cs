@@ -3,6 +3,7 @@
     public enum PlaylistValidationResult
     {
         TooLarge,
-        Ok
+        Ok,
+        Null
     }
 }
