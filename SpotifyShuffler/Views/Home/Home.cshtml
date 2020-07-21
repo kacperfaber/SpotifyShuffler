@@ -29,7 +29,7 @@
                         @playlist.Description
                     </p>
 
-                    <a href="#" class="btn btn-primary">Shuffle</a>
+                    @Html.ActionLink("Shuffle", "BeginNewOperation", "Operation", new {playlist_id = playlist.Id}, new {@class = "btn btn-primary"})
                 </div>
             }
         </div>

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using Newtonsoft.Json;
 
 namespace SpotifyShuffler.Interface
@@ -62,7 +64,7 @@ namespace SpotifyShuffler.Interface
             
             request.Headers.Add("Authorization", spotifyAuthorization.GetToken());
             request.Headers.Add("Accept", "*/*");
-            
+
             HttpResponseMessage response = await Http.SendAsync(request);
             string result = response.Content.ReadAsStringAsync().Result;
 
