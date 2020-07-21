@@ -50,7 +50,7 @@ namespace SpotifyShuffler.Controllers
         }
 
         [HttpGet("operation/begin-new")]
-        public async Task<IActionResult> BeginNewOperation(string playlistId)
+        public async Task<IActionResult> BeginNewOperation([FromQuery(Name = "playlist_id")] string playlistId)
         {
             User user = UserManager.GetUserAsync(HttpContext.User).Result;
 
@@ -81,6 +81,11 @@ namespace SpotifyShuffler.Controllers
             else if (validation == PlaylistValidationResult.TooLarge)
             {
                 return Content("Playlist is too large.\nAllowed playlist items count is 300.");
+            }
+            
+            else if (validation == PlaylistValidationResult.Null)
+            {
+                return Content("Could not validate this playlist " + playlistId);
             }
 
             return Ok();
@@ -118,7 +123,13 @@ namespace SpotifyShuffler.Controllers
                 SpotifyContext.Add(operation.Prototype);
                 _ = SpotifyContext.SaveChangesAsync();
 
-                return Json(operation.Prototype.Tracks);
+                return View("CheckPrototype", new CheckPrototypeModel
+                {
+                    Prototype = operation.Prototype,
+                    OperationId = (Guid) operation.Id,
+                    PlaylistId = playlist.Id,
+                    CurrentUser = user
+                });
             }
 
             else
@@ -130,7 +141,13 @@ namespace SpotifyShuffler.Controllers
 
                 TrackPrototype track = prototype.Tracks.FirstOrDefault();
 
-                return Content($"Updating existing prototype.\n Now first position is {track.Author} - \"{track.Name}\"");
+                return View("CheckPrototype", new CheckPrototypeModel
+                {
+                    Prototype = operation.Prototype,
+                    OperationId = (Guid) operation.Id,
+                    PlaylistId = operation.OriginalPlaylistId,
+                    CurrentUser = user
+                });
             }
         }
 

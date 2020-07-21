@@ -37,10 +37,10 @@ namespace SpotifyShuffler.Controllers
                     AccessToken = await AccessTokenStore.GetAccessToken(user)
                 });
 
-                Paging<SimpleSpotifyPlaylist> paging = playlistService.GetPlaylists(20, 0).Result;
+                Paging<SimpleSpotifyPlaylist> paging = playlistService.GetPlaylists().Result;
                 SimpleSpotifyPlaylist[] playlists = paging.Items;
 
-                return View(new HomeModel
+                return View("Home", new HomeModel
                 {
                     CurrentUser = user,
                     SpotifyPlaylists = playlists,
@@ -48,12 +48,7 @@ namespace SpotifyShuffler.Controllers
                 });
             }
 
-            return View(new HomeModel()
-            {
-                CurrentUser = null,
-                CompletedPlaylists = new List<CompletedPlaylist>(),
-                SpotifyPlaylists = new SimpleSpotifyPlaylist[0]
-            });
+            return View("AnonymousHome", new HomeModel());
         }
     }
 }

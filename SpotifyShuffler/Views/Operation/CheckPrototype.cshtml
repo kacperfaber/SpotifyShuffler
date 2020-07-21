@@ -1,0 +1,44 @@
+﻿@using SpotifyShuffler.Database
+@model SpotifyShuffler.Models.CheckPrototypeModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-xl-8 col-xs-12 offset-xl-2 offset-md-1">
+            <table class="table table-striped table-light">
+                <thead>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Artist
+                </th>
+                <th>
+                    Album
+                </th>
+                </thead>
+                <tbody>
+                @foreach (TrackPrototype proto in Model.Prototype.Tracks)
+                {
+                    <tr>
+                        <td>
+                            @proto.Name
+                        </td>
+                        <td>
+                            @proto.Author
+                        </td>
+                        <td>
+                            @proto.Album
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+            @Html.ActionLink("Ok", "NameYourPlaylist", "Operation", new { playlist_id = Model.PlaylistId, operation_id = Model.OperationId }, new {@class = "btn btn-primary d-inline"})
+        </div>
+    </div>
+</div>
