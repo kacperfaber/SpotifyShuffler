@@ -9,39 +9,45 @@ namespace SpotifyShuffler.Types
 {
     public class OperationManager
     {
-        public SpotifyContext SpotifyContext;
+        public OperationContext OperationContext;
 
-        public OperationManager(SpotifyContext spotifyContext)
+        public OperationManager(OperationContext operationContext)
         {
-            SpotifyContext = spotifyContext;
+            OperationContext = operationContext;
         }
 
         public async Task CreateAsync(Operation operation)
         {
             operation.Id ??= Guid.NewGuid();
             
-            await SpotifyContext.Operations.AddAsync(operation);
-            await SpotifyContext.SaveChangesAsync();
+            await OperationContext.AddAsync(operation);
+            await OperationContext.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(Operation operation)
         {
-            SpotifyContext.Operations.Update(operation);
-            await SpotifyContext.SaveChangesAsync();
+            OperationContext.Update(operation);
+            await OperationContext.SaveChangesAsync();
         }
 
         public async Task<Operation> GetAsync(Guid operationId)
         {
-            return await SpotifyContext.Operations
+            return await OperationContext.Operations
                 .Include(x => x.Prototype)
                 .ThenInclude(x => x.Tracks)
-                .Include(x => x.User)
                 .FirstOrDefaultAsync(x => x.Id == operationId);
         }
 
-        public async Task<List<Operation>> GetAsync(string originalPlaylistId)
+        public async Task<IEnumerable<SimpleOperation>> GetAsync(string originalPlaylistId)
         {
-            return await SpotifyContext.Operations.Where(x => x.OriginalPlaylistId == originalPlaylistId).ToListAsync();
+            IQueryable<Operation> operations = OperationContext.Operations.Where(x => x.OriginalPlaylistId == originalPlaylistId);
+            return await operations.Cast<SimpleOperation>().ToListAsync();
+        }
+
+        public async Task<List<SimpleOperation>> GetAsync(User user)
+        {
+            IQueryable<Operation> operations = OperationContext.Operations.Where(x => x.OwnerId == user.Id);
+            return await operations.Cast<SimpleOperation>().ToListAsync();
         }
     }
 }
