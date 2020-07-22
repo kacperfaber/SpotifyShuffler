@@ -27,6 +27,7 @@ namespace SpotifyShuffler.Controllers
         public IOperationValidator OperationValidator;
         public IPlaylistValidator PlaylistValidator;
         public Executor Executor;
+        public ICompletedPlaylistGenerator CompletedPlaylistGenerator;
 
         public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
             SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator, SpotifyContext spotifyContext,
@@ -199,12 +200,14 @@ namespace SpotifyShuffler.Controllers
 
                 ExecuteResult result = await Executor.ExecuteAsync(operation, operation.Prototype, user, auth);
 
+                CompletedPlaylist completedPlaylist = await CompletedPlaylistGenerator.GenerateAsync(operation.Prototype, result.Playlist, user);
+
                 ExecuteSuccessfullyModel model = new ExecuteSuccessfullyModel
                 {
                     Operation = operation,
                     CurrentUser = user,
                     CompletedPlaylist = completedPlaylist,
-                    SpotifyPlaylist = playlist
+                    SpotifyPlaylist = result.Playlist
                 };
                 
                 return View("ExecutedSuccessfully", model);
