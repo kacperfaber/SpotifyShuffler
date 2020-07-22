@@ -32,7 +32,7 @@ namespace SpotifyShuffler.Controllers
         public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
             SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator, SpotifyContext spotifyContext,
             IPrototypesSorter prototypesSorter, IOperationValidator operationValidator,
-            IPlaylistValidator playlistValidator)
+            IPlaylistValidator playlistValidator, ICompletedPlaylistGenerator completedPlaylistGenerator, Executor executor)
         {
             OperationManager = operationManager;
             UserManager = userManager;
@@ -43,6 +43,8 @@ namespace SpotifyShuffler.Controllers
             PrototypesSorter = prototypesSorter;
             OperationValidator = operationValidator;
             PlaylistValidator = playlistValidator;
+            CompletedPlaylistGenerator = completedPlaylistGenerator;
+            Executor = executor;
         }
 
         [HttpGet("operation/begin-new")]
