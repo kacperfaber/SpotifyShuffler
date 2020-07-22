@@ -35,6 +35,8 @@ namespace SpotifyShuffler
         {
             services.AddDbContext<SpotifyContext>(builder => builder.UseSqlite("Data Source=app.db;", b => b.MigrationsAssembly("SpotifyShuffler")));
 
+            services.AddDbContext<OperationContext>(b => b.UseSqlite("Data Source=op.db;", b => b.MigrationsAssembly("SpotifyShuffler")));
+            
             services.AddSpotify();
 
             services
