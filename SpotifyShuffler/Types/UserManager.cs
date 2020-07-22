@@ -31,11 +31,17 @@ namespace SpotifyShuffler.Types
                 return null;
 
             return await SpotifyContext.Users
-                .Include(x => x.CompletedPlaylists)
-                .ThenInclude(x => x.PlaylistPrototype)
-                .ThenInclude(x => x.Tracks)
-                .Include(x => x.SpotifyAccount)
                 .FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
+        }
+
+        public async Task<SimpleUser> GetAsync(Guid userId)
+        {
+            return await SpotifyContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+        }
+
+        public async Task<SimpleUser> GetAsync(string spotifyId)
+        {
+            return await SpotifyContext.Users.FirstOrDefaultAsync(x => x.SpotifyAccountId == spotifyId);
         }
     }
 }

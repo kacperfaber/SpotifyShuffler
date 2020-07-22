@@ -10,8 +10,6 @@ namespace SpotifyShuffler.Database
 
         public string SpotifyId { get; set; }
 
-        public User Owner { get; set; }
-
         public DateTime GeneratedAt { get; set; }
     }
 }

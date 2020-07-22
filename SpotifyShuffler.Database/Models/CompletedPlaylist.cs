@@ -11,5 +11,7 @@ namespace SpotifyShuffler.Database
         public PlaylistPrototype PlaylistPrototype { get; set; }
 
         public Guid? PlaylistPrototypeId { get; set; }
+        
+        public User Owner { get; set; }
     }
 }

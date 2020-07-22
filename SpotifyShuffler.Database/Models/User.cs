@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace SpotifyShuffler.Database
 {
-    public class User : IdentityUser<Guid>
+    public class User : SimpleUser
     {
         [ForeignKey("SpotifyAccountId")]
         public SpotifyAccount SpotifyAccount { get; set; }
