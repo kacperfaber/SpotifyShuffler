@@ -5,17 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SpotifyShuffler.Database
 {
-    public class CompletedPlaylist
+    public class CompletedPlaylist : SimpleCompletedPlaylist
     {
-        [Key]
-        public Guid Id { get; set; }
-
-        public string SpotifyId { get; set; }
-
-        public User Owner { get; set; }
-
-        public DateTime GeneratedAt { get; set; }
-
         [ForeignKey("PlaylistPrototypeId")]
         public PlaylistPrototype PlaylistPrototype { get; set; }
 
