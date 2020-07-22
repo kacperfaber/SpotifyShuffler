@@ -10,7 +10,7 @@ namespace SpotifyShuffler.Database
         public DbSet<Registration> Registrations { get; set; }
         public DbSet<CompletedPlaylist> CompletedPlaylists { get; set; }
 
-        public SpotifyContext(DbContextOptions options) : base(options)
+        public SpotifyContext(DbContextOptions<SpotifyContext> options) : base(options)
         {
         }
 
