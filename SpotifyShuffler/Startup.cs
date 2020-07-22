@@ -90,9 +90,12 @@ namespace SpotifyShuffler
             services.AddScoped<ITrackPrototypeGenerator, TrackPrototypeGenerator>();
             services.AddScoped<ITrackPrototypesGenerator, TrackPrototypesGenerator>();
             services.AddScoped<IArtistLabelGenerator, ArtistLabelGenerator>();
-
             services.AddScoped<IOperationValidator, OperationValidator>();
             services.AddScoped<ISpotifyUrisGenerator, SpotifyUrisGenerator>();
+
+            services.AddScoped<Executor>();
+            services.AddScoped<ITracksAdder, TracksAdder>();
+            services.AddScoped<ISpotifyPlaylistCreator, SpotifyPlaylistCreator>();
 
             services.AddScoped(typeof(OperationManager));
         }

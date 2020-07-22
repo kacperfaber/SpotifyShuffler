@@ -9,15 +9,16 @@ namespace SpotifyShuffler.Types
 {
     public class Executor
     {
-        public SpotifyService SpotifyService { get; set; }
+        public SpotifyService SpotifyService;
 
         public ISpotifyPlaylistCreator PlaylistCreator;
         public ITracksAdder TracksAdder;
 
-        public Executor(ISpotifyPlaylistCreator playlistCreator, ITracksAdder tracksAdder)
+        public Executor(ISpotifyPlaylistCreator playlistCreator, ITracksAdder tracksAdder, SpotifyService spotifyService)
         {
             PlaylistCreator = playlistCreator;
             TracksAdder = tracksAdder;
+            SpotifyService = spotifyService;
         }
 
         public async Task<ExecuteResult> ExecuteAsync(Operation operation, PlaylistPrototype playlistPrototype, User user, SpotifyAuthorization authorization)

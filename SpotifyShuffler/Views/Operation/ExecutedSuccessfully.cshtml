@@ -4,18 +4,20 @@
     Layout = "_Layout";
 }
 
-<div class="container m-5">
+<div class="container">
     <div class="row">
-        <div class="col-xs-12 col-md-8 col-xl-8 offset-md-3 offset-xl-4">
-            <h1 class="h3">
-                Thank You!
-            </h1>
-            <p>
-                Your playlist will be created in a few seconds
-            </p>
-            
-            <div class="mt-5">
-                @Html.ActionLink("Download Raport", "DownloadRaport", "Raport", new { completed_playlist_id = Model.CompletedPlaylist.Id}, new {@class = "btn btn-primary"})
+        <div class="col-xs-12 col-md-10 col-xl-8 offset-md-1 offset-xl-2">
+            <div class="jumbotron">
+                <h1 class="h3">
+                    Thank You!
+                </h1>
+                <p>
+                    Your playlist will be created in a few seconds
+                </p>
+
+                <div class="mt-5">
+                    @Html.ActionLink("Download Raport", "DownloadRaport", "Raport", new {completed_playlist_id = Model.CompletedPlaylist.Id}, new {@class = "btn btn-primary"})
+                </div>
             </div>
         </div>
     </div>
