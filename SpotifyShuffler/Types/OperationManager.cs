@@ -49,5 +49,10 @@ namespace SpotifyShuffler.Types
             IQueryable<Operation> operations = OperationContext.Operations.Where(x => x.OwnerId == user.Id);
             return await operations.Cast<SimpleOperation>().ToListAsync();
         }
+
+        public async Task<SimpleOperation> GetSimpleAsync(Guid operationId)
+        {
+            return await OperationContext.Operations.FirstOrDefaultAsync(x => x.Id == operationId);
+        }
     }
 }

@@ -54,7 +54,10 @@ namespace SpotifyShuffler.Controllers
         {
             User user = UserManager.GetUserAsync(HttpContext.User).Result;
 
-            SpotifyAuthorization authorization = new SpotifyAuthorization {AccessToken = await AccessTokenStore.GetAccessToken(user)};
+            SpotifyAuthorization authorization = new SpotifyAuthorization
+            {
+                AccessToken = await AccessTokenStore.GetAccessToken(user)
+            };
 
             PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(authorization);
 
@@ -231,11 +234,11 @@ namespace SpotifyShuffler.Controllers
         [HttpPost("operation/summary/confirm")]
         public async Task<IActionResult> ConfirmOperationPost(SummaryOperationModel model)
         {
-            Operation op = await OperationManager.GetAsync(model.OperationId);
+            SimpleOperation op = await OperationManager.GetSimpleAsync(model.OperationId);
             op.IsSubmitted = true;
             op.SubmittedAt = DateTime.Now;
 
-            await OperationManager.UpdateAsync(op);
+            await OperationManager.UpdateAsync((Operation) op);
 
             return RedirectToAction("ExecuteOperation", "Operation", new {operation_id = model.OperationId});
         }
