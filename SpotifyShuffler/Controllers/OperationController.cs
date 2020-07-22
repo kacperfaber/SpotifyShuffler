@@ -68,7 +68,7 @@ namespace SpotifyShuffler.Controllers
                 {
                     CreatedAt = DateTime.Now,
                     OriginalPlaylistId = playlistId,
-                    User = user,
+                    OwnerId = user.Id,
                     OriginalPlaylistDescription = playlist.Description,
                     OriginalPlaylistName = playlist.Name
                 };
