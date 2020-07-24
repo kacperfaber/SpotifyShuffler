@@ -89,7 +89,7 @@ namespace SpotifyShuffler.Controllers
                 return Content("Could not validate this playlist " + playlistId);
             }
 
-            return Ok();
+            return BadRequest();
         }
 
         [HttpGet("operation/make-prototype")]
@@ -100,18 +100,12 @@ namespace SpotifyShuffler.Controllers
 
             if (operation.Prototype == null)
             {
-                SpotifyAuthorization auth = new SpotifyAuthorization
-                {
-                    AccessToken = await AccessTokenStore.GetAccessToken(user)
-                };
+                SpotifyAuthorization auth = SpotifyAuthorization.Create(await AccessTokenStore.GetAccessToken(user));
 
                 PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(auth);
 
-                // TODO can be copy playlist into database.
                 SpotifyPlaylist playlist = await playlistService.GetPlaylist(operation.OriginalPlaylistId);
 
-                // int total??
-                // Without him i ll be able to left behind SpotifyPlaylist (upper)
                 List<SpotifyTrack> tracks = await playlistService.GetAllTracks(playlist.Id, playlist.Tracks.Total);
 
                 operation.Prototype = await PlaylistPrototypeGenerator.GenerateAsync(tracks, operation);
@@ -119,8 +113,6 @@ namespace SpotifyShuffler.Controllers
 
                 await OperationManager.OperationContext.AddAsync(operation.Prototype);
                 _ = OperationManager.OperationContext.SaveChangesAsync();
-
-                // operation.Prototype.Tracks.ForEach(x => x.PlaylistPrototype = operation.Prototype);
 
                 return View("CheckPrototype", new CheckPrototypeModel
                 {
@@ -133,23 +125,32 @@ namespace SpotifyShuffler.Controllers
 
             else
             {
-                PrototypesSorter.Sort(operation.Prototype);
-
-                SpotifyContext.Update(operation.Prototype);
-                _ = SpotifyContext.SaveChangesAsync();
-
-                return View("CheckPrototype", new CheckPrototypeModel
-                {
-                    Prototype = operation.Prototype,
-                    OperationId = (Guid) operation.Id,
-                    PlaylistId = operation.OriginalPlaylistId,
-                    CurrentUser = user
-                });
+                return BadRequest($"Taken operation {{ {operation.Id} }} has prototype.");
             }
         }
 
-        [HttpGet("operation/name-your-playlist")]
-        public IActionResult NameYourPlaylist(NameYourPlaylistPayload payload)
+        [HttpGet("operation/refresh-prototype")]
+        public async Task<IActionResult> RefreshPrototype([FromQuery(Name = "operation_id")] Guid operationId)
+        {
+            User user = await UserManager.GetUserAsync(HttpContext.User);
+            Operation operation = await OperationManager.GetAsync(operationId);
+
+            PrototypesSorter.Sort(operation.Prototype);
+
+            SpotifyContext.Update(operation.Prototype);
+            _ = SpotifyContext.SaveChangesAsync();
+
+            return View("CheckPrototype", new CheckPrototypeModel
+            {
+                Prototype = operation.Prototype,
+                OperationId = (Guid) operation.Id,
+                PlaylistId = operation.OriginalPlaylistId,
+                CurrentUser = user
+            });
+        }
+
+        [HttpGet("operation/configure-your-playlist")]
+        public IActionResult ConfigureYourPlaylist(NameYourPlaylistPayload payload)
         {
             NameYourPlaylist model = new NameYourPlaylist
             {
@@ -161,8 +162,8 @@ namespace SpotifyShuffler.Controllers
             return View(model);
         }
 
-        [HttpPost("operation/name-your-playlist/post")]
-        public async Task<IActionResult> NameYourPlaylistPost(NameYourPlaylist payload)
+        [HttpPost("operation/configure-your-playlist/post")]
+        public async Task<IActionResult> ConfigureYourPlaylistPost(NameYourPlaylist payload)
         {
             Operation operation = await OperationManager.GetAsync(payload.OperationId);
 

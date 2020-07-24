@@ -68,6 +68,11 @@ namespace SpotifyShuffler
                 .AddEntityFrameworkStores<SpotifyContext>()
                 .AddUserManager<UserManager>();
 
+            services.ConfigureApplicationCookie(x =>
+            {
+                x.ExpireTimeSpan = TimeSpan.FromMinutes(59);
+            });
+
             services.AddScoped<IUserFinder, UserFinder>();
             services.AddScoped<IUserGenerator, UserGenerator>();
             services.AddScoped<IUserCreator, UserCreator>();
