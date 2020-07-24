@@ -29,7 +29,7 @@ namespace SpotifyShuffler.Interface
             {
                 Method = method,
                 Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8),
-                RequestUri = new Uri(url)
+                RequestUri = new System.Uri(url)
             };
 
             request.Headers.Add("Authorization", spotifyAuthorization.GetToken());
@@ -43,7 +43,7 @@ namespace SpotifyShuffler.Interface
             {
                 Method = method,
                 Content = new StringContent(JsonConvert.SerializeObject(body)),
-                RequestUri = new Uri(url)
+                RequestUri = new System.Uri(url)
             };
 
             request.Headers.Add("Authorization", spotifyAuthorization.GetToken());
@@ -59,7 +59,7 @@ namespace SpotifyShuffler.Interface
             {
                 Method = method,
                 Content = body != null ? new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json") : new StringContent(string.Empty),
-                RequestUri = new Uri(QueryGenerator.Generate(url, InstanceToDictionaryConverter.Convert(queryParameters)))
+                RequestUri = new System.Uri(QueryGenerator.Generate(url, InstanceToDictionaryConverter.Convert(queryParameters)))
             };
             
             request.Headers.Add("Authorization", spotifyAuthorization.GetToken());

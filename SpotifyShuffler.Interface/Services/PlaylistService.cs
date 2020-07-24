@@ -136,5 +136,36 @@ namespace SpotifyShuffler.Interface
 
             return tracks;
         }
+
+        public async Task Clear(string playlistId, IEnumerable<string> uris)
+        {
+            List<SpotifyUri> spotifyUris = Array.ConvertAll(uris.ToArray(), s => new SpotifyUri {ItemUri = s}).ToList();
+
+            DeletePlaylistTracksPayload payload = new DeletePlaylistTracksPayload
+            {
+                Tracks = spotifyUris
+            };
+
+            string url = $"https://api.spotify.com/v1/playlists/{playlistId}/tracks";
+
+            await SpotifyClient.SendAsync(url, payload, HttpMethod.Delete, SpotifyAuthorization);
+        }
+        
+        public async Task ClearAll(string playlistId, int total)
+        {
+            List<SpotifyTrack> tracks = await GetAllTracks(playlistId, total);
+
+            List<string> spotifyUris = Array.ConvertAll(tracks.ToArray(), s => s.Uri)
+                .ToList();
+
+            for (int i = 0; i < spotifyUris.Count; i++)
+            {
+                IEnumerable<string> uris = spotifyUris
+                    .Skip(100 * i)
+                    .Take(100);
+
+                _ = Clear(playlistId, uris);
+            }
+        }
     }
 }
