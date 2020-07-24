@@ -151,15 +151,17 @@ namespace SpotifyShuffler.Interface
             HttpResponseMessage response = await SpotifyClient.SendAsync(url, payload, HttpMethod.Delete, SpotifyAuthorization);
         }
 
-        public async Task ClearAll(string playlistId, int total)
+        public async Task ClearAll(SpotifyPlaylist playlist)
         {
-            int loops = total / 100;
-            int left = total % 100;
-
-            List<SpotifyTrack> tracks = await GetAllTracks(playlistId, total);
+            List<SpotifyTrack> tracks = await GetAllTracks(playlist.Id, playlist.Tracks.Total);
 
             List<string> spotifyUris = Array.ConvertAll(tracks.ToArray(), s => s.Uri)
+                .Distinct()
                 .ToList();
+
+            int count = spotifyUris.Count;
+            int loops = count / 100;
+            int left = count % 100;
 
             for (int i = 0; i < loops; i++)
             {
@@ -167,13 +169,13 @@ namespace SpotifyShuffler.Interface
                     .Skip(100 * i)
                     .Take(100);
 
-                await Clear(playlistId, uris);
+                await Clear(playlist.Id, uris);
             }
 
             IEnumerable<string> leftUris = spotifyUris
                 .TakeLast(left);
 
-            await Clear(playlistId, leftUris);
+            await Clear(playlist.Id, leftUris);
         }
     }
 }
