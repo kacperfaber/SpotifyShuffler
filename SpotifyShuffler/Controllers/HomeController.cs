@@ -25,7 +25,7 @@ namespace SpotifyShuffler.Controllers
             AccessTokenStore = accessTokenStore;
         }
 
-        [HttpGet("home")]
+        [HttpGet("home", Name = "home/home")]
         public async Task<IActionResult> Home()
         {
             User user = await UserManager.GetUserAsync(HttpContext.User);

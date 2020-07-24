@@ -7,18 +7,18 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12 col-md-10 col-xl-8 offset-md-1 offset-xl-2">
-            <div class="jumbotron">
-                <h1 class="h3">
-                    Thank You!
-                </h1>
-                <p>
-                    Your playlist will be created in a few seconds
-                </p>
-
-                <div class="mt-5">
-                    @Html.ActionLink("Download Raport", "DownloadRaport", "Raport", new {completed_playlist_id = Model.CompletedPlaylist.Id}, new {@class = "btn btn-primary"})
-                </div>
-            </div>
+            <h1 class="h3">
+                Thank You!
+            </h1>
+            <p>
+                You will be redirect in a few seconds...
+            </p>
         </div>
     </div>
 </div>
+
+<script>
+    window.setTimeout(function() {
+        window.location.href = '@Url.Link("home/home", new {})';
+    }, 5000);
+</script>
