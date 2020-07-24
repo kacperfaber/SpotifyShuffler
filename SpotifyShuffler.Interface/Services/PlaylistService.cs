@@ -148,24 +148,32 @@ namespace SpotifyShuffler.Interface
 
             string url = $"https://api.spotify.com/v1/playlists/{playlistId}/tracks";
 
-            await SpotifyClient.SendAsync(url, payload, HttpMethod.Delete, SpotifyAuthorization);
+            HttpResponseMessage response = await SpotifyClient.SendAsync(url, payload, HttpMethod.Delete, SpotifyAuthorization);
         }
-        
+
         public async Task ClearAll(string playlistId, int total)
         {
+            int loops = total / 100;
+            int left = total % 100;
+
             List<SpotifyTrack> tracks = await GetAllTracks(playlistId, total);
 
             List<string> spotifyUris = Array.ConvertAll(tracks.ToArray(), s => s.Uri)
                 .ToList();
 
-            for (int i = 0; i < spotifyUris.Count; i++)
+            for (int i = 0; i < loops; i++)
             {
                 IEnumerable<string> uris = spotifyUris
                     .Skip(100 * i)
                     .Take(100);
 
-                _ = Clear(playlistId, uris);
+                await Clear(playlistId, uris);
             }
+
+            IEnumerable<string> leftUris = spotifyUris
+                .TakeLast(left);
+
+            await Clear(playlistId, leftUris);
         }
     }
 }
