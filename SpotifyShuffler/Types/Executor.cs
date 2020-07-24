@@ -25,14 +25,31 @@ namespace SpotifyShuffler.Types
         {
             PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(authorization);
 
-            SpotifyPlaylist playlist = await PlaylistCreator.CreateAsync(operation, user, playlistService);
-
-            await TracksAdder.AddAll(playlistPrototype, playlist, playlistService);
-
-            return new ExecuteResult
+            if (operation.Kind == OperationKind.CreateNewPlaylist)
             {
-                Playlist = playlist
-            };
+                SpotifyPlaylist playlist = await PlaylistCreator.CreateAsync(operation, user, playlistService);
+
+                await TracksAdder.AddAll(playlistPrototype, playlist, playlistService);
+
+                return new ExecuteResult
+                {
+                    Playlist = playlist,
+                    Operation = operation
+                };
+            }
+
+            else if (operation.Kind == OperationKind.UseOriginalPlaylist)
+            {
+                SpotifyPlaylist playlist = await PlaylistCreator.CreateAsync(operation, user, playlistService);
+
+                await TracksAdder.AddAll(playlistPrototype, playlist, playlistService);
+
+                return new ExecuteResult
+                {
+                    Playlist = playlist,
+                    Operation = operation
+                };
+            }
         }
     }
 }

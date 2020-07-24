@@ -31,5 +31,7 @@ namespace SpotifyShuffler.Database
         public string PlaylistDescription { get; set; }
 
         public Guid OwnerId { get; set; }
+
+        public OperationKind Kind { get; set; }
     }
 }
