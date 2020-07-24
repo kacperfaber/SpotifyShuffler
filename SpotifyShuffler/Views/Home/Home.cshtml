@@ -1,39 +1,15 @@
-﻿@using SpotifyShuffler.Interface
+﻿@using SpotifyShuffler.Models
 @model SpotifyShuffler.Models.HomeModel
 
 @{
     Layout = "_Layout";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div class="container-fluid">
+<div class="container">
     <div class="row">
-        <div class="col-xs-12 col-md-10 col-xl-8 offset-md-1 offset-xl-2">
-            <h1 class="h2">
-                Playlists
-            </h1>
-            @foreach (SimpleSpotifyPlaylist playlist in Model.SpotifyPlaylists)
-            {
-                <div class="m-1 mt-3 p-3" style="width: 100%;">
-                    <h1 class="h3">
-                        @playlist.Name
-                    </h1>
-                    <h1 class="h6 text-muted"> @@@playlist.Owner.Name</h1>
-                    <p class="text-muted">
-                        @playlist.Description
-                    </p>
-
-                    @Html.ActionLink("Shuffle", "BeginNewOperation", "Operation", new {playlist_id = playlist.Id}, new {@class = "btn btn-primary"})
-                </div>
-            }
-        </div>
+        @foreach (PlaylistModel playlist in Model.Playlists)
+        {
+            @await Html.PartialAsync("_PlaylistItem", playlist)
+        }
     </div>
 </div>
-</body>
-</html>

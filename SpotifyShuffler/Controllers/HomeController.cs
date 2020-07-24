@@ -37,14 +37,13 @@ namespace SpotifyShuffler.Controllers
                     AccessToken = await AccessTokenStore.GetAccessToken(user)
                 });
 
-                Paging<SimpleSpotifyPlaylist> paging = playlistService.GetPlaylists().Result;
+                Paging<SimpleSpotifyPlaylist> paging = await playlistService.GetPlaylists();
                 SimpleSpotifyPlaylist[] playlists = paging.Items;
 
                 return View("Home", new HomeModel
                 {
                     CurrentUser = user,
-                    SpotifyPlaylists = playlists,
-                    CompletedPlaylists = user.CompletedPlaylists
+                    Playlists = Array.ConvertAll(playlists, p => new PlaylistModel {SpotifyPlaylist = p})
                 });
             }
 

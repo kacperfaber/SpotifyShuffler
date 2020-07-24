@@ -6,7 +6,6 @@ namespace SpotifyShuffler.Models
 {
     public class HomeModel : LayoutModel
     {
-        public SimpleSpotifyPlaylist[] SpotifyPlaylists { get; set; }
-        public List<CompletedPlaylist> CompletedPlaylists { get; set; }
+        public PlaylistModel[] Playlists { get; set; }
     }
 }
