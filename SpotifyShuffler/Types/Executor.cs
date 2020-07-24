@@ -50,6 +50,8 @@ namespace SpotifyShuffler.Types
                     Operation = operation
                 };
             }
+            
+            throw new Exception();
         }
     }
 }

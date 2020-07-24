@@ -71,7 +71,8 @@ namespace SpotifyShuffler.Controllers
                     OriginalPlaylistId = playlistId,
                     OwnerId = user.Id,
                     OriginalPlaylistDescription = playlist.Description,
-                    OriginalPlaylistName = playlist.Name
+                    OriginalPlaylistName = playlist.Name,
+                    Kind = OperationKind.CreateNewPlaylist
                 };
 
                 await OperationManager.CreateAsync(operation);

@@ -44,5 +44,21 @@ namespace SpotifyShuffler.Interface.Tests
 
             Assert.AreEqual(s, $@"{url}?{k1}={v1}&{k2}={v2}");
         }
+
+        [Test]
+        public async Task xxx()
+        {
+            SpotifyAuthorization auth = SpotifyAuthorization.Create("BQDRpo--RZ1YTjWqSeW1cPXv2c_jaPqjsJTXMObfafRVxzmxSMjlbagPpBPr3hNs-UivY5bi_T8G8t6KT5NDrGDXKJ5W98k0vU_gPzlkRXuaWoy2WCCWDrqGeH_0J8pfDg7h5pIYOy3beONUd03rGsxBKQ04JZw1o_cGk_uQkhwoxMWWfExfRXdROby44VbSuu-kcp634EIfi1bEXG7eZROPIgE1X7D48sm45xQarHmaSFMxCUnCTMgsBgpysDj3-l9zQOFPvaQIyO1Ziaey31VJ6HGHFX4f");
+            PlaylistService service = await ContainerFactory
+                .Container()
+                .ResolveOrAuto<SpotifyService>()
+                .GetAsync<PlaylistService>(auth);
+            
+            SpotifyPlaylist playlist = await service.GetPlaylist("4ntPBJuz62JrT4Wx4O807G");
+
+            await service.ClearAll(playlist.Id, playlist.Tracks.Total);
+            
+            SpotifyPlaylist p = await service.GetPlaylist("7BV8uiaIeB5IvHeZjvosNX");
+        }
     }
 }

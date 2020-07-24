@@ -4,6 +4,11 @@
     &lt;TestId&gt;NUnit3x::2D265035-A986-4D0D-827A-156A9D22A7F7::.NETCoreApp,Version=v3.1::SpotifyShuffler.Tests.prototypessorter_sort_tests.dont_throws_exceptions&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7b73bc71_002D7d12_002D4794_002D8fa0_002D5e9956a28478/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="xxx #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::C48F1E3F-1042-49A2-90F8-C8DFFE6B6B9C::.NETCoreApp,Version=v3.1::SpotifyShuffler.Interface.Tests.querygenerator_generate_tests.xxx&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	
 	
 	
