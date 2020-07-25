@@ -17,20 +17,15 @@
             @using (Html.BeginForm("ConfirmOperationPost", "Operation", FormMethod.Post))
             {
                 @Html.HiddenFor(x => x.OperationId)
-
+                
                 <div class="form-group">
-                    <label>Playlist Name</label>
-                    <input type="text" placeholder="@Model.Operation.PlaylistName" readonly class="form-control"/>
+                    <label>Operation Kind</label>
+                    <input type="text" placeholder="Shuffle original playlist" readonly class="form-control"/>
                 </div>
 
                 <div class="form-group">
-                    <label>Playlist Description</label>
-                    <input type="text" placeholder="@Model.Operation.PlaylistName" readonly class="form-control"/>
-                </div>
-
-                <div class="form-group">
-                    <label>Total</label>
-                    <input type="text" placeholder="@Model.Operation.PlaylistName" readonly class="form-control"/>
+                    <label>Original Playlist Name</label>
+                    <input type="text" placeholder="@Model.Operation.OriginalPlaylistName" readonly class="form-control"/>
                 </div>
 
                 <a href="#" class="btn btn-secondary">Cancel</a>

@@ -1,0 +1,23 @@
+﻿@using System.Security.Cryptography
+@model SpotifyShuffler.Models.ConfigureOperationKindModel 
+
+@{
+    Layout = "_Layout";
+}
+
+@using (Html.BeginForm("ConfigureOperationKindPost", "Operation", FormMethod.Post))
+{
+    @Html.HiddenFor(x => x.OperationId)
+    @Html.HiddenFor(x => x.PlaylistId)
+    
+    <h1 class="h3">
+        Do you want to create new playlist?
+    </h1>
+    <p>
+        <label class="form-text">Create new playlist</label>
+        @Html.CheckBoxFor(x => x.CreateNewPlaylist)
+    </p>
+    
+    <input class="btn btn-primary m-3" type="submit">
+}
+
