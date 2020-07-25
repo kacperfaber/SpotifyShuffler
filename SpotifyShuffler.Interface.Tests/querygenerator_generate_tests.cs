@@ -48,14 +48,14 @@ namespace SpotifyShuffler.Interface.Tests
         [Test]
         public async Task xxx()
         {
-            SpotifyAuthorization auth = SpotifyAuthorization.Create("BQC44GAHGDbDGmI7ExwzhgBO4CbPBlTTDf0biTHVQHxtb-NRYQX86w6UUHZBCpP0uT333KV4-9hQVliOxkhUMscy6Dcvf5VwBk9ZQIt5tW8KQ_0ou3c3ngSjG1ldm5VYd06J44kPY3aOtANEOETdsGCHWHGwXLzGCKx8AGMqC3UaDI45QArjTCYLxAby6sAomZIKaC-ByZo4_rQv0uVwcJUTxpUIAI_jvogRNVuKDks2jMeIE_u-icrzKnEH2-Ys5nDywR6P8tKV12jm4XQU05rXw4Ppc0W1");
+            SpotifyAuthorization auth = SpotifyAuthorization.Create("BQCUJuM_EhTL0pWWXzLyczpYBSecMzf_zHILjXdbcELWjSIHf0T5plhwL-BD6wOefKwrZ86isgb1lLBSd5ncHbPyDwn4sgVfgZ2XjUxa3I4M4dCUrvX2PORrmL1AEKzPAOxxTwcnZRcRWk1xpqcQH6Xqt3RzmFv0lof6y5xV8Uyr_6pTU4AXWYONthni_mUxu1O4zMfsXRef3gChvfsAmVHZUdpfmp92q9R7yMwGCkwSbDB-ybB4SIIiKDyqdyISr2cbbyAJxrugbz6pw3aq6eX_ZN7_68kB");
             
             PlaylistService service = await ContainerFactory
                 .Container()
                 .ResolveOrAuto<SpotifyService>()
                 .GetAsync<PlaylistService>(auth);
             
-            SpotifyPlaylist playlist = await service.GetPlaylist("1ccvERlOc722iJUhj5G5ya");
+            SpotifyPlaylist playlist = await service.GetPlaylist("0J7cbNQx2M9yjjkABfMUjZ");
 
             await service.Clear(playlist);
         }

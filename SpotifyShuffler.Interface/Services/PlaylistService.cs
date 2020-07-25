@@ -13,14 +13,16 @@ namespace SpotifyShuffler.Interface
         public SpotifyClient SpotifyClient;
         public IUriFilter UriFilter;
         public IPlaylistItemsGenerator PlaylistItemsGenerator;
+        public IPlaylistItemsOptymalizer PlaylistItemsOptymalizer;
 
         public PlaylistService(SpotifyClient spotifyClient, ITrackUriGenerator trackUriGenerator, IUriFilter uriFilter,
-            IPlaylistItemsGenerator playlistItemsGenerator)
+            IPlaylistItemsGenerator playlistItemsGenerator, IPlaylistItemsOptymalizer playlistItemsOptymalizer)
         {
             SpotifyClient = spotifyClient;
             TrackUriGenerator = trackUriGenerator;
             UriFilter = uriFilter;
             PlaylistItemsGenerator = playlistItemsGenerator;
+            PlaylistItemsOptymalizer = playlistItemsOptymalizer;
         }
 
         public async Task<Paging<SimpleSpotifyPlaylist>> GetPlaylists(int limit = 20, int offset = 0)
@@ -156,15 +158,17 @@ namespace SpotifyShuffler.Interface
         {
             List<SpotifyTrack> tracks = await GetAllTracks(playlist.Id, playlist.Tracks.Total);
             IEnumerable<PlaylistItem> items = PlaylistItemsGenerator.Generate(tracks);
+            IEnumerable<PlaylistItem> optymalizedItems = PlaylistItemsOptymalizer.Optymalize(items)
+                .Distinct(new PlaylistItemEqualistyComparer());
 
             const int loopSize = 100;
-            int itemsCount = items.Count();
+            int itemsCount = optymalizedItems.Count();
             int total = itemsCount / loopSize;
             int left = itemsCount % loopSize;
 
             for (int i = 0; i < total; i++)
             {
-                List<PlaylistItem> selectedItems = items
+                List<PlaylistItem> selectedItems = optymalizedItems
                     .Skip(i * loopSize)
                     .Take(loopSize)
                     .ToList();
@@ -172,16 +176,10 @@ namespace SpotifyShuffler.Interface
                 await Delete(playlist.Id, selectedItems);
             }
 
-            List<PlaylistItem> leftItems = items
+            List<PlaylistItem> leftItems = optymalizedItems
                 .TakeLast(left)
                 .ToList();
             
-            leftItems.ForEach(x =>
-            {
-                int val = x.Positions[0] - (loopSize * total);
-                x.Positions[0] = val;
-            });
-
             await Delete(playlist.Id, leftItems);
         }
     }
