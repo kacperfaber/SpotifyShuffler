@@ -12,12 +12,14 @@ namespace SpotifyShuffler.Interface
         public ITrackUriGenerator TrackUriGenerator;
         public SpotifyClient SpotifyClient;
         public IUriFilter UriFilter;
+        public IPlaylistItemsGenerator PlaylistItemsGenerator;
 
-        public PlaylistService(SpotifyClient spotifyClient, ITrackUriGenerator trackUriGenerator, IUriFilter uriFilter)
+        public PlaylistService(SpotifyClient spotifyClient, ITrackUriGenerator trackUriGenerator, IUriFilter uriFilter, IPlaylistItemsGenerator playlistItemsGenerator)
         {
             SpotifyClient = spotifyClient;
             TrackUriGenerator = trackUriGenerator;
             UriFilter = uriFilter;
+            PlaylistItemsGenerator = playlistItemsGenerator;
         }
 
         public async Task<Paging<SimpleSpotifyPlaylist>> GetPlaylists(int limit = 20, int offset = 0)
@@ -67,7 +69,7 @@ namespace SpotifyShuffler.Interface
                 Uris = uris.ToList()
             };
 
-            HttpResponseMessage response = await SpotifyClient.SendAsync($"https://api.spotify.com/v1/playlists/{playlistId}/tracks", payload, HttpMethod.Post,
+            await SpotifyClient.SendAsync($"https://api.spotify.com/v1/playlists/{playlistId}/tracks", payload, HttpMethod.Post,
                 SpotifyAuthorization);
         }
 
@@ -141,12 +143,39 @@ namespace SpotifyShuffler.Interface
         {
             string url = $"https://api.spotify.com/v1/playlists/{playlistId}/tracks";
 
+            DeletePlaylistTracksPayload payload = new DeletePlaylistTracksPayload
+            {
+                Tracks = items
+            };
+
             await SpotifyClient.SendAsync(url, payload, HttpMethod.Delete, SpotifyAuthorization);
         }
 
-        public async Task Clear(string playlistId)
+        public async Task Clear(SpotifyPlaylist playlist)
         {
+            List<SpotifyTrack> tracks = await GetAllTracks(playlist.Id, playlist.Tracks.Total);
+            IEnumerable<PlaylistItem> items = PlaylistItemsGenerator.Generate(tracks);
+
+            const int loopSize = 100;
+            int itemsCount = items.Count();
+            int total = itemsCount / loopSize;
+            int left = itemsCount % loopSize;
+
+            for (int i = 0; i < total; i++)
+            {
+                List<PlaylistItem> selectedItems = items
+                    .Skip(i * loopSize)
+                    .Take(loopSize)
+                    .ToList();
+
+                await Delete(playlist.Id, selectedItems);
+            }
+
+            List<PlaylistItem> leftItems = items
+                .TakeLast(left)
+                .ToList();
             
+            await Delete(playlist.Id, leftItems);
         }
     }
 }
