@@ -30,7 +30,7 @@ namespace SpotifyShuffler.Types
                     return OperationValidationResult.IsCanceled;
                 }
 
-                else if (string.IsNullOrEmpty(operation.PlaylistName))
+                else if (operation.Kind == OperationKind.CreateNewPlaylist && string.IsNullOrEmpty(operation.PlaylistName))
                 {
                     return OperationValidationResult.NoName;
                 }

@@ -80,12 +80,12 @@ namespace SpotifyShuffler.Controllers
 
             else if (validation == PlaylistValidationResult.TooLarge)
             {
-                return Content("Playlist is too large.\nAllowed playlist items count is 300.");
+                return Content("Playlist is too large.\nAllowed playlist size is 300.");
             }
 
             else if (validation == PlaylistValidationResult.Null)
             {
-                return Content("Could not validate this playlist " + playlistId);
+                return Content("Could not validate playlist " + playlistId);
             }
 
             return BadRequest();
@@ -177,12 +177,29 @@ namespace SpotifyShuffler.Controllers
         [HttpGet("operation/summary")]
         public async Task<IActionResult> Summary([FromQuery(Name = "operation_id")] Guid operationId)
         {
-            return View("Summary", new SummaryOperationModel
+            Operation operation = await OperationManager.GetAsync(operationId);
+
+            if (operation.Kind == OperationKind.CreateNewPlaylist)
             {
-                Operation = await OperationManager.GetAsync(operationId),
-                OperationId = operationId,
-                CurrentUser = await UserManager.GetUserAsync(HttpContext.User)
-            });
+                return View("CreateNewPlaylistSummary", new SummaryOperationModel
+                {
+                    Operation = operation,
+                    OperationId = operationId,
+                    CurrentUser = await UserManager.GetUserAsync(HttpContext.User)
+                });
+            }
+            
+            else if (operation.Kind == OperationKind.UseOriginalPlaylist)
+            {
+                return View("UseOriginalPlaylistSummary", new SummaryOperationModel
+                {
+                    Operation = operation,
+                    OperationId = operationId,
+                    CurrentUser = await UserManager.GetUserAsync(HttpContext.User)
+                });
+            }
+
+            return BadRequest();
         }
 
         [HttpGet("operation/execute")]
@@ -228,6 +245,31 @@ namespace SpotifyShuffler.Controllers
             await OperationManager.UpdateAsync((Operation) op);
 
             return RedirectToAction("ExecuteOperation", "Operation", new {operation_id = model.OperationId});
+        }
+
+        [HttpGet("operation/set-kind")]
+        public IActionResult ConfigureOperationKind([FromQuery(Name = "operation_id")] Guid operationId, [FromQuery(Name = "playlist_id")] string playlistId)
+        {
+            User user = UserManager.GetUserAsync(HttpContext.User).Result;
+            return View(new ConfigureOperationKindModel {OperationId = operationId, PlaylistId = playlistId, CurrentUser = user});
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfigureOperationKindPost(ConfigureOperationKindModel model)
+        {
+            SimpleOperation op = await OperationManager.GetSimpleAsync(model.OperationId);
+            op.Kind = model.CreateNewPlaylist ? OperationKind.CreateNewPlaylist : OperationKind.UseOriginalPlaylist;
+            _ = OperationManager.OperationContext.SaveChangesAsync();
+
+            if (model.CreateNewPlaylist)
+            {
+                return RedirectToAction("ConfigureYourPlaylist", new {operation_id = model.OperationId, playlist_id = model.PlaylistId});
+            }
+
+            else
+            {
+                return RedirectToAction("Summary", new {operation_id = model.OperationId});
+            }
         }
     }
 }
