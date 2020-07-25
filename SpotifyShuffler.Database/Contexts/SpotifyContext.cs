@@ -6,10 +6,6 @@ namespace SpotifyShuffler.Database
 {
     public class SpotifyContext : IdentityDbContext<User, Role, Guid>
     {
-        public DbSet<SpotifyAccount> SpotifyAccounts { get; set; }
-        public DbSet<Registration> Registrations { get; set; }
-        public DbSet<CompletedPlaylist> CompletedPlaylists { get; set; }
-
         public SpotifyContext(DbContextOptions<SpotifyContext> options) : base(options)
         {
         }
@@ -17,5 +13,9 @@ namespace SpotifyShuffler.Database
         public SpotifyContext()
         {
         }
+
+        public DbSet<SpotifyAccount> SpotifyAccounts { get; set; }
+        public DbSet<Registration> Registrations { get; set; }
+        public DbSet<CompletedPlaylist> CompletedPlaylists { get; set; }
     }
 }

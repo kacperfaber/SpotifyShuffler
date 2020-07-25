@@ -14,12 +14,8 @@ namespace SpotifyShuffler.Interface
         public IEnumerable<string> Filter(IEnumerable<string> uris)
         {
             foreach (string uri in uris)
-            {
                 if (UriValidator.ValidateAsync(uri).Result)
-                {
                     yield return uri;
-                }
-            }
         }
     }
 }

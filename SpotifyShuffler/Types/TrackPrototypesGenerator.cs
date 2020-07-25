@@ -18,7 +18,7 @@ namespace SpotifyShuffler.Types
         public async Task<List<TrackPrototype>> GenerateAsync(IEnumerable<SpotifyTrack> tracks)
         {
             List<TrackPrototype> prototypes = new List<TrackPrototype>();
-            
+
             foreach (SpotifyTrack track in tracks)
             {
                 TrackPrototype proto = await PrototypeGenerator.GenerateAsync(track);

@@ -21,7 +21,7 @@ namespace SpotifyShuffler.Controllers
         public async Task<IActionResult> Settings()
         {
             User user = await UserManager.GetUserAsync(HttpContext.User);
-            
+
             return View("Settings", new SettingsModel
             {
                 CurrentUser = user

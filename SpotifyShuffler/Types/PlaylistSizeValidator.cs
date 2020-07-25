@@ -6,7 +6,7 @@ namespace SpotifyShuffler.Types
     {
         public bool Validate(int tracks)
         {
-            return tracks <= 300;
+            return tracks <= 100;
         }
     }
 }

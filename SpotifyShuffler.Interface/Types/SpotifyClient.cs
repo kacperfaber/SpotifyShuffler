@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using System.Timers;
 using Newtonsoft.Json;
 
 namespace SpotifyShuffler.Interface
 {
     public class SpotifyClient
     {
-        HttpClient Http = new HttpClient();
+        private HttpClient Http = new HttpClient();
+        public IInstanceToDictionaryConverter InstanceToDictionaryConverter;
 
         public IQueryGenerator QueryGenerator;
-        public IInstanceToDictionaryConverter InstanceToDictionaryConverter;
 
         public SpotifyClient(IInstanceToDictionaryConverter instanceToDictionaryConverter, IQueryGenerator queryGenerator)
         {
@@ -43,7 +39,7 @@ namespace SpotifyShuffler.Interface
             {
                 Method = method,
                 Content = new StringContent(JsonConvert.SerializeObject(body)),
-                RequestUri = new System.Uri(url)
+                RequestUri = new Uri(url)
             };
 
             request.Headers.Add("Authorization", spotifyAuthorization.GetToken());
@@ -53,15 +49,18 @@ namespace SpotifyShuffler.Interface
             return JsonConvert.DeserializeObject<TResult>(response.Content.ReadAsStringAsync().Result);
         }
 
-        public async Task<TResult> SendAsync<TResult>(string url, object queryParameters, object body, HttpMethod method, SpotifyAuthorization spotifyAuthorization)
+        public async Task<TResult> SendAsync<TResult>(string url, object queryParameters, object body, HttpMethod method,
+            SpotifyAuthorization spotifyAuthorization)
         {
             HttpRequestMessage request = new HttpRequestMessage
             {
                 Method = method,
-                Content = body != null ? new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json") : new StringContent(string.Empty),
-                RequestUri = new System.Uri(QueryGenerator.Generate(url, InstanceToDictionaryConverter.Convert(queryParameters)))
+                Content = body != null
+                    ? new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json")
+                    : new StringContent(string.Empty),
+                RequestUri = new Uri(QueryGenerator.Generate(url, InstanceToDictionaryConverter.Convert(queryParameters)))
             };
-            
+
             request.Headers.Add("Authorization", spotifyAuthorization.GetToken());
             request.Headers.Add("Accept", "*/*");
 

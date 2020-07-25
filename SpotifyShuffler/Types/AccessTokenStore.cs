@@ -11,8 +11,8 @@ namespace SpotifyShuffler.Types
 {
     public class AccessTokenStore : IAccessTokenStore
     {
-        public UserManager<User> UserManager;
         public IClaimGenerator ClaimGenerator;
+        public UserManager<User> UserManager;
 
         public AccessTokenStore(UserManager<User> userManager, IClaimGenerator claimGenerator)
         {
@@ -28,10 +28,7 @@ namespace SpotifyShuffler.Types
             IEnumerable<Claim> targetClaims = currentClaims.Where(x => x.Type == "AccessToken");
             Claim claim = ClaimGenerator.GenerateClaim("AccessToken", accessToken);
 
-            foreach (Claim targetClaim in targetClaims)
-            {
-                await UserManager.RemoveClaimAsync(user, targetClaim);
-            }
+            foreach (Claim targetClaim in targetClaims) await UserManager.RemoveClaimAsync(user, targetClaim);
 
             await UserManager.AddClaimAsync(user, claim);
         }

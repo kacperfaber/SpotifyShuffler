@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 
 namespace SpotifyShuffler.Interface
 {
@@ -7,10 +6,7 @@ namespace SpotifyShuffler.Interface
     {
         public IEnumerable<string> Generate(params SimpleSpotifyTrack[] tracks)
         {
-            foreach (SimpleSpotifyTrack t in tracks)
-            {
-                yield return t.Uri;
-            }
+            foreach (SimpleSpotifyTrack t in tracks) yield return t.Uri;
         }
     }
 }

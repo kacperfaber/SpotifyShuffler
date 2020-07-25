@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-
-namespace SpotifyShuffler.Interface
+﻿namespace SpotifyShuffler.Interface
 {
     public class SpotifyAuthorization : ISpotifyAuthorization
     {
@@ -8,7 +6,10 @@ namespace SpotifyShuffler.Interface
 
         public string AccessTokenType { get; set; } = "Bearer";
 
-        public string GetToken() => $"{AccessTokenType} {AccessToken}";
+        public string GetToken()
+        {
+            return $"{AccessTokenType} {AccessToken}";
+        }
 
         public static SpotifyAuthorization Create(string accessToken, string tokenType = "Bearer")
         {

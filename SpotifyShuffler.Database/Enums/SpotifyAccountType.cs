@@ -2,7 +2,7 @@
 {
     public enum SpotifyAccountType
     {
-        Free, 
+        Free,
         Premium
     }
 }

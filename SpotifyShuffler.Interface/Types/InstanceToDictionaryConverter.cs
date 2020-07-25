@@ -10,9 +10,7 @@ namespace SpotifyShuffler.Interface
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
 
             foreach (PropertyInfo property in instance.GetType().GetProperties())
-            {
                 dictionary.Add(toLower ? property.Name.ToLower() : property.Name, property.GetValue(instance));
-            }
 
             return dictionary;
         }

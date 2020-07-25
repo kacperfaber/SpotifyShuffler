@@ -7,7 +7,7 @@ namespace SpotifyShuffler.Payloads
     {
         [FromQuery(Name = "operation_id")]
         public Guid OperationId { get; set; }
-        
+
         [FromQuery(Name = "playlist_id")]
         public string PlaylistId { get; set; }
     }

@@ -17,9 +17,9 @@ namespace SpotifyShuffler.Database
         public string OriginalPlaylistId { get; set; }
 
         public string OriginalPlaylistName { get; set; }
-        
+
         public string OriginalPlaylistDescription { get; set; }
-        
+
         public bool IsSubmitted { get; set; }
 
         public DateTime? SubmittedAt { get; set; }

@@ -6,7 +6,7 @@ namespace SpotifyShuffler.Interface
     {
         [JsonProperty("free")]
         Free,
-        
+
         [JsonProperty("premium")]
         Premium
     }

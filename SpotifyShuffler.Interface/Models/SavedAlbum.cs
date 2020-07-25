@@ -7,7 +7,7 @@ namespace SpotifyShuffler.Interface
     {
         [JsonProperty("added_at")]
         public DateTime AddedAt { get; set; }
-        
+
         [JsonProperty("album")]
         public SpotifyAlbum Album { get; set; }
     }

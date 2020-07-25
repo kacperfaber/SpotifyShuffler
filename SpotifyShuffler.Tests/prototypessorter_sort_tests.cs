@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using SpotifyShuffler.Database;
-using SpotifyShuffler.Types;
 
 namespace SpotifyShuffler.Tests
 {
     public class prototypessorter_sort_tests
     {
-
-        IEnumerable<TrackPrototype> exec(ref IEnumerable<TrackPrototype> prototypes)
+        private IEnumerable<TrackPrototype> exec(ref IEnumerable<TrackPrototype> prototypes)
         {
             // new PrototypesSorter().Sort(ref prototypes);
 
@@ -18,17 +16,17 @@ namespace SpotifyShuffler.Tests
         [Test]
         public void dont_throws_exceptions()
         {
-            IEnumerable<TrackPrototype> prototypes = new List<TrackPrototype>()
+            IEnumerable<TrackPrototype> prototypes = new List<TrackPrototype>
             {
-                new TrackPrototype()
+                new TrackPrototype
                 {
                     Author = "1"
                 },
-                new TrackPrototype()
+                new TrackPrototype
                 {
                     Author = "2"
                 },
-                new TrackPrototype()
+                new TrackPrototype
                 {
                     Author = "3"
                 }

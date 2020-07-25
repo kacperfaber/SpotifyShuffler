@@ -8,13 +8,14 @@ namespace SpotifyShuffler.Types
 {
     public class UserCreator : IUserCreator
     {
-        public UserManager<User> UserManager;
+        public IUserLoginInfoGenerator LoginInfoGenerator;
+        public IRegistrationValidator RegistrationValidator;
         public SignInManager<User> SignInManager;
         public IUserGenerator UserGenerator;
-        public IRegistrationValidator RegistrationValidator;
-        public IUserLoginInfoGenerator LoginInfoGenerator;
+        public UserManager<User> UserManager;
 
-        public UserCreator(UserManager<User> userManager, IUserGenerator userGenerator, IRegistrationValidator registrationValidator, IUserLoginInfoGenerator loginInfoGenerator)
+        public UserCreator(UserManager<User> userManager, IUserGenerator userGenerator, IRegistrationValidator registrationValidator,
+            IUserLoginInfoGenerator loginInfoGenerator)
         {
             UserManager = userManager;
             UserGenerator = userGenerator;
@@ -29,10 +30,7 @@ namespace SpotifyShuffler.Types
                 User user = UserGenerator.GenerateUser(registration.UserName, registration.EmailAddress);
                 IdentityResult result = await UserManager.CreateAsync(user);
 
-                if (result.Succeeded)
-                {
-                    await UserManager.AddLoginAsync(user, LoginInfoGenerator.GenerateLoginInfo(user.SpotifyAccount.SpotifyId));
-                }
+                if (result.Succeeded) await UserManager.AddLoginAsync(user, LoginInfoGenerator.GenerateLoginInfo(user.SpotifyAccount.SpotifyId));
 
                 return user;
             }
