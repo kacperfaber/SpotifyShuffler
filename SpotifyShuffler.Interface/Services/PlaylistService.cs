@@ -135,7 +135,7 @@ namespace SpotifyShuffler.Interface
                 tracks.AddRange(Array.ConvertAll(items, x => x.Track));
             }
 
-            PlaylistTrackObject[] leftItems = (await GetTracks(playlistId, left, total / 100)).Items;
+            PlaylistTrackObject[] leftItems = (await GetTracks(playlistId, left, fullLoops * 100)).Items;
 
             tracks.AddRange(Array.ConvertAll(leftItems, x => x.Track));
 
@@ -151,7 +151,7 @@ namespace SpotifyShuffler.Interface
                 Tracks = items
             };
 
-            HttpResponseMessage r = await SpotifyClient.SendAsync(url, payload, HttpMethod.Delete, SpotifyAuthorization);
+            await SpotifyClient.SendAsync(url, payload, HttpMethod.Delete, SpotifyAuthorization);
         }
 
         public async Task Clear(SpotifyPlaylist playlist)

@@ -54,8 +54,10 @@ namespace SpotifyShuffler.Interface.Tests
                 .Container()
                 .ResolveOrAuto<SpotifyService>()
                 .GetAsync<PlaylistService>(auth);
+
+            const string playlistId = "0J7cbNQx2M9yjjkABfMUjZ";
             
-            SpotifyPlaylist playlist = await service.GetPlaylist("0J7cbNQx2M9yjjkABfMUjZ");
+            SpotifyPlaylist playlist = await service.GetPlaylist(playlistId);
 
             await service.Clear(playlist);
         }
