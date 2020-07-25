@@ -44,22 +44,5 @@ namespace SpotifyShuffler.Interface.Tests
 
             Assert.AreEqual(s, $@"{url}?{k1}={v1}&{k2}={v2}");
         }
-
-        [Test]
-        public async Task xxx()
-        {
-            SpotifyAuthorization auth = SpotifyAuthorization.Create("BQCUJuM_EhTL0pWWXzLyczpYBSecMzf_zHILjXdbcELWjSIHf0T5plhwL-BD6wOefKwrZ86isgb1lLBSd5ncHbPyDwn4sgVfgZ2XjUxa3I4M4dCUrvX2PORrmL1AEKzPAOxxTwcnZRcRWk1xpqcQH6Xqt3RzmFv0lof6y5xV8Uyr_6pTU4AXWYONthni_mUxu1O4zMfsXRef3gChvfsAmVHZUdpfmp92q9R7yMwGCkwSbDB-ybB4SIIiKDyqdyISr2cbbyAJxrugbz6pw3aq6eX_ZN7_68kB");
-            
-            PlaylistService service = await ContainerFactory
-                .Container()
-                .ResolveOrAuto<SpotifyService>()
-                .GetAsync<PlaylistService>(auth);
-
-            const string playlistId = "0J7cbNQx2M9yjjkABfMUjZ";
-            
-            SpotifyPlaylist playlist = await service.GetPlaylist(playlistId);
-
-            await service.Clear(playlist);
-        }
     }
 }

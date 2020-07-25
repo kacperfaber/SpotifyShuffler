@@ -158,8 +158,7 @@ namespace SpotifyShuffler.Interface
         {
             List<SpotifyTrack> tracks = await GetAllTracks(playlist.Id, playlist.Tracks.Total);
             IEnumerable<PlaylistItem> items = PlaylistItemsGenerator.Generate(tracks);
-            IEnumerable<PlaylistItem> optymalizedItems = PlaylistItemsOptymalizer.Optymalize(items)
-                .Distinct(new PlaylistItemEqualistyComparer());
+            IEnumerable<PlaylistItem> optymalizedItems = PlaylistItemsOptymalizer.Optymalize(items);
 
             const int loopSize = 100;
             int itemsCount = optymalizedItems.Count();

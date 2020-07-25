@@ -6,9 +6,9 @@ namespace SpotifyShuffler.Interface
     {
         public IEnumerable<PlaylistItem> Generate(List<SpotifyTrack> tracks)
         {
-            for (int i = 0; i < tracks.Count; i++)
+            foreach (SpotifyTrack track in tracks)
             {
-                yield return new PlaylistItem(tracks[i].Uri, i);
+                yield return new PlaylistItem(track.Uri);
             }
         }
     }
