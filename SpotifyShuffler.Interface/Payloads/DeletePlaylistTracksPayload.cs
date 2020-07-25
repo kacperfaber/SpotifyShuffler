@@ -6,6 +6,6 @@ namespace SpotifyShuffler.Interface
     public class DeletePlaylistTracksPayload
     {
         [JsonProperty("tracks")]
-        public List<SpotifyUri> Tracks { get; set; }
+        public List<PlaylistItem> Tracks { get; set; }
     }
 }

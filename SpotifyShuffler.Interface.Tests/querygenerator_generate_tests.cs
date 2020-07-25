@@ -57,7 +57,7 @@ namespace SpotifyShuffler.Interface.Tests
             
             SpotifyPlaylist playlist = await service.GetPlaylist("2iufOQu15tQPxjHbOY49P4");
 
-            await service.ClearAll(playlist);
+            await service.Clear(playlist);
         }
     }
 }

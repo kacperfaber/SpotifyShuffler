@@ -137,45 +137,16 @@ namespace SpotifyShuffler.Interface
             return tracks;
         }
 
-        public async Task Clear(string playlistId, IEnumerable<string> uris)
+        public async Task Delete(string playlistId, List<PlaylistItem> items)
         {
-            List<SpotifyUri> spotifyUris = Array.ConvertAll(uris.ToArray(), s => new SpotifyUri {ItemUri = s}).ToList();
-
-            DeletePlaylistTracksPayload payload = new DeletePlaylistTracksPayload
-            {
-                Tracks = spotifyUris
-            };
-
             string url = $"https://api.spotify.com/v1/playlists/{playlistId}/tracks";
 
-            HttpResponseMessage response = await SpotifyClient.SendAsync(url, payload, HttpMethod.Delete, SpotifyAuthorization);
+            await SpotifyClient.SendAsync(url, payload, HttpMethod.Delete, SpotifyAuthorization);
         }
 
-        public async Task ClearAll(SpotifyPlaylist playlist)
+        public async Task Clear(string playlistId)
         {
-            List<SpotifyTrack> tracks = await GetAllTracks(playlist.Id, playlist.Tracks.Total);
-
-            List<string> spotifyUris = Array.ConvertAll(tracks.ToArray(), s => s.Uri)
-                .Distinct()
-                .ToList();
-
-            int count = spotifyUris.Count;
-            int loops = count / 100;
-            int left = count % 100;
-
-            for (int i = 0; i < loops; i++)
-            {
-                IEnumerable<string> uris = spotifyUris
-                    .Skip(100 * i)
-                    .Take(100);
-
-                await Clear(playlist.Id, uris);
-            }
-
-            IEnumerable<string> leftUris = spotifyUris
-                .TakeLast(left);
-
-            await Clear(playlist.Id, leftUris);
+            
         }
     }
 }
