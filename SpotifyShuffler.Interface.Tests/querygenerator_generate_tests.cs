@@ -1,15 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using NUnit.Framework;
-using Spencer.NET;
 
 namespace SpotifyShuffler.Interface.Tests
 {
     public class querygenerator_generate_tests
     {
-        string exec(string url, params KeyValuePair<string, object>[] pairs)
+        private string exec(string url, params KeyValuePair<string, object>[] pairs)
         {
             QueryGenerator queryGenerator = new QueryGenerator(new QueryParameterGenerator());
             return queryGenerator.Generate(url, new Dictionary<string, object>(pairs));

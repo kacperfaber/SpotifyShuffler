@@ -6,8 +6,7 @@ namespace SpotifyShuffler.Interface.Tests
 {
     public class instancetodictionaryconverter_convert_tests
     {
-
-        Dictionary<string, object> exec(object o)
+        private Dictionary<string, object> exec(object o)
         {
             return new InstanceToDictionaryConverter().Convert(o);
         }
@@ -37,7 +36,7 @@ namespace SpotifyShuffler.Interface.Tests
         public void returns_expected_Age_value_gived_in_anonymous_object(int ageParam)
         {
             object age = exec(new {Age = ageParam}).SingleOrDefault(x => x.Key == "age").Value;
-            
+
             Assert.IsTrue((int) age == ageParam);
         }
     }

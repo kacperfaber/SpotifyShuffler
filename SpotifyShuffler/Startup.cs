@@ -1,18 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AspNet.Security.OAuth.Spotify;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using SpotifyShuffler.Database;
@@ -36,7 +28,7 @@ namespace SpotifyShuffler
             services.AddDbContext<SpotifyContext>(builder => builder.UseSqlite("Data Source=app.db;", b => b.MigrationsAssembly("SpotifyShuffler")));
 
             services.AddDbContext<OperationContext>(b => b.UseSqlite("Data Source=op.db;", b => b.MigrationsAssembly("SpotifyShuffler")));
-            
+
             services.AddSpotify();
 
             services
@@ -68,10 +60,7 @@ namespace SpotifyShuffler
                 .AddEntityFrameworkStores<SpotifyContext>()
                 .AddUserManager<UserManager>();
 
-            services.ConfigureApplicationCookie(x =>
-            {
-                x.ExpireTimeSpan = TimeSpan.FromMinutes(59);
-            });
+            services.ConfigureApplicationCookie(x => { x.ExpireTimeSpan = TimeSpan.FromMinutes(59); });
 
             services.AddScoped<IUserFinder, UserFinder>();
             services.AddScoped<IUserGenerator, UserGenerator>();
@@ -107,10 +96,7 @@ namespace SpotifyShuffler
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             app.UseRouting();
             app.UseStaticFiles();

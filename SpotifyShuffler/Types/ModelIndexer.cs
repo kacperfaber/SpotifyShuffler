@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using SpotifyShuffler.Interfaces;
@@ -15,10 +14,7 @@ namespace SpotifyShuffler.Types
             {
                 PropertyInfo property = ((MemberExpression) expression.Body).Member as PropertyInfo;
 
-                for (int i = 0; i <= models.Count; i++)
-                {
-                    property.SetValue(models[i], i);
-                }
+                for (int i = 0; i <= models.Count; i++) property.SetValue(models[i], i);
             }
 
             catch (ArgumentOutOfRangeException)

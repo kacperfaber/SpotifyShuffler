@@ -1,13 +1,11 @@
-﻿using System;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
 namespace SpotifyShuffler.Database.Tests
 {
     public class spotifycontext_constructor_tests
     {
-        SpotifyContext exec()
+        private SpotifyContext exec()
         {
             DbContextOptions<SpotifyContext> options = new DbContextOptionsBuilder<SpotifyContext>()
                 .UseInMemoryDatabase("testdb2")
@@ -38,7 +36,7 @@ namespace SpotifyShuffler.Database.Tests
         public void dont_throws_exception_when_adding_new_SpotifyAccount()
         {
             SpotifyContext ctx = exec();
-            
+
             Assert.DoesNotThrow(() =>
             {
                 ctx.SpotifyAccounts.Add(new SpotifyAccount {SpotifyId = "00"});

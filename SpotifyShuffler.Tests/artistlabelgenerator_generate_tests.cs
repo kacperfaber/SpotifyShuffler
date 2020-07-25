@@ -7,8 +7,7 @@ namespace SpotifyShuffler.Tests
 {
     public class artistlabelgenerator_generate_tests
     {
-
-        string exec(params SimpleSpotifyArtist[] artists)
+        private string exec(params SimpleSpotifyArtist[] artists)
         {
             ArtistLabelGenerator gen = new ArtistLabelGenerator();
             return gen.Generate(artists);
@@ -25,8 +24,8 @@ namespace SpotifyShuffler.Tests
         [TestCase("Seether", "Amy Lee")]
         public void returns_matching_to_pattern(string artist1, string artist2)
         {
-            string s = exec(new SimpleSpotifyArtist() {Name = artist1}, new SimpleSpotifyArtist() {Name = artist2}); 
-            
+            string s = exec(new SimpleSpotifyArtist {Name = artist1}, new SimpleSpotifyArtist {Name = artist2});
+
             Assert.IsTrue(Regex.IsMatch(s, $"{artist1}, {artist2}"));
         }
 
@@ -35,8 +34,8 @@ namespace SpotifyShuffler.Tests
         [TestCase("Seether", "Amy Lee")]
         public void returns_expected_string(string artist1, string artist2)
         {
-            string s = exec(new SimpleSpotifyArtist() {Name = artist1}, new SimpleSpotifyArtist() {Name = artist2});
-            
+            string s = exec(new SimpleSpotifyArtist {Name = artist1}, new SimpleSpotifyArtist {Name = artist2});
+
             Assert.AreEqual($"{artist1}, {artist2}", s);
         }
     }

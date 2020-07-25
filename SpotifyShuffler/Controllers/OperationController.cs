@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyShuffler.Database;
 using SpotifyShuffler.Interface;
@@ -17,17 +15,17 @@ namespace SpotifyShuffler.Controllers
     [Authorize]
     public class OperationController : Controller
     {
-        public UserManager UserManager;
-        public OperationManager OperationManager;
         public IAccessTokenStore AccessTokenStore;
-        public SpotifyService SpotifyService;
-        public IPlaylistPrototypeGenerator PlaylistPrototypeGenerator;
-        public SpotifyContext SpotifyContext;
-        public IPrototypesSorter PrototypesSorter;
-        public IOperationValidator OperationValidator;
-        public IPlaylistValidator PlaylistValidator;
-        public Executor Executor;
         public ICompletedPlaylistGenerator CompletedPlaylistGenerator;
+        public Executor Executor;
+        public OperationManager OperationManager;
+        public IOperationValidator OperationValidator;
+        public IPlaylistPrototypeGenerator PlaylistPrototypeGenerator;
+        public IPlaylistValidator PlaylistValidator;
+        public IPrototypesSorter PrototypesSorter;
+        public SpotifyContext SpotifyContext;
+        public SpotifyService SpotifyService;
+        public UserManager UserManager;
 
         public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
             SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator, SpotifyContext spotifyContext,
@@ -84,7 +82,7 @@ namespace SpotifyShuffler.Controllers
             {
                 return Content("Playlist is too large.\nAllowed playlist items count is 300.");
             }
-            
+
             else if (validation == PlaylistValidationResult.Null)
             {
                 return Content("Could not validate this playlist " + playlistId);
@@ -213,7 +211,7 @@ namespace SpotifyShuffler.Controllers
                     CompletedPlaylist = completedPlaylist,
                     SpotifyPlaylist = result.Playlist
                 };
-                
+
                 return View("ExecutedSuccessfully", model);
             }
 

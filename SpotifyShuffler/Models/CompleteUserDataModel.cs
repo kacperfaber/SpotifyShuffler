@@ -16,9 +16,9 @@ namespace SpotifyShuffler.Models
         public string UserName { get; set; }
 
         public SpotifyAccount SpotifyAccount { get; set; }
-        
+
         public Guid RegistrationId { get; set; }
-        
+
         public string SpotifyId { get; set; }
     }
 }

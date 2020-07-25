@@ -7,10 +7,7 @@ namespace SpotifyShuffler
     {
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
         {
-            foreach (T t in enumerable)
-            {
-                action(t);
-            }
+            foreach (T t in enumerable) action(t);
 
             return enumerable;
         }

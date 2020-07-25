@@ -17,9 +17,9 @@ namespace SpotifyShuffler.Database
         public string EmailAddress { get; set; }
 
         public string Country { get; set; }
-        
+
         public int TotalFollowers { get; set; }
-        
+
         public SpotifyAccountType AccountType { get; set; }
     }
 }

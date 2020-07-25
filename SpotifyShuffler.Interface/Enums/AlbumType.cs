@@ -6,10 +6,10 @@ namespace SpotifyShuffler.Interface
     {
         [JsonProperty("album")]
         Album,
-        
+
         [JsonProperty("single")]
         Single,
-        
+
         [JsonProperty("compilation")]
         Compilation
     }

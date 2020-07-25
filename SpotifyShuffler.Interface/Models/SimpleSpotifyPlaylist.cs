@@ -28,10 +28,10 @@ namespace SpotifyShuffler.Interface
 
         [JsonProperty("type")]
         public SpotifyType Type { get; set; }
-        
+
         [JsonProperty("uri")]
         public string Uri { get; set; }
-        
+
         [JsonIgnore]
         [JsonProperty("images")]
         public List<Image> Images { get; set; }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -9,11 +8,11 @@ namespace SpotifyShuffler.Interface
 {
     public class PlaylistService : ServiceBase
     {
-        public ITrackUriGenerator TrackUriGenerator;
-        public SpotifyClient SpotifyClient;
-        public IUriFilter UriFilter;
         public IPlaylistItemsGenerator PlaylistItemsGenerator;
         public IPlaylistItemsOptymalizer PlaylistItemsOptymalizer;
+        public SpotifyClient SpotifyClient;
+        public ITrackUriGenerator TrackUriGenerator;
+        public IUriFilter UriFilter;
 
         public PlaylistService(SpotifyClient spotifyClient, ITrackUriGenerator trackUriGenerator, IUriFilter uriFilter,
             IPlaylistItemsGenerator playlistItemsGenerator, IPlaylistItemsOptymalizer playlistItemsOptymalizer)
@@ -84,10 +83,7 @@ namespace SpotifyShuffler.Interface
             int totalLoops = count / 100;
             int left = count % 100;
 
-            for (int i = 0; i < totalLoops; i++)
-            {
-                await AddTracks(playlistId, filteredUris.Skip(100 * i).Take(100));
-            }
+            for (int i = 0; i < totalLoops; i++) await AddTracks(playlistId, filteredUris.Skip(100 * i).Take(100));
 
             if (left > 0)
                 await AddTracks(playlistId, filteredUris.TakeLast(left));
@@ -178,7 +174,7 @@ namespace SpotifyShuffler.Interface
             List<PlaylistItem> leftItems = optymalizedItems
                 .TakeLast(left)
                 .ToList();
-            
+
             await Delete(playlist.Id, leftItems);
         }
     }

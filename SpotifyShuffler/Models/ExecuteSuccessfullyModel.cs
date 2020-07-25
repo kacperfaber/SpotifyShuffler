@@ -1,5 +1,4 @@
-﻿using System;
-using SpotifyShuffler.Database;
+﻿using SpotifyShuffler.Database;
 using SpotifyShuffler.Interface;
 
 namespace SpotifyShuffler.Models

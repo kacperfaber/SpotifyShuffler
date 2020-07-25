@@ -1,5 +1,4 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace SpotifyShuffler.Interface
 {
@@ -7,28 +6,28 @@ namespace SpotifyShuffler.Interface
     {
         [JsonProperty("album_group")]
         public AlbumGroupType AlbumGroup { get; set; }
-        
+
         [JsonProperty("album_type")]
         public string AlbumType { get; set; }
-        
+
         [JsonProperty("artists")]
         public SimpleSpotifyArtist[] Artists { get; set; }
-        
+
         [JsonProperty("href")]
         public string Href { get; set; }
-        
+
         [JsonProperty("id")]
         public string Id { get; set; }
-        
+
         [JsonProperty("name")]
         public string Name { get; set; }
-        
+
         [JsonProperty("release_date")]
         public string ReleaseDate { get; set; }
-        
+
         [JsonProperty("type")]
         public SpotifyType Type { get; set; }
-        
+
         [JsonProperty("uri")]
         public string Uri { get; set; }
     }

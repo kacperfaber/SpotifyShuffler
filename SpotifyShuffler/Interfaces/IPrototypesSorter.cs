@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SpotifyShuffler.Database;
+﻿using SpotifyShuffler.Database;
 
 namespace SpotifyShuffler.Interfaces
 {

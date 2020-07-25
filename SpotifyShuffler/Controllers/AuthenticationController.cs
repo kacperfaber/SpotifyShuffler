@@ -1,25 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyShuffler.Database;
 using SpotifyShuffler.Interfaces;
-using SpotifyShuffler.Models;
 
 namespace SpotifyShuffler.Controllers
 {
     public class AuthenticationController : Controller
     {
-        public SignInManager<User> SignInManager;
-        public UserManager<User> UserManager;
-        public IUserFinder UserFinder;
         public IAccessTokenStore AccessTokenStore;
+        public SignInManager<User> SignInManager;
         public ISpotifyAccountGenerator SpotifyAccountGenerator;
+        public IUserFinder UserFinder;
+        public UserManager<User> UserManager;
 
         public AuthenticationController(SignInManager<User> signInManager, UserManager<User> userManager, IUserFinder userFinder,
             IAccessTokenStore accessTokenStore, ISpotifyAccountGenerator spotifyAccountGenerator)
@@ -45,11 +40,11 @@ namespace SpotifyShuffler.Controllers
             ExternalLoginInfo loginInfo = await SignInManager.GetExternalLoginInfoAsync();
 
             User user = UserFinder.FindUserBySpotifyIdOrNull(loginInfo.ProviderKey);
-            
+
             if (user == null)
             {
                 SpotifyAccount spotifyAccount = await SpotifyAccountGenerator.GenerateAccount(loginInfo.Principal);
-                
+
                 User createdUser = new User
                 {
                     Id = Guid.NewGuid(),
@@ -63,7 +58,7 @@ namespace SpotifyShuffler.Controllers
                 _ = await UserManager.AddLoginAsync(createdUser, loginInfo);
 
                 AccessTokenStore.StoreAccessToken(createdUser, loginInfo.AuthenticationTokens);
-                
+
                 await SignInManager.SignInAsync(createdUser, true);
 
                 return RedirectToAction("Home", "Home");
@@ -72,19 +67,18 @@ namespace SpotifyShuffler.Controllers
             else
             {
                 AccessTokenStore.StoreAccessToken(user, loginInfo.AuthenticationTokens);
-                
+
                 await SignInManager.SignInAsync(user, true);
 
                 return RedirectToAction("Home", "Home");
             }
-
         }
 
         [HttpGet("logout")]
         public async Task<IActionResult> Logout()
         {
             await SignInManager.SignOutAsync();
-            
+
             return RedirectToAction("Home", "Home");
         }
     }

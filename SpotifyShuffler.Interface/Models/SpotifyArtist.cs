@@ -6,16 +6,16 @@ namespace SpotifyShuffler.Interface
     {
         [JsonProperty("followers")]
         public SpotifyFollowers Followers { get; set; }
-        
+
         [JsonProperty("genres")]
         public string[] Genres { get; set; }
-        
+
         [JsonProperty("href")]
         public string Href { get; set; }
-        
+
         [JsonProperty("id")]
         public string Id { get; set; }
-        
+
         [JsonProperty("name")]
         public string Name { get; set; }
     }

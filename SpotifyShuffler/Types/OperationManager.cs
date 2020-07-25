@@ -19,7 +19,7 @@ namespace SpotifyShuffler.Types
         public async Task CreateAsync(Operation operation)
         {
             operation.Id ??= Guid.NewGuid();
-            
+
             await OperationContext.AddAsync(operation);
             await OperationContext.SaveChangesAsync();
         }

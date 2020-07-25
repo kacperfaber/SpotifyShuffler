@@ -9,9 +9,8 @@ namespace SpotifyShuffler.Types
 {
     public class Executor
     {
-        public SpotifyService SpotifyService;
-
         public ISpotifyPlaylistCreator PlaylistCreator;
+        public SpotifyService SpotifyService;
         public ITracksAdder TracksAdder;
 
         public Executor(ISpotifyPlaylistCreator playlistCreator, ITracksAdder tracksAdder, SpotifyService spotifyService)
@@ -51,7 +50,7 @@ namespace SpotifyShuffler.Types
                     Operation = operation
                 };
             }
-            
+
             throw new Exception();
         }
     }

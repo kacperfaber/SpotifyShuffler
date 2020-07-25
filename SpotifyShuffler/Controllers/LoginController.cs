@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
-using SpotifyShuffler.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace SpotifyShuffler.Controllers
 {

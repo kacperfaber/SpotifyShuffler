@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using Authorization = System.Net.Authorization;
 
 namespace SpotifyShuffler.Database.Tests
 {

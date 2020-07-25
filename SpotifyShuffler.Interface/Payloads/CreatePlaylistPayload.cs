@@ -12,7 +12,7 @@ namespace SpotifyShuffler.Interface
 
         [JsonProperty("public")]
         public bool IsPublic { get; set; }
-        
+
         [JsonProperty("collaborative")]
         public bool Collaborative { get; set; }
     }
