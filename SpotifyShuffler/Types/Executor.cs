@@ -40,8 +40,9 @@ namespace SpotifyShuffler.Types
 
             else if (operation.Kind == OperationKind.UseOriginalPlaylist)
             {
-                SpotifyPlaylist playlist = await PlaylistCreator.CreateAsync(operation, user, playlistService);
+                SpotifyPlaylist playlist = await playlistService.GetPlaylist(operation.OriginalPlaylistId);
 
+                await playlistService.Clear(playlist);
                 await TracksAdder.AddAll(playlistPrototype, playlist, playlistService);
 
                 return new ExecuteResult
