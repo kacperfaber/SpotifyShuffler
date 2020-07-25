@@ -29,7 +29,7 @@ namespace SpotifyShuffler.Interface
             {
                 Method = method,
                 Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8),
-                RequestUri = new System.Uri(url)
+                RequestUri = new Uri(url)
             };
 
             request.Headers.Add("Authorization", spotifyAuthorization.GetToken());
