@@ -9,17 +9,12 @@ namespace SpotifyShuffler.Interface
         [JsonProperty("uri")]
         public string Uri { get; set; }
 
-        [JsonProperty("positions")]
-        [JsonIgnore]
-        public List<int> Positions { get; set; } = new List<int>();
-
         public PlaylistItem()
         {
         }
 
-        public PlaylistItem(string uri, params int[] positions)
+        public PlaylistItem(string uri)
         {
-            Positions = positions.ToList();
             Uri = uri;
         }
     }
