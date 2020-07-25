@@ -14,7 +14,8 @@ namespace SpotifyShuffler.Interface
         public IUriFilter UriFilter;
         public IPlaylistItemsGenerator PlaylistItemsGenerator;
 
-        public PlaylistService(SpotifyClient spotifyClient, ITrackUriGenerator trackUriGenerator, IUriFilter uriFilter, IPlaylistItemsGenerator playlistItemsGenerator)
+        public PlaylistService(SpotifyClient spotifyClient, ITrackUriGenerator trackUriGenerator, IUriFilter uriFilter,
+            IPlaylistItemsGenerator playlistItemsGenerator)
         {
             SpotifyClient = spotifyClient;
             TrackUriGenerator = trackUriGenerator;
@@ -148,7 +149,7 @@ namespace SpotifyShuffler.Interface
                 Tracks = items
             };
 
-            await SpotifyClient.SendAsync(url, payload, HttpMethod.Delete, SpotifyAuthorization);
+            HttpResponseMessage r = await SpotifyClient.SendAsync(url, payload, HttpMethod.Delete, SpotifyAuthorization);
         }
 
         public async Task Clear(SpotifyPlaylist playlist)
@@ -175,6 +176,12 @@ namespace SpotifyShuffler.Interface
                 .TakeLast(left)
                 .ToList();
             
+            leftItems.ForEach(x =>
+            {
+                int val = x.Positions[0] - (loopSize * total);
+                x.Positions[0] = val;
+            });
+
             await Delete(playlist.Id, leftItems);
         }
     }
