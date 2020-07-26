@@ -1,0 +1,36 @@
+﻿@model SpotifyShuffler.Database.SpotifyAccount
+
+<div class="p-3">
+    <h1 class="h3">
+        Spotify Account
+    </h1>
+    
+    <div class="form-group">
+        <label class="form-text">Username</label>
+        <input class="form-control" type="email" placeholder="@Model.Name" readonly>
+    </div>
+    
+    <div class="form-group">
+        <label class="form-text">Identifier</label>
+        <input class="form-control" type="email" placeholder="@Model.SpotifyId" readonly>
+    </div>
+    
+    <div class="form-group">
+        <label class="form-text">Email Address</label>
+        <input class="form-control" type="email" placeholder="@Model.EmailAddress" readonly>
+    </div>
+    
+    <div class="form-group">
+        <label class="form-text">Price Type</label>
+        <input class="form-control" type="email" placeholder="@Model.AccountType.ToString()" readonly>
+    </div>
+    
+    <div class="form-group">
+        <label class="form-text">Country</label>
+        <input class="form-control" type="email" placeholder="@Model.Country" readonly>
+    </div>
+    
+    <button data-toogle="tooltip" data-placement="top" title="If you want to delete related data, you have to delete your account." href="#" id="deleteAccountButton" class="btn btn-danger disabled">
+        Delete
+    </button>
+</div>

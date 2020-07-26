@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyShuffler.Database;
@@ -11,10 +12,12 @@ namespace SpotifyShuffler.Controllers
     public class AccountSettingsController : Controller
     {
         public UserManager UserManager;
+        public SpotifyContext SpotifyContext;
 
-        public AccountSettingsController(UserManager userManager)
+        public AccountSettingsController(UserManager userManager, SpotifyContext spotifyContext)
         {
             UserManager = userManager;
+            SpotifyContext = spotifyContext;
         }
 
         [HttpGet("account-settings/settings")]
@@ -24,7 +27,8 @@ namespace SpotifyShuffler.Controllers
 
             return View("Settings", new SettingsModel
             {
-                CurrentUser = user
+                CurrentUser = user,
+                SpotifyAccount = SpotifyContext.SpotifyAccounts.FirstOrDefault(x => x.SpotifyId == user.SpotifyAccountId)
             });
         }
     }
