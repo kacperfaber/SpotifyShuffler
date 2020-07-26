@@ -24,7 +24,7 @@
                 </th>
                 </thead>
                 <tbody>
-                @foreach (TrackPrototype proto in Model.Prototype.Tracks)
+                @foreach (TrackPrototype proto in Model.Prototype.Tracks.OrderBy(x => x.Index))
                 {
                     <tr>
                         <td>
@@ -44,7 +44,15 @@
                 </tbody>
             </table>
 
-            @Html.ActionLink("Ok", "ConfigureOperationKind", "Operation", new {playlist_id = Model.PlaylistId, operation_id = Model.OperationId}, new {@class = "btn btn-primary d-inline"})
+            @if (Model.PlaylistIsCollaborative)
+            {
+                @Html.ActionLink("Ok", "ConfigureOperationKind", "Operation", new {playlist_id = Model.PlaylistId, operation_id = Model.OperationId}, new {@class = "btn btn-primary d-inline"})
+            }
+
+            else
+            {
+                @Html.ActionLink("Ok", "ConfigureYourPlaylist", "Operation", new {playlist_id = Model.PlaylistId, operation_id = Model.OperationId}, new {@class = "btn btn-primary d-inline"})
+            }
         </div>
     </div>
 </div>
