@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using SpotifyShuffler.Database;
+using SpotifyShuffler.Interface;
 using SpotifyShuffler.Interface.Extension;
 using SpotifyShuffler.Interfaces;
 using SpotifyShuffler.Types;
@@ -73,11 +74,9 @@ namespace SpotifyShuffler
             services.AddScoped<IPlaylistSizeValidator, PlaylistSizeValidator>();
             services.AddScoped<IOrderedPrototypesProvider, OrderedPrototypesProvider>();
             services.AddScoped<ICompletedPlaylistGenerator, CompletedPlaylistGenerator>();
-
             services.AddScoped<IRegistrationValidator, RegistrationValidator>();
             services.AddScoped<IRegistrationActivator, RegistrationActivator>();
             services.AddScoped<IUserLoginInfoGenerator, UserLoginInfoGenerator>();
-
             services.AddScoped<IModelIndexer, ModelIndexer>();
             services.AddScoped<IPlaylistPrototypeGenerator, PlaylistPrototypeGenerator>();
             services.AddScoped<IPrototypesSorter, PrototypesSorter>();
@@ -86,10 +85,10 @@ namespace SpotifyShuffler
             services.AddScoped<IArtistLabelGenerator, ArtistLabelGenerator>();
             services.AddScoped<IOperationValidator, OperationValidator>();
             services.AddScoped<ISpotifyUrisGenerator, SpotifyUrisGenerator>();
-
             services.AddScoped<Executor>();
             services.AddScoped<ITracksAdder, TracksAdder>();
             services.AddScoped<ISpotifyPlaylistCreator, SpotifyPlaylistCreator>();
+            services.AddScoped<IPlaylistCollaborativeChecker, PlaylistCollaborativeChecker>();
 
             services.AddScoped(typeof(OperationManager));
         }
