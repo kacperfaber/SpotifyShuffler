@@ -10,7 +10,6 @@ namespace SpotifyShuffler.Models
         public string PlaylistId { get; set; }
 
         public Guid OperationId { get; set; }
-        
-        
+        public bool PlaylistIsCollaborative { get; set; }
     }
 }

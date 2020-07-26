@@ -5,6 +5,6 @@ namespace SpotifyShuffler.Interfaces
 {
     public interface IPlaylistCollaborativeChecker
     {
-        bool Check(User user, SpotifyPlaylist playlist);
+        bool Check(SpotifyAccount account, SpotifyPlaylist playlist);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,11 +27,12 @@ namespace SpotifyShuffler.Controllers
         public SpotifyContext SpotifyContext;
         public SpotifyService SpotifyService;
         public UserManager UserManager;
+        public IPlaylistCollaborativeChecker PlaylistCollaborativeChecker;
 
         public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
             SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator, SpotifyContext spotifyContext,
             IPrototypesSorter prototypesSorter, IOperationValidator operationValidator,
-            IPlaylistValidator playlistValidator, ICompletedPlaylistGenerator completedPlaylistGenerator, Executor executor)
+            IPlaylistValidator playlistValidator, ICompletedPlaylistGenerator completedPlaylistGenerator, Executor executor, IPlaylistCollaborativeChecker playlistCollaborativeChecker)
         {
             OperationManager = operationManager;
             UserManager = userManager;
@@ -43,6 +45,7 @@ namespace SpotifyShuffler.Controllers
             PlaylistValidator = playlistValidator;
             CompletedPlaylistGenerator = completedPlaylistGenerator;
             Executor = executor;
+            PlaylistCollaborativeChecker = playlistCollaborativeChecker;
         }
 
         [HttpGet("operation/begin-new")]
@@ -113,12 +116,10 @@ namespace SpotifyShuffler.Controllers
                 await OperationManager.OperationContext.AddAsync(operation.Prototype);
                 _ = OperationManager.OperationContext.SaveChangesAsync();
 
-                return View("CheckPrototype", new CheckPrototypeModel
+                return RedirectToAction("CheckPrototype", new
                 {
-                    Prototype = operation.Prototype,
-                    OperationId = (Guid) operation.Id,
-                    PlaylistId = playlist.Id,
-                    CurrentUser = user
+                    operation_id = operation.Id,
+                    playlist_id = operation.OriginalPlaylistId
                 });
             }
 
@@ -128,10 +129,32 @@ namespace SpotifyShuffler.Controllers
             }
         }
 
+        [HttpGet("operation/check-prototype")]
+        public async Task<IActionResult> CheckPrototype(
+            [FromQuery(Name = "operation_id")] Guid operationId,
+            [FromQuery(Name = "playlist_id")] string playlistId)
+        {
+            Operation operation = await OperationManager.GetAsync(operationId);
+            User user = await UserManager.GetUserAsync(HttpContext.User);
+            SpotifyAuthorization authorization = SpotifyAuthorization.Create(await AccessTokenStore.GetAccessToken(user));
+
+            PlaylistService service = await SpotifyService.GetAsync<PlaylistService>(authorization);
+            SpotifyAccount spotifyAccount = SpotifyContext.SpotifyAccounts.FirstOrDefault(x => x.SpotifyId == user.SpotifyAccountId);
+            bool isCollaborative = PlaylistCollaborativeChecker.Check(spotifyAccount, await service.GetPlaylist(playlistId));
+
+            return View("CheckPrototype", new CheckPrototypeModel
+            {
+                CurrentUser = user,
+                Prototype = operation.Prototype,
+                OperationId = (Guid) operation.Id,
+                PlaylistId = operation.OriginalPlaylistId,
+                PlaylistIsCollaborative = isCollaborative
+            });
+        }
+
         [HttpGet("operation/refresh-prototype")]
         public async Task<IActionResult> RefreshPrototype([FromQuery(Name = "operation_id")] Guid operationId)
         {
-            User user = await UserManager.GetUserAsync(HttpContext.User);
             Operation operation = await OperationManager.GetAsync(operationId);
 
             PrototypesSorter.Sort(operation.Prototype);
@@ -139,13 +162,7 @@ namespace SpotifyShuffler.Controllers
             SpotifyContext.Update(operation.Prototype);
             _ = SpotifyContext.SaveChangesAsync();
 
-            return View("CheckPrototype", new CheckPrototypeModel
-            {
-                Prototype = operation.Prototype,
-                OperationId = (Guid) operation.Id,
-                PlaylistId = operation.OriginalPlaylistId,
-                CurrentUser = user
-            });
+            return RedirectToAction("CheckPrototype", new {operation_id = operation.Id, playlist_id = operation.OriginalPlaylistId});
         }
 
         [HttpGet("operation/configure-your-playlist")]
@@ -188,7 +205,7 @@ namespace SpotifyShuffler.Controllers
                     CurrentUser = await UserManager.GetUserAsync(HttpContext.User)
                 });
             }
-            
+
             else if (operation.Kind == OperationKind.UseOriginalPlaylist)
             {
                 return View("UseOriginalPlaylistSummary", new SummaryOperationModel
