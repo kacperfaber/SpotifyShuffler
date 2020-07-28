@@ -28,8 +28,6 @@ namespace SpotifyShuffler
         {
             services.AddDbContext<SpotifyContext>(builder => builder.UseSqlite("Data Source=app.db;", b => b.MigrationsAssembly("SpotifyShuffler")));
 
-            services.AddDbContext<OperationContext>(b => b.UseSqlite("Data Source=op.db;", b => b.MigrationsAssembly("SpotifyShuffler")));
-
             services.AddSpotify();
 
             services
@@ -51,7 +49,8 @@ namespace SpotifyShuffler
                     opts.Scope.Add("user-library-read");
                 });
 
-            services.AddMvc(mvc => mvc.EnableEndpointRouting = false).AddNewtonsoftJson(o =>
+            services.AddMvc(mvc => mvc.EnableEndpointRouting = false)
+                .AddNewtonsoftJson(o =>
             {
                 o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 o.SerializerSettings.Formatting = Formatting.Indented;
@@ -61,7 +60,10 @@ namespace SpotifyShuffler
                 .AddEntityFrameworkStores<SpotifyContext>()
                 .AddUserManager<UserManager>();
 
-            services.ConfigureApplicationCookie(x => { x.ExpireTimeSpan = TimeSpan.FromMinutes(59); });
+            services.ConfigureApplicationCookie(x =>
+            {
+                x.ExpireTimeSpan = TimeSpan.FromMinutes(59);
+            });
 
             services.AddScoped<IUserFinder, UserFinder>();
             services.AddScoped<IUserGenerator, UserGenerator>();
@@ -72,20 +74,16 @@ namespace SpotifyShuffler
             services.AddScoped<IRegistrationGenerator, RegistrationGenerator>();
             services.AddScoped<IPlaylistValidator, PlaylistValidator>();
             services.AddScoped<IPlaylistSizeValidator, PlaylistSizeValidator>();
-            services.AddScoped<IOrderedPrototypesProvider, OrderedPrototypesProvider>();
             services.AddScoped<ICompletedPlaylistGenerator, CompletedPlaylistGenerator>();
             services.AddScoped<IRegistrationValidator, RegistrationValidator>();
             services.AddScoped<IRegistrationActivator, RegistrationActivator>();
             services.AddScoped<IUserLoginInfoGenerator, UserLoginInfoGenerator>();
             services.AddScoped<IModelIndexer, ModelIndexer>();
-            services.AddScoped<IPlaylistPrototypeGenerator, PlaylistPrototypeGenerator>();
-            services.AddScoped<IPrototypesSorter, PrototypesSorter>();
-            services.AddScoped<ITrackPrototypeGenerator, TrackPrototypeGenerator>();
-            services.AddScoped<ITrackPrototypesGenerator, TrackPrototypesGenerator>();
             services.AddScoped<IArtistLabelGenerator, ArtistLabelGenerator>();
             services.AddScoped<IOperationValidator, OperationValidator>();
             services.AddScoped<ISpotifyUrisGenerator, SpotifyUrisGenerator>();
             services.AddScoped<Executor>();
+            services.AddScoped<ISpotifyTracksShuffler, SpotifyTracksShuffler>();
             services.AddScoped<ITracksAdder, TracksAdder>();
             services.AddScoped<ISpotifyPlaylistCreator, SpotifyPlaylistCreator>();
             services.AddScoped<IPlaylistCollaborativeChecker, PlaylistCollaborativeChecker>();

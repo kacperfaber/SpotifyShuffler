@@ -10,17 +10,7 @@ namespace SpotifyShuffler.Types
         {
             return await Task.Run(() =>
             {
-                if (operation.Prototype == null)
-                {
-                    return OperationValidationResult.MissingPrototype;
-                }
-
-                if (operation.Prototype.Tracks.Count == 0)
-                {
-                    return OperationValidationResult.NoTracks;
-                }
-
-                else if (!operation.IsSubmitted)
+                if (!operation.IsSubmitted)
                 {
                     return OperationValidationResult.NotSubmitted;
                 }
