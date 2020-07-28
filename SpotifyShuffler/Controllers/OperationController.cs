@@ -30,17 +30,15 @@ namespace SpotifyShuffler.Controllers
         public IPlaylistCollaborativeChecker PlaylistCollaborativeChecker;
 
         public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
-            SpotifyService spotifyService, IPlaylistPrototypeGenerator playlistPrototypeGenerator, SpotifyContext spotifyContext,
-            IPrototypesSorter prototypesSorter, IOperationValidator operationValidator,
+            SpotifyService spotifyService, SpotifyContext spotifyContext,
+            IOperationValidator operationValidator,
             IPlaylistValidator playlistValidator, ICompletedPlaylistGenerator completedPlaylistGenerator, Executor executor, IPlaylistCollaborativeChecker playlistCollaborativeChecker)
         {
             OperationManager = operationManager;
             UserManager = userManager;
             AccessTokenStore = accessTokenStore;
             SpotifyService = spotifyService;
-            PlaylistPrototypeGenerator = playlistPrototypeGenerator;
             SpotifyContext = spotifyContext;
-            PrototypesSorter = prototypesSorter;
             OperationValidator = operationValidator;
             PlaylistValidator = playlistValidator;
             CompletedPlaylistGenerator = completedPlaylistGenerator;
