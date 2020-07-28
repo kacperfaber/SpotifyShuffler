@@ -6,6 +6,6 @@ namespace SpotifyShuffler.Interfaces
 {
     public interface ICompletedPlaylistGenerator
     {
-        Task<CompletedPlaylist> GenerateAsync(PlaylistPrototype prototype, SpotifyPlaylist playlist, User owner);
+        Task<CompletedPlaylist> GenerateAsync(SpotifyPlaylist playlist, User owner);
     }
 }
