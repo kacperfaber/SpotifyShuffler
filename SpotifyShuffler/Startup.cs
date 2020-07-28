@@ -83,6 +83,7 @@ namespace SpotifyShuffler
             services.AddScoped<IOperationValidator, OperationValidator>();
             services.AddScoped<ISpotifyUrisGenerator, SpotifyUrisGenerator>();
             services.AddScoped<Executor>();
+            services.AddScoped<ISpotifyTracksShuffler, SpotifyTracksShuffler>();
             services.AddScoped<ITracksAdder, TracksAdder>();
             services.AddScoped<ISpotifyPlaylistCreator, SpotifyPlaylistCreator>();
             services.AddScoped<IPlaylistCollaborativeChecker, PlaylistCollaborativeChecker>();

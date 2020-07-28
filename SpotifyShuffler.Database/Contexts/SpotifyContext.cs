@@ -6,7 +6,7 @@ namespace SpotifyShuffler.Database
 {
     public class SpotifyContext : IdentityDbContext<User, Role, Guid>
     {
-        public SpotifyContext(DbContextOptions<SpotifyContext> options) : base(options)
+        public SpotifyContext(DbContextOptions options) : base(options)
         {
         }
 
