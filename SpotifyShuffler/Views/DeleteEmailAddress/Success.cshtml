@@ -1,0 +1,23 @@
+﻿@model SpotifyShuffler.Models.DeleteEmailAddressModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-10 col-xl-8 offset-md-1 offset-xl-2">
+            <div class="p-5">
+                <h1 class="h3">
+                    Success
+                </h1>
+                <p>
+                    Email was successfully deleted.
+                    <br/>
+                    If you want further use our website, please put new email address.
+                </p>
+                @Html.ActionLink("Home", "Home", "Home", new {}, new {@class = "btn-link"})
+            </div>
+        </div>
+    </div>
+</div>

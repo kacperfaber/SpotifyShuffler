@@ -31,6 +31,7 @@ namespace SpotifyShuffler.Types
                 return null;
 
             return await SpotifyContext.Users
+                .Include(x => x.EmailAddress)
                 .FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
         }
 

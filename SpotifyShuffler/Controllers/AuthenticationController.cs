@@ -50,7 +50,12 @@ namespace SpotifyShuffler.Controllers
                     Id = Guid.NewGuid(),
                     Email = spotifyAccount.EmailAddress,
                     UserName = spotifyAccount.Name,
-                    SpotifyAccount = spotifyAccount
+                    SpotifyAccount = spotifyAccount,
+                    EmailAddress = new EmailAddress
+                    {
+                        Id = Guid.NewGuid(),
+                        CreatedAt = DateTime.Now
+                    }
                 };
 
                 _ = await UserManager.CreateAsync(createdUser);
