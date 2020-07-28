@@ -19,8 +19,6 @@ namespace SpotifyShuffler.Types
         {
             return await SpotifyContext.CompletedPlaylists
                 .Where(x => x.Id == id)
-                .Include(x => x.PlaylistPrototype)
-                .ThenInclude(x => x.Tracks)
                 .Include(x => x.Owner)
                 .FirstOrDefaultAsync();
         }
