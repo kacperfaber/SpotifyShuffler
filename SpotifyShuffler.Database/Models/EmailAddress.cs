@@ -10,6 +10,10 @@ namespace SpotifyShuffler.Database
 
         public string Email { get; set; }
 
+        public DateTime CreatedAt { get; set; }
+
         public bool IsConfirmed { get; set; }
+
+        public DateTime? ConfirmedAt { get; set; }
     }
 }

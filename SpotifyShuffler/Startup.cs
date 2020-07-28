@@ -87,6 +87,7 @@ namespace SpotifyShuffler
             services.AddScoped<ITracksAdder, TracksAdder>();
             services.AddScoped<ISpotifyPlaylistCreator, SpotifyPlaylistCreator>();
             services.AddScoped<IPlaylistCollaborativeChecker, PlaylistCollaborativeChecker>();
+            services.AddScoped<IEmailAddressDeleter, EmailAddressDeleter>();
 
             services.AddScoped(typeof(OperationManager));
         }
