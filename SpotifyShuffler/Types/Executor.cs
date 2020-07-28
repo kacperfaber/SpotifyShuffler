@@ -20,7 +20,7 @@ namespace SpotifyShuffler.Types
             SpotifyService = spotifyService;
         }
 
-        public async Task<ExecuteResult> ExecuteAsync(Operation operation, PlaylistPrototype playlistPrototype, User user, SpotifyAuthorization authorization)
+        public async Task<ExecuteResult> ExecuteAsync(Operation operation, User user, SpotifyAuthorization authorization)
         {
             PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(authorization);
 
@@ -28,7 +28,7 @@ namespace SpotifyShuffler.Types
             {
                 SpotifyPlaylist playlist = await PlaylistCreator.CreateAsync(operation, user, playlistService);
 
-                await TracksAdder.AddAll(playlistPrototype, playlist, playlistService);
+                await TracksAdder.AddAll(playlist, playlistService);
 
                 return new ExecuteResult
                 {
@@ -42,7 +42,7 @@ namespace SpotifyShuffler.Types
                 SpotifyPlaylist playlist = await playlistService.GetPlaylist(operation.OriginalPlaylistId);
 
                 await playlistService.Clear(playlist);
-                await TracksAdder.AddAll(playlistPrototype, playlist, playlistService);
+                await TracksAdder.AddAll(playlist, playlistService);
 
                 return new ExecuteResult
                 {

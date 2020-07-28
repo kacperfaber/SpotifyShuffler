@@ -17,5 +17,6 @@ namespace SpotifyShuffler.Database
         public DbSet<SpotifyAccount> SpotifyAccounts { get; set; }
         public DbSet<Registration> Registrations { get; set; }
         public DbSet<CompletedPlaylist> CompletedPlaylists { get; set; }
+        public DbSet<Operation> Operations { get; set; }
     }
 }

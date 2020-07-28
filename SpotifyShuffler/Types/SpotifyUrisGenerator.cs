@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using SpotifyShuffler.Database;
+using SpotifyShuffler.Interface;
 using SpotifyShuffler.Interfaces;
 
 namespace SpotifyShuffler.Types
 {
     public class SpotifyUrisGenerator : ISpotifyUrisGenerator
     {
-        public IEnumerable<string> Generate(IOrderedEnumerable<TrackPrototype> prototypes)
+        public IEnumerable<string> Generate(IOrderedEnumerable<SpotifyTrack> tracks)
         {
-            foreach (TrackPrototype prototype in prototypes)
+            foreach (SpotifyTrack track in tracks)
             {
-                yield return prototype.SpotifyUri;
+                yield return track.Uri;
             }
         }
     }

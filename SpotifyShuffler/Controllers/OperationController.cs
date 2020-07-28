@@ -113,8 +113,8 @@ namespace SpotifyShuffler.Controllers
                 operation.Prototype = await PlaylistPrototypeGenerator.GenerateAsync(tracks, operation);
                 PrototypesSorter.Sort(operation.Prototype);
 
-                await OperationManager.OperationContext.AddAsync(operation.Prototype);
-                _ = OperationManager.OperationContext.SaveChangesAsync();
+                await OperationManager.SpotifyContext.AddAsync(operation.Prototype);
+                _ = OperationManager.SpotifyContext.SaveChangesAsync();
 
                 return RedirectToAction("CheckPrototype", new
                 {
@@ -234,7 +234,7 @@ namespace SpotifyShuffler.Controllers
                     AccessToken = await AccessTokenStore.GetAccessToken(user)
                 };
 
-                ExecuteResult result = await Executor.ExecuteAsync(operation, operation.Prototype, user, auth);
+                ExecuteResult result = await Executor.ExecuteAsync(operation, user, auth);
 
                 CompletedPlaylist completedPlaylist = await CompletedPlaylistGenerator.GenerateAsync(operation.Prototype, result.Playlist, user);
 
@@ -276,7 +276,7 @@ namespace SpotifyShuffler.Controllers
         {
             SimpleOperation op = await OperationManager.GetSimpleAsync(model.OperationId);
             op.Kind = model.CreateNewPlaylist ? OperationKind.CreateNewPlaylist : OperationKind.UseOriginalPlaylist;
-            _ = OperationManager.OperationContext.SaveChangesAsync();
+            _ = OperationManager.SpotifyContext.SaveChangesAsync();
 
             if (model.CreateNewPlaylist)
             {

@@ -9,19 +9,16 @@ namespace SpotifyShuffler.Types
 {
     public class TracksAdder : ITracksAdder
     {
-        public IOrderedPrototypesProvider OrderedPrototypesProvider;
         public ISpotifyUrisGenerator UrisGenerator;
 
-        public TracksAdder(ISpotifyUrisGenerator urisGenerator, IOrderedPrototypesProvider orderedPrototypesProvider)
+        public TracksAdder(ISpotifyUrisGenerator urisGenerator)
         {
             UrisGenerator = urisGenerator;
-            OrderedPrototypesProvider = orderedPrototypesProvider;
         }
 
-        public async Task AddAll(PlaylistPrototype prototype, SpotifyPlaylist playlist, PlaylistService playlistService)
+        public async Task AddAll(IOrderedEnumerable<SpotifyTrack> shuffledTracks, SpotifyPlaylist playlist, PlaylistService playlistService)
         {
-            IOrderedEnumerable<TrackPrototype> orderedTracks = OrderedPrototypesProvider.Provide(prototype);
-            IEnumerable<string> uris = UrisGenerator.Generate(orderedTracks);
+            IEnumerable<string> uris = UrisGenerator.Generate(shuffledTracks);
             await playlistService.AddAllTracks(playlist.Id, uris);
         }
     }
