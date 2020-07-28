@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SpotifyShuffler.Database
@@ -12,5 +13,10 @@ namespace SpotifyShuffler.Database
 
         [InverseProperty("Owner")]
         public List<CompletedPlaylist> CompletedPlaylists { get; set; }
+
+        [ForeignKey("EmailAddressId")]
+        public EmailAddress EmailAddress { get; set; }
+
+        public Guid? EmailAddressId { get; set; }
     }
 }

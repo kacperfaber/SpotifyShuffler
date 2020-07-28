@@ -137,6 +137,23 @@ namespace SpotifyShuffler.Migrations
                     b.ToTable("CompletedPlaylists");
                 });
 
+            modelBuilder.Entity("SpotifyShuffler.Database.EmailAddress", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsConfirmed")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailAddress");
+                });
+
             modelBuilder.Entity("SpotifyShuffler.Database.Operation", b =>
                 {
                     b.Property<Guid?>("Id")
@@ -299,6 +316,9 @@ namespace SpotifyShuffler.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
+                    b.Property<Guid?>("EmailAddressId")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
 
@@ -339,6 +359,8 @@ namespace SpotifyShuffler.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmailAddressId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -419,6 +441,10 @@ namespace SpotifyShuffler.Migrations
 
             modelBuilder.Entity("SpotifyShuffler.Database.User", b =>
                 {
+                    b.HasOne("SpotifyShuffler.Database.EmailAddress", "EmailAddress")
+                        .WithMany()
+                        .HasForeignKey("EmailAddressId");
+
                     b.HasOne("SpotifyShuffler.Database.SpotifyAccount", "SpotifyAccount")
                         .WithMany()
                         .HasForeignKey("SpotifyAccountId");

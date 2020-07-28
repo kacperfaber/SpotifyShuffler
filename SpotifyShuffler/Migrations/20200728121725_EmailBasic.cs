@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SpotifyShuffler.Migrations
 {
-    public partial class InitialMigrationOp : Migration
+    public partial class EmailBasic : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,6 +19,19 @@ namespace SpotifyShuffler.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmailAddress",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Email = table.Column<string>(nullable: true),
+                    IsConfirmed = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmailAddress", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -103,11 +116,18 @@ namespace SpotifyShuffler.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    SpotifyAccountId = table.Column<string>(nullable: true)
+                    SpotifyAccountId = table.Column<string>(nullable: true),
+                    EmailAddressId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_EmailAddress_EmailAddressId",
+                        column: x => x.EmailAddressId,
+                        principalTable: "EmailAddress",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_SpotifyAccounts_SpotifyAccountId",
                         column: x => x.SpotifyAccountId,
@@ -273,6 +293,11 @@ namespace SpotifyShuffler.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_EmailAddressId",
+                table: "AspNetUsers",
+                column: "EmailAddressId");
+
+            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
@@ -330,6 +355,9 @@ namespace SpotifyShuffler.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "EmailAddress");
 
             migrationBuilder.DropTable(
                 name: "SpotifyAccounts");
