@@ -8,6 +8,8 @@ namespace SpotifyShuffler.Database
         [Key]
         public Guid Id { get; set; }
 
+        public User User { get; set; }
+
         public string Email { get; set; }
 
         public DateTime CreatedAt { get; set; }
@@ -15,5 +17,9 @@ namespace SpotifyShuffler.Database
         public bool IsConfirmed { get; set; }
 
         public DateTime? ConfirmedAt { get; set; }
+
+        public bool IsDeleted { get; set; }
+
+        public DateTime? DeletedAt { get; set; }
     }
 }
