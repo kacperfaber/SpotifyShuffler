@@ -41,7 +41,7 @@ namespace SpotifyShuffler.Controllers
 
                     if (confirmResult == EmailAddressResult.Confirmed)
                     {
-                        return Content($"{model.Email} confirmed successfully.");
+                        return View("Success", model);
                     }
                 }
 
@@ -56,7 +56,7 @@ namespace SpotifyShuffler.Controllers
                     
                     else if (createResult == EmailAddressResult.Confirmed)
                     {
-                        return Content("Confirmed successfully.");
+                        return View("Success", model);
                     }
 
                     else

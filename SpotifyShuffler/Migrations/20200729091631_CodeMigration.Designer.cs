@@ -9,8 +9,8 @@ using SpotifyShuffler.Database;
 namespace SpotifyShuffler.Migrations
 {
     [DbContext(typeof(SpotifyContext))]
-    [Migration("20200729071853_EmailModelChangedMigration")]
-    partial class EmailModelChangedMigration
+    [Migration("20200729091631_CodeMigration")]
+    partial class CodeMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -139,11 +139,46 @@ namespace SpotifyShuffler.Migrations
                     b.ToTable("CompletedPlaylists");
                 });
 
+            modelBuilder.Entity("SpotifyShuffler.Database.ConfirmationCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DeactivatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeactivated")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("UsedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ConfirmationCodes");
+                });
+
             modelBuilder.Entity("SpotifyShuffler.Database.EmailAddress", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("ConfirmationMethod")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("ConfirmedAt")
                         .HasColumnType("TEXT");
@@ -151,7 +186,7 @@ namespace SpotifyShuffler.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DeactivatedAt")
+                    b.Property<DateTime?>("DeactivatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("DeletedAt")
