@@ -14,10 +14,8 @@
             <p>
                 Your email address @Model.Email is confirmed.
             </p>
-            
-            <a href="#" class="btn btn-primary">
-                Home
-            </a>
+
+            @Html.ActionLink("Home", "Home", "Home", new {}, new {@class = "btn btn-primary"})
         </div>
     </div>
 </div>

@@ -13,11 +13,13 @@ namespace SpotifyShuffler.Controllers
     {
         public UserManager UserManager;
         public SpotifyContext SpotifyContext;
+        public EmailAddressManager EmailAddressManager;
 
-        public AccountSettingsController(UserManager userManager, SpotifyContext spotifyContext)
+        public AccountSettingsController(UserManager userManager, SpotifyContext spotifyContext, EmailAddressManager emailAddressManager)
         {
             UserManager = userManager;
             SpotifyContext = spotifyContext;
+            EmailAddressManager = emailAddressManager;
         }
 
         [HttpGet("account-settings/settings")]
@@ -28,6 +30,7 @@ namespace SpotifyShuffler.Controllers
             return View("Settings", new SettingsModel
             {
                 CurrentUser = user,
+                EmailAddress = await EmailAddressManager.GetAsync(user),
                 SpotifyAccount = SpotifyContext.SpotifyAccounts.FirstOrDefault(x => x.SpotifyId == user.SpotifyAccountId)
             });
         }
