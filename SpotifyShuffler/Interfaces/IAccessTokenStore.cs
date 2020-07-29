@@ -7,7 +7,7 @@ namespace SpotifyShuffler.Interfaces
 {
     public interface IAccessTokenStore
     {
-        void StoreAccessToken(User user, IEnumerable<AuthenticationToken> tokens);
+        Task StoreAccessToken(User user, IEnumerable<AuthenticationToken> tokens);
 
         Task<string> GetAccessToken(User user);
     }

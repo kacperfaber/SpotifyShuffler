@@ -20,7 +20,7 @@ namespace SpotifyShuffler.Types
             ClaimGenerator = claimGenerator;
         }
 
-        public async void StoreAccessToken(User user, IEnumerable<AuthenticationToken> tokens)
+        public async Task StoreAccessToken(User user, IEnumerable<AuthenticationToken> tokens)
         {
             string accessToken = tokens.FirstOrDefault(x => x.Name == "access_token").Value;
 

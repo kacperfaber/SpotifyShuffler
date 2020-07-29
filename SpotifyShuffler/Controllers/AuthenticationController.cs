@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyShuffler.Database;
 using SpotifyShuffler.Interfaces;
+using SpotifyShuffler.Types;
 
 namespace SpotifyShuffler.Controllers
 {
@@ -15,9 +16,9 @@ namespace SpotifyShuffler.Controllers
         public SignInManager<User> SignInManager;
         public ISpotifyAccountGenerator SpotifyAccountGenerator;
         public IUserFinder UserFinder;
-        public UserManager<User> UserManager;
+        public UserManager UserManager;
 
-        public AuthenticationController(SignInManager<User> signInManager, UserManager<User> userManager, IUserFinder userFinder,
+        public AuthenticationController(SignInManager<User> signInManager, UserManager userManager, IUserFinder userFinder,
             IAccessTokenStore accessTokenStore, ISpotifyAccountGenerator spotifyAccountGenerator)
         {
             SignInManager = signInManager;
@@ -59,7 +60,7 @@ namespace SpotifyShuffler.Controllers
 
                 _ = await UserManager.AddLoginAsync(createdUser, loginInfo);
 
-                AccessTokenStore.StoreAccessToken(createdUser, loginInfo.AuthenticationTokens);
+                await AccessTokenStore.StoreAccessToken(createdUser, loginInfo.AuthenticationTokens);
 
                 await SignInManager.SignInAsync(createdUser, true);
 
@@ -68,7 +69,7 @@ namespace SpotifyShuffler.Controllers
 
             else
             {
-                AccessTokenStore.StoreAccessToken(user, loginInfo.AuthenticationTokens);
+                await AccessTokenStore.StoreAccessToken(user, loginInfo.AuthenticationTokens);
 
                 await SignInManager.SignInAsync(user, true);
 
