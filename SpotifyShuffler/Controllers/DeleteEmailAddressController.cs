@@ -13,11 +13,13 @@ namespace SpotifyShuffler.Controllers
     {
         public UserManager UserManager;
         public IEmailAddressDeleter Deleter;
+        public IEmailAddressProvider EmailAddressProvider;
 
-        public DeleteEmailAddressController(UserManager userManager, IEmailAddressDeleter deleter)
+        public DeleteEmailAddressController(UserManager userManager, IEmailAddressDeleter deleter, IEmailAddressProvider emailAddressProvider)
         {
             UserManager = userManager;
             Deleter = deleter;
+            EmailAddressProvider = emailAddressProvider;
         }
 
         [HttpGet]
@@ -33,7 +35,7 @@ namespace SpotifyShuffler.Controllers
         {
             User user = await UserManager.GetUserAsync(HttpContext.User);
 
-            await Deleter.DeleteAsync(user.EmailAddress);
+            await Deleter.DeleteAsync(EmailAddressProvider.Provide(user));
 
             return View("Success", model);
         }

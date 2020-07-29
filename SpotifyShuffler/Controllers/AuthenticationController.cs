@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -51,10 +52,8 @@ namespace SpotifyShuffler.Controllers
                     Email = spotifyAccount.EmailAddress,
                     UserName = spotifyAccount.Name,
                     SpotifyAccount = spotifyAccount,
-                    EmailAddress = new EmailAddress
+                    EmailAddresses = new List<EmailAddress>()
                     {
-                        Id = Guid.NewGuid(),
-                        CreatedAt = DateTime.Now
                     }
                 };
 
