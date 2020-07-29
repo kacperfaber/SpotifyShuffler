@@ -31,7 +31,7 @@ namespace SpotifyShuffler.Types
 
         public async Task<EmailAddressResult> CreateEmail(User user, string email)
         {
-            // TODO Validate is taken.
+            // TODO Validate which email is taken.
 
             EmailAddress emailAddress = EmailAddressGenerator.Generate(user, email);
             ConfirmationCode confirmationCode = ConfirmationCodeGenerator.Generate(email);

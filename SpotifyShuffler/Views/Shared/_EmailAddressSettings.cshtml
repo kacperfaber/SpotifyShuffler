@@ -18,7 +18,7 @@
         </div>
     
         <div class="form-group">
-            <label>Is Confirmed</label>
+            <label class="form-text">Is Confirmed</label>
             @if (Model.IsConfirmed)
             {
                 <label class="form-text">Yes, at @Model.ConfirmedAt.Value.ToString("g")</label>
@@ -29,11 +29,6 @@
                 <label class="form-text">No, @Html.ActionLink("Confirm Now", "Confirm", "ConfirmEmailAddress")</label>
             }
         </div>
-    
-        @if (!Model.IsConfirmed)
-        {
-            <a href="#" class="btn btn-secondary">Confirm Email</a>
-        }
     
         @Html.ActionLink("Delete", "Delete", "DeleteEmailAddress", new {}, new {@class = "btn btn-danger"})
     }
