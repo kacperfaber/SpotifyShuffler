@@ -22,6 +22,8 @@ namespace SpotifyShuffler.Controllers
 
         public async Task<IActionResult> Confirm()
         {
+            // TODO there is need to be second verification page.
+            
             User user = await UserManager.GetUserAsync(HttpContext.User);
 
             EmailAddress emailAddress = await EmailAddressManager.GetAsync(user);
