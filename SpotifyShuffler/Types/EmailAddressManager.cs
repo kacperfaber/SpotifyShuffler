@@ -18,7 +18,7 @@ namespace SpotifyShuffler.Types
         public ISpotifyEmailIsSameChecker SpotifyEmailIsSameChecker;
         public IEmailAddressConfirmator EmailAddressConfirmator;
 
-        public EmailAddressManager(IConfirmationCodeSender confirmationCodeSender, IConfirmationCodeProvider confirmationCodeProvider, IConfirmationCodeValidator confirmationCodeValidator, IConfirmationCodeGenerator confirmationCodeGenerator, IEmailAddressGenerator emailAddressGenerator, IEmailAddressProvider emailAddressProvider, SpotifyContext spotifyContext)
+        public EmailAddressManager(IConfirmationCodeSender confirmationCodeSender, IConfirmationCodeProvider confirmationCodeProvider, IConfirmationCodeValidator confirmationCodeValidator, IConfirmationCodeGenerator confirmationCodeGenerator, IEmailAddressGenerator emailAddressGenerator, IEmailAddressProvider emailAddressProvider, SpotifyContext spotifyContext, IEmailAddressDeleter emailAddressDeleter)
         {
             ConfirmationCodeSender = confirmationCodeSender;
             ConfirmationCodeProvider = confirmationCodeProvider;
@@ -27,6 +27,7 @@ namespace SpotifyShuffler.Types
             EmailAddressGenerator = emailAddressGenerator;
             EmailAddressProvider = emailAddressProvider;
             SpotifyContext = spotifyContext;
+            EmailAddressDeleter = emailAddressDeleter;
         }
 
         public async Task<EmailAddressResult> CreateEmail(User user, string email)
@@ -76,6 +77,12 @@ namespace SpotifyShuffler.Types
         public async Task<EmailAddress> GetAsync(User user)
         {
             return await Task.Run(() => EmailAddressProvider.Provide(user));
+        }
+
+        public async Task DeleteAsync(User owner)
+        {
+            EmailAddress emailAddress = EmailAddressProvider.Provide(owner);
+            await EmailAddressDeleter.DeleteAsync(emailAddress);
         }
     }
 }

@@ -13,12 +13,12 @@
             
             @using (Html.BeginForm("Delete", "DeleteEmailAddress", FormMethod.Post))
             {
-                <div class="form-control mb-3">
+                <div class="form-group mb-3">
                     <label class="form-text">Are you sure?</label>
                 </div>
                 
-                <a href="#" class="btn btn-secondary m-1">Cancel</a>
-                <input type="submit" class="btn btn-danger m-1"/>
+                @Html.ActionLink("Cancel", "Home", "Home", new {}, new {@class = "btn btn-secondary"})
+                <input type="submit" class="btn btn-danger"/>
             }
         </div>
     </div>
