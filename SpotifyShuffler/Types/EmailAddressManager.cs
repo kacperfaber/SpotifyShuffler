@@ -72,5 +72,10 @@ namespace SpotifyShuffler.Types
 
             return EmailAddressResult.BadCode;
         }
+
+        public async Task<EmailAddress> GetAsync(User user)
+        {
+            return await Task.Run(() => EmailAddressProvider.Provide(user));
+        }
     }
 }
