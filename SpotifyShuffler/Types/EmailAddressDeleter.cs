@@ -16,9 +16,8 @@ namespace SpotifyShuffler.Types
 
         public async Task DeleteAsync(EmailAddress emailAddress)
         {
-            emailAddress.Email = string.Empty;
-            emailAddress.ConfirmedAt = null;
-            emailAddress.IsConfirmed = false;
+            emailAddress.IsDeleted = true;
+            emailAddress.DeletedAt = DateTime.Now;
 
             SpotifyContext.Update(emailAddress);
             await SpotifyContext.SaveChangesAsync();
