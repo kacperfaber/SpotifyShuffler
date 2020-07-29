@@ -7,16 +7,23 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12 col-md-10 col-xl-8 offset-xl-2 offset-md-1">
-            <h1 class="h3">
-                Delete Email Address
-            </h1>
-            
+            <div class="">
+                <h1 class="h3">
+                    Delete Email Address
+                </h1>
+                <p>
+                    If you want to continue using out website, you have to put new email address.
+                </p>
+            </div>
+
             @using (Html.BeginForm("Delete", "DeleteEmailAddress", FormMethod.Post))
             {
                 <div class="form-group mb-3">
-                    <label class="form-text">Are you sure?</label>
+                    <label class="form-text">Email Address</label>
+                    <input type="email" class="form-control" placeholder="@Model.EmailAddress.Email" readonly>
+                    <small class="form-text text-muted">You cannot undo this operation.</small>
                 </div>
-                
+
                 @Html.ActionLink("Cancel", "Home", "Home", new {}, new {@class = "btn btn-secondary"})
                 <input type="submit" class="btn btn-danger"/>
             }
