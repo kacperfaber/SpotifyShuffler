@@ -89,6 +89,14 @@ namespace SpotifyShuffler
             services.AddScoped<IPlaylistCollaborativeChecker, PlaylistCollaborativeChecker>();
             services.AddScoped<IEmailAddressDeleter, EmailAddressDeleter>();
             services.AddScoped<IEmailAddressProvider, EmailAddressProvider>();
+            services.AddScoped<IConfirmationCodeGenerator, ConfirmationCodeGenerator>();
+            services.AddScoped<IConfirmationCodeProvider, ConfirmationCodeProvider>();
+            services.AddScoped<IConfirmationCodeSender, ConfirmationCodeSender>();
+            services.AddScoped<IConfirmationCodeValidator, ConfirmationCodeValidator>();
+            services.AddScoped<IEmailAddressConfirmator, EmailAddressConfirmator>();
+            services.AddScoped<IEmailAddressGenerator, EmailAddressGenerator>();
+            services.AddScoped<ISpotifyEmailIsSameChecker, SpotifyEmailIsSameChecker>();
+            services.AddScoped<EmailAddressManager>();
 
             services.AddScoped(typeof(OperationManager));
         }
