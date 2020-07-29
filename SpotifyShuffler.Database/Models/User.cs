@@ -14,9 +14,7 @@ namespace SpotifyShuffler.Database
         [InverseProperty("Owner")]
         public List<CompletedPlaylist> CompletedPlaylists { get; set; }
 
-        [ForeignKey("EmailAddressId")]
-        public EmailAddress EmailAddress { get; set; }
-
-        public Guid? EmailAddressId { get; set; }
+        [InverseProperty("User")]
+        public List<EmailAddress> EmailAddresses { get; set; }
     }
 }
