@@ -21,5 +21,10 @@ namespace SpotifyShuffler.Database
         public bool IsDeleted { get; set; }
 
         public DateTime? DeletedAt { get; set; }
+        
+        public bool IsDeactivated { get; set; }
+        
+
+        public DateTime DeactivatedAt { get; set; }
     }
 }
