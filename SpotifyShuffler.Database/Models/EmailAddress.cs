@@ -18,6 +18,8 @@ namespace SpotifyShuffler.Database
 
         public DateTime? ConfirmedAt { get; set; }
 
+        public EmailConfirmationMethod ConfirmationMethod { get; set; }
+
         public bool IsDeleted { get; set; }
 
         public DateTime? DeletedAt { get; set; }
