@@ -32,6 +32,7 @@ namespace SpotifyShuffler.Controllers
         public async Task<IActionResult> CreateEmailPost(CreateEmailAddressModel model)
         {
             User user = await UserManager.GetUserAsync(HttpContext.User);
+            model.CurrentUser = user;
 
             if (ModelState.IsValid)
             {

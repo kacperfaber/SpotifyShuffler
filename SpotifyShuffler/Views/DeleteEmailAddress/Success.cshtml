@@ -14,10 +14,12 @@
                 <p>
                     Email was successfully deleted.
                     <br/>
-                    If you want further use our website, please put new email address.
+                    You cannot to shuffle playlist now, @Html.ActionLink("Add new email", "CreateEmail", "CreateEmailAddress", new {}, new {@class = "btn-link"})
                 </p>
-                @Html.ActionLink("Home", "Home", "Home", new {}, new {@class = "btn-link"})
+                @await Html.PartialAsync("_HomeButton")
             </div>
+            
+            
         </div>
     </div>
 </div>
