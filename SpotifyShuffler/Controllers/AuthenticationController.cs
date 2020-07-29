@@ -53,8 +53,6 @@ namespace SpotifyShuffler.Controllers
                     UserName = spotifyAccount.Name,
                     SpotifyAccount = spotifyAccount,
                     EmailAddresses = new List<EmailAddress>()
-                    {
-                    }
                 };
 
                 _ = await UserManager.CreateAsync(createdUser);

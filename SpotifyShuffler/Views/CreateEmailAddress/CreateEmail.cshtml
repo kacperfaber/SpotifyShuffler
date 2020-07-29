@@ -1,0 +1,24 @@
+﻿@model SpotifyShuffler.Models.CreateEmailAddressModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-10 col-xl-8 offset-md-1 offset-xl-2">
+            <h1 class="h3">Create Email</h1>
+            
+            @using (Html.BeginForm("CreateEmail", "CreateEmailAddress", FormMethod.Post))
+            {
+                <div class="form-group my-2">
+                    <label class="form-text">Email Address</label>
+                    @Html.TextBoxFor(x => x.Email, new {@class = "form-control"})
+                </div>
+                
+                <input type="submit" class="btn btn-primary"/>
+            }
+        </div>
+    </div>
+</div>
+
