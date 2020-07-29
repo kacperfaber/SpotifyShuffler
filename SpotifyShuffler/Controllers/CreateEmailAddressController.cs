@@ -11,10 +11,12 @@ namespace SpotifyShuffler.Controllers
     public class CreateEmailAddressController : Controller
     {
         public UserManager UserManager;
+        public EmailAddressManager EmailAddressManager;
 
-        public CreateEmailAddressController(UserManager userManager)
+        public CreateEmailAddressController(UserManager userManager, EmailAddressManager emailAddressManager)
         {
             UserManager = userManager;
+            EmailAddressManager = emailAddressManager;
         }
 
         public async Task<IActionResult> CreateEmail(CreateEmailAddressModel model)
@@ -35,15 +37,32 @@ namespace SpotifyShuffler.Controllers
             {
                 if (model.IsCodeSent)
                 {
-                    // validate code.
+                    EmailAddressResult confirmResult = await EmailAddressManager.Confirm(model.Email, model.ConfirmationCode);
+
+                    if (confirmResult == EmailAddressResult.Confirmed)
+                    {
+                        return Content($"{model.Email} confirmed successfully.");
+                    }
                 }
 
                 else
                 {
-                    model.IsCodeSent = true;
+                    EmailAddressResult createResult = await EmailAddressManager.CreateEmail(user, model.Email);
 
-                    // create email.
-                    // create and send ConfirmationCode not related with EmailAddress created above - { code, email, id }.
+                    if (createResult == EmailAddressResult.CodeSent)
+                    {
+                        model.IsCodeSent = true;
+                    }
+                    
+                    else if (createResult == EmailAddressResult.Confirmed)
+                    {
+                        return Content("Confirmed successfully.");
+                    }
+
+                    else
+                    {
+                        return Content($"Unexcepted response. {createResult.ToString()}");
+                    }
                 }
             }
 
