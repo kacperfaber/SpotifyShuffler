@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SpotifyShuffler.Migrations
 {
-    public partial class EmailModelChangedMigration : Migration
+    public partial class CodeMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,6 +19,24 @@ namespace SpotifyShuffler.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ConfirmationCodes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Email = table.Column<string>(nullable: true),
+                    Code = table.Column<string>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    IsUsed = table.Column<bool>(nullable: false),
+                    UsedAt = table.Column<DateTime>(nullable: true),
+                    IsDeactivated = table.Column<bool>(nullable: false),
+                    DeactivatedAt = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ConfirmationCodes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -256,10 +274,11 @@ namespace SpotifyShuffler.Migrations
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     IsConfirmed = table.Column<bool>(nullable: false),
                     ConfirmedAt = table.Column<DateTime>(nullable: true),
+                    ConfirmationMethod = table.Column<int>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
                     DeletedAt = table.Column<DateTime>(nullable: true),
                     IsDeactivated = table.Column<bool>(nullable: false),
-                    DeactivatedAt = table.Column<DateTime>(nullable: false)
+                    DeactivatedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -349,6 +368,9 @@ namespace SpotifyShuffler.Migrations
 
             migrationBuilder.DropTable(
                 name: "CompletedPlaylists");
+
+            migrationBuilder.DropTable(
+                name: "ConfirmationCodes");
 
             migrationBuilder.DropTable(
                 name: "EmailAddresses");
