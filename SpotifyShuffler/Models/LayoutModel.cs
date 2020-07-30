@@ -7,5 +7,7 @@ namespace SpotifyShuffler.Models
         public string Title { get; set; } = "SpotifyShuffler";
 
         public User CurrentUser { get; set; }
+
+        public bool HideCurrentUser { get; set; }
     }
 }

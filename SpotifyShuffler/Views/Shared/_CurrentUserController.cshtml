@@ -1,4 +1,8 @@
-﻿@model SpotifyShuffler.Database.User
+﻿@using SpotifyShuffler.Database
+@using SpotifyShuffler.Types
+@model SpotifyShuffler.Database.User
+
+@inject EmailAddressManager EmailManager
 
 @if (Model == null)
 {
@@ -18,7 +22,25 @@ else
             </a>
 
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                @{
+                    EmailAddress emailAddress = await EmailManager.GetAsync(Model);
+
+                    if (emailAddress == null)
+                    {
+                        @Html.ActionLink("Add Email", "CreateEmail", "CreateEmailAddress", new {}, new {@class = "dropdown-item font-weight-bold"})
+                        <div class="dropdown-divider"></div>
+                    }
+
+                    else if (!emailAddress.IsConfirmed)
+                    {
+                        @Html.ActionLink("Confirm Email", "ConfirmEmail", "ConfirmEmailAddress", new {emailAddress.Email}, new {@class = "dropdown-item font-weight-bold"})
+                        <div class="dropdown-divider"></div>
+                    }
+                }
+
                 @Html.ActionLink("Settings", "Settings", "AccountSettings", new object[0], new {@class = "dropdown-item"})
+
                 <div class="dropdown-divider"></div>
                 @Html.ActionLink("Logout", "Logout", "Authentication", new object[0], new {@class = "dropdown-item"})
             </div>

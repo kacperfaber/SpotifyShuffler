@@ -39,6 +39,7 @@ namespace SpotifyShuffler.Controllers
         public async Task<IActionResult> Delete(DeleteEmailAddressModel model)
         {
             User user = await UserManager.GetUserAsync(HttpContext.User);
+            model.CurrentUser = user;
 
             await EmailAddressManager.DeleteAsync(owner: user);
 

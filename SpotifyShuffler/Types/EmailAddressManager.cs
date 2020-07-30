@@ -23,7 +23,7 @@ namespace SpotifyShuffler.Types
         public EmailAddressManager(IConfirmationCodeSender confirmationCodeSender, IConfirmationCodeProvider confirmationCodeProvider,
             IConfirmationCodeValidator confirmationCodeValidator, IConfirmationCodeGenerator confirmationCodeGenerator,
             IEmailAddressGenerator emailAddressGenerator, IEmailAddressProvider emailAddressProvider, SpotifyContext spotifyContext,
-            IEmailAddressDeleter emailAddressDeleter, IEmailAddressConfirmator emailAddressConfirmator, ISpotifyEmailIsSameChecker spotifyEmailIsSameChecker)
+            IEmailAddressDeleter emailAddressDeleter, IEmailAddressConfirmator emailAddressConfirmator, ISpotifyEmailIsSameChecker spotifyEmailIsSameChecker, IConfiguration configuration)
         {
             ConfirmationCodeSender = confirmationCodeSender;
             ConfirmationCodeProvider = confirmationCodeProvider;
@@ -35,6 +35,7 @@ namespace SpotifyShuffler.Types
             EmailAddressDeleter = emailAddressDeleter;
             EmailAddressConfirmator = emailAddressConfirmator;
             SpotifyEmailIsSameChecker = spotifyEmailIsSameChecker;
+            Configuration = configuration;
         }
 
         public async Task<EmailAddressResult> CreateEmail(User user, string email)

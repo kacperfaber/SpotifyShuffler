@@ -27,7 +27,7 @@ namespace SpotifyShuffler.Controllers
 
             if (confirmResult == EmailAddressResult.Confirmed)
             {
-                return View("Success", new ConfirmationSuccessModel {CurrentUser = null, Email = model.Email});
+                return View("Success", new ConfirmationSuccessModel {CurrentUser = null, HideCurrentUser = true, Email = model.Email});
             }
 
             else
