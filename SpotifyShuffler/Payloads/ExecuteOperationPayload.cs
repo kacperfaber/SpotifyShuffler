@@ -6,7 +6,6 @@ namespace SpotifyShuffler.Payloads
 {
     public class ExecuteOperationPayload : LayoutModel
     {
-        [FromQuery(Name = "operation_id")]
         public Guid OperationId { get; set; }
     }
 }

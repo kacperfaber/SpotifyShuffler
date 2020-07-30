@@ -1,0 +1,83 @@
+﻿@using SpotifyShuffler.Database
+@model SpotifyShuffler.Models.SummaryOperationModel
+
+@{
+    Layout = "_Layout";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-10 col-xl-8 offset-md-1 offset-xl-2">
+            <h1 class="h3">
+                Summary
+            </h1>
+
+            @using (Html.BeginForm("SummaryPost", "Operation", FormMethod.Post))
+            {
+                <div class="form-group">
+                    <label class="form-text">
+                        Operation
+                    </label>
+                    <input type="text" class="form-control" placeholder="@Model.OperationId" readonly>
+                </div>
+
+                @if (Model.Operation.Kind == OperationKind.CreateNewPlaylist)
+                {
+                    @Html.HiddenFor(x => x.OperationId)
+
+                    <div class="form-group">
+                        <label class="form-text">
+                            Playlist Appearance
+                        </label>
+
+                        <label class="form-text">
+                            @Model.Operation.PlaylistName
+                        </label>
+
+                        <label class="form-text text-muted">
+                            @Model.Operation.PlaylistDescription
+                        </label>
+
+                        @Html.ActionLink("Configure", "ConfigureYourPlaylist", "Operation", new {Model.OperationId}, new {@class = "p-1"})
+                    </div>
+                }
+
+                <div class="form-group">
+                    <label class="form-text">
+                        Original Playlist Name
+                    </label>
+                    <input type="text" class="form-control" placeholder="@Model.Operation.OriginalPlaylistName" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-text">
+                        Original Playlist
+                    </label>
+                    <input type="text" class="form-control" placeholder="@Model.Operation.OriginalPlaylistId" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-text">
+                        Operation Kind
+                    </label>
+
+                    <input class="form-control" type="text" placeholder="@(Model.Operation.Kind == OperationKind.CreateNewPlaylist ? "Create New Playlist" : "Use Original Playlist")" readonly>
+
+                    @if (Model.CanUseOriginalPlaylist)
+                    {
+                        @Html.ActionLink("Change", "ConfigureOperationKind", new {Model.OperationId}, new {@class = "m-1"})
+                    }
+
+                    else
+                    {
+                        <label class="form-text text-muted">You cannot to use original playlist, because you are not her owner and playlist is not collaborative.</label>
+                    }
+
+                </div>
+
+                <input type="submit" class="btn btn-primary" value="Submit"/>
+            }
+        </div>
+    </div>
+</div>

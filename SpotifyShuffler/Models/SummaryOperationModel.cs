@@ -7,5 +7,6 @@ namespace SpotifyShuffler.Models
     {
         public Operation Operation { get; set; }
         public Guid OperationId { get; set; }
+        public bool CanUseOriginalPlaylist { get; set; }
     }
 }

@@ -1,14 +1,12 @@
 ﻿@model SpotifyShuffler.Models.NameYourPlaylist
 
 @{
-    ViewBag.Title = "title";
     Layout = "_Layout";
 }
 
 @using (Html.BeginForm("ConfigureYourPlaylistPost", "Operation", FormMethod.Post))
 {
     @Html.HiddenFor(x => x.OperationId)
-    @Html.HiddenFor(x => x.PlaylistId)
 
     <div>
         <div class="form-group">

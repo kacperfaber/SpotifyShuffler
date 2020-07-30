@@ -31,7 +31,8 @@ namespace SpotifyShuffler.Controllers
         public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
             SpotifyService spotifyService, SpotifyContext spotifyContext,
             IOperationValidator operationValidator,
-            IPlaylistValidator playlistValidator, ICompletedPlaylistGenerator completedPlaylistGenerator, Executor executor, IPlaylistCollaborativeChecker playlistCollaborativeChecker)
+            IPlaylistValidator playlistValidator, ICompletedPlaylistGenerator completedPlaylistGenerator, Executor executor,
+            IPlaylistCollaborativeChecker playlistCollaborativeChecker, IOperationGenerator operationGenerator)
         {
             OperationManager = operationManager;
             UserManager = userManager;
@@ -43,10 +44,11 @@ namespace SpotifyShuffler.Controllers
             CompletedPlaylistGenerator = completedPlaylistGenerator;
             Executor = executor;
             PlaylistCollaborativeChecker = playlistCollaborativeChecker;
+            OperationGenerator = operationGenerator;
         }
 
         [HttpGet("operation/begin-new")]
-        public async Task<IActionResult> BeginNewOperation([FromQuery(Name = "playlist_id")] string playlistId)
+        public async Task<IActionResult> BeginNewOperation([FromQuery(Name = "PlaylistId")] string playlistId)
         {
             User user = UserManager.GetUserAsync(HttpContext.User).Result;
 
@@ -69,7 +71,7 @@ namespace SpotifyShuffler.Controllers
 
                 return RedirectToAction("Summary", new
                 {
-                    operation_id = operation.Id
+                    OperationId = operation.Id
                 });
             }
 
@@ -87,13 +89,16 @@ namespace SpotifyShuffler.Controllers
         }
 
         [HttpGet("operation/configure-your-playlist")]
-        public IActionResult ConfigureYourPlaylist(NameYourPlaylistPayload payload)
+        public async Task<IActionResult> ConfigureYourPlaylist(NameYourPlaylistPayload payload)
         {
+            Operation operation = await OperationManager.GetAsync(payload.OperationId);
+
             NameYourPlaylist model = new NameYourPlaylist
             {
-                PlaylistId = payload.PlaylistId,
                 OperationId = payload.OperationId,
-                CurrentUser = UserManager.GetUserAsync(HttpContext.User).Result
+                CurrentUser = await UserManager.GetUserAsync(HttpContext.User),
+                PlaylistName = operation.PlaylistName,
+                PlaylistDescription = operation.PlaylistDescription
             };
 
             return View(model);
@@ -109,35 +114,28 @@ namespace SpotifyShuffler.Controllers
 
             await OperationManager.UpdateAsync(operation);
 
-            return RedirectToAction("Summary", new {operation_id = operation.Id});
+            return RedirectToAction("Summary", new {OperationId = operation.Id});
         }
 
         [HttpGet("operation/summary")]
-        public async Task<IActionResult> Summary([FromQuery(Name = "operation_id")] Guid operationId)
+        public async Task<IActionResult> Summary([FromQuery(Name = "OperationId")] Guid operationId)
         {
+            User user = await UserManager.GetUserAsync(HttpContext.User);
             Operation operation = await OperationManager.GetAsync(operationId);
-
-            if (operation.Kind == OperationKind.CreateNewPlaylist)
+            PlaylistService playlistService = await SpotifyService.GetAsync<PlaylistService>(new SpotifyAuthorization
             {
-                return View("CreateNewPlaylistSummary", new SummaryOperationModel
-                {
-                    Operation = operation,
-                    OperationId = operationId,
-                    CurrentUser = await UserManager.GetUserAsync(HttpContext.User)
-                });
-            }
+                AccessToken = await AccessTokenStore.GetAccessToken(user)
+            });
 
-            else if (operation.Kind == OperationKind.UseOriginalPlaylist)
+            bool isCollaborative = PlaylistCollaborativeChecker.Check(user.SpotifyAccount, await playlistService.GetPlaylist(operation.OriginalPlaylistId));
+
+            return View("Summary", new SummaryOperationModel
             {
-                return View("UseOriginalPlaylistSummary", new SummaryOperationModel
-                {
-                    Operation = operation,
-                    OperationId = operationId,
-                    CurrentUser = await UserManager.GetUserAsync(HttpContext.User)
-                });
-            }
-
-            return BadRequest();
+                Operation = operation,
+                OperationId = operationId,
+                CurrentUser = user,
+                CanUseOriginalPlaylist = isCollaborative
+            });
         }
 
         [HttpGet("operation/execute")]
@@ -174,20 +172,22 @@ namespace SpotifyShuffler.Controllers
         }
 
         [HttpPost("operation/summary/confirm")]
-        public async Task<IActionResult> ConfirmOperationPost(SummaryOperationModel model)
+        public async Task<IActionResult> SummaryPost(SummaryOperationModel model)
         {
             Operation operation = await OperationManager.GetAsync(model.OperationId);
+            operation.IsSubmitted = true;
+            operation.SubmittedAt = DateTime.Now;
 
             await OperationManager.UpdateAsync(operation);
 
-            return RedirectToAction("ExecuteOperation", "Operation", new {operation_id = model.OperationId});
+            return RedirectToAction("ExecuteOperation", "Operation", new {model.OperationId});
         }
 
         [HttpGet("operation/set-kind")]
-        public IActionResult ConfigureOperationKind([FromQuery(Name = "operation_id")] Guid operationId, [FromQuery(Name = "playlist_id")] string playlistId)
+        public IActionResult ConfigureOperationKind([FromQuery(Name = "OperationId")] Guid operationId)
         {
             User user = UserManager.GetUserAsync(HttpContext.User).Result;
-            return View(new ConfigureOperationKindModel {OperationId = operationId, PlaylistId = playlistId, CurrentUser = user});
+            return View(new ConfigureOperationKindModel {OperationId = operationId, CurrentUser = user});
         }
 
         [HttpPost]
@@ -197,15 +197,7 @@ namespace SpotifyShuffler.Controllers
             op.Kind = model.CreateNewPlaylist ? OperationKind.CreateNewPlaylist : OperationKind.UseOriginalPlaylist;
             _ = OperationManager.SpotifyContext.SaveChangesAsync();
 
-            if (model.CreateNewPlaylist)
-            {
-                return RedirectToAction("ConfigureYourPlaylist", new {operation_id = model.OperationId, playlist_id = model.PlaylistId});
-            }
-
-            else
-            {
-                return RedirectToAction("Summary", new {operation_id = model.OperationId});
-            }
+            return RedirectToAction("Summary", new {OperationId = model.OperationId});
         }
     }
 }
