@@ -26,6 +26,7 @@ namespace SpotifyShuffler.Controllers
         public SpotifyService SpotifyService;
         public UserManager UserManager;
         public IPlaylistCollaborativeChecker PlaylistCollaborativeChecker;
+        public IOperationGenerator OperationGenerator;
 
         public OperationController(OperationManager operationManager, UserManager userManager, IAccessTokenStore accessTokenStore,
             SpotifyService spotifyService, SpotifyContext spotifyContext,
@@ -62,22 +63,13 @@ namespace SpotifyShuffler.Controllers
 
             if (validation == PlaylistValidationResult.Ok)
             {
-                Operation operation = new Operation
-                {
-                    CreatedAt = DateTime.Now,
-                    OriginalPlaylistId = playlistId,
-                    OwnerId = user.Id,
-                    OriginalPlaylistDescription = playlist.Description,
-                    OriginalPlaylistName = playlist.Name,
-                    Kind = OperationKind.CreateNewPlaylist
-                };
+                Operation operation = OperationGenerator.Generate(user, playlist);
 
                 await OperationManager.CreateAsync(operation);
 
-                return RedirectToAction("ConfigureOperationKind", new
+                return RedirectToAction("Summary", new
                 {
-                    operation_id = operation.Id,
-                    playlist_id = playlist.Id
+                    operation_id = operation.Id
                 });
             }
 

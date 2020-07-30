@@ -115,6 +115,10 @@ namespace SpotifyShuffler
             services.AddScoped<EmailAddressManager>();
             services.AddScoped<IEmailSenderCredentialsGenerator, EmailSenderCredentialsGenerator>();
             services.AddScoped<IEmailSenderSecretProvider, EmailSenderSecretProvider>();
+            services.AddScoped<IOperationGenerator, OperationGenerator>();
+            services.AddScoped<IDefaultPlaylistDescriptionGenerator, DefaultPlaylistDescriptionGenerator>();
+            services.AddScoped<IDefaultPlaylistNameGenerator, DefaultPlaylistNameGenerator>();
+            services.AddScoped<IDefaultOperationKindGenerator, DefaultOperationKindGenerator>();
             
             services.AddSingleton(Configuration);
             services.AddScoped<IAuthorizationHandler, RequireConfirmedEmailHandler>();
