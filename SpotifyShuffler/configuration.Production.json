@@ -4,6 +4,11 @@
       "Settings": {
         "Send": true
       }
+    },
+    "Confirmation":{
+      "Settings": {
+        "AllowSpotifyVerification": true
+      }
     }
   }
 }

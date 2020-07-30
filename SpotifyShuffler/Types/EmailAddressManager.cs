@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using SpotifyShuffler.Database;
 using SpotifyShuffler.Interfaces;
 
@@ -17,6 +18,7 @@ namespace SpotifyShuffler.Types
         public IConfirmationCodeSender ConfirmationCodeSender;
         public ISpotifyEmailIsSameChecker SpotifyEmailIsSameChecker;
         public IEmailAddressConfirmator EmailAddressConfirmator;
+        public IConfiguration Configuration;
 
         public EmailAddressManager(IConfirmationCodeSender confirmationCodeSender, IConfirmationCodeProvider confirmationCodeProvider,
             IConfirmationCodeValidator confirmationCodeValidator, IConfirmationCodeGenerator confirmationCodeGenerator,
@@ -98,17 +100,22 @@ namespace SpotifyShuffler.Types
                 return EmailAddressResult.Confirmed;
             }
 
-            if (user.SpotifyAccount != null)
+            if (Configuration.GetValue<bool>("Emails:Confirmation:Settings:AllowSpotifyVerification"))
             {
-                if (SpotifyEmailIsSameChecker.Check(emailAddress, user.SpotifyAccount))
+                if (user.SpotifyAccount != null)
                 {
-                    await EmailAddressConfirmator.ConfirmAsync(emailAddress, EmailConfirmationMethod.Spotify);
+                    if (SpotifyEmailIsSameChecker.Check(emailAddress, user.SpotifyAccount))
+                    {
+                        await EmailAddressConfirmator.ConfirmAsync(emailAddress, EmailConfirmationMethod.Spotify);
+                        return EmailAddressResult.Confirmed;
+                    }
                 }
             }
 
+
             ConfirmationCode confirmationCode = ConfirmationCodeGenerator.Generate(email);
             await ConfirmationCodeSender.SendAsync(confirmationCode);
-            
+
             await SpotifyContext.AddAsync(confirmationCode);
             await SpotifyContext.SaveChangesAsync();
 
