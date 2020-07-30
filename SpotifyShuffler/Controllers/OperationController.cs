@@ -13,7 +13,7 @@ using SpotifyShuffler.Types;
 
 namespace SpotifyShuffler.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = Policies.RequireConfirmedEmail)]
     public class OperationController : Controller
     {
         public IAccessTokenStore AccessTokenStore;

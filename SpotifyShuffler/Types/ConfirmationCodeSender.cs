@@ -23,7 +23,7 @@ namespace SpotifyShuffler.Types
 
         public Task SendAsync(ConfirmationCode confirmationCode)
         {
-            if (Configuration.IsDevelopment())
+            if (!Configuration.GetValue<bool>("Emails:Sender:Settings:Send"))
             {
                 return Task.Run(() => { });
             }

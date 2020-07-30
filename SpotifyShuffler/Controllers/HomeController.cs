@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SpotifyShuffler.Database;
 using SpotifyShuffler.Interface;
 using SpotifyShuffler.Interfaces;
 using SpotifyShuffler.Models;
+using SpotifyShuffler.Types;
 
 namespace SpotifyShuffler.Controllers
 {
@@ -13,9 +15,9 @@ namespace SpotifyShuffler.Controllers
     {
         public IAccessTokenStore AccessTokenStore;
         public SpotifyService SpotifyService;
-        public UserManager<User> UserManager;
+        public UserManager UserManager;
 
-        public HomeController(UserManager<User> userManager, SpotifyService spotifyService, IAccessTokenStore accessTokenStore)
+        public HomeController(UserManager userManager, SpotifyService spotifyService, IAccessTokenStore accessTokenStore)
         {
             UserManager = userManager;
             SpotifyService = spotifyService;

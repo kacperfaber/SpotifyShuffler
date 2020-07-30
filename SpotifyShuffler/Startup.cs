@@ -1,5 +1,7 @@
 using System;
 using AspNet.Security.OAuth.Spotify;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +38,10 @@ namespace SpotifyShuffler
             services.AddSpotify();
 
             services
-                .AddAuthentication(opts => { opts.DefaultSignInScheme = SpotifyAuthenticationDefaults.AuthenticationScheme; })
+                .AddAuthentication(opts =>
+                {
+                    opts.DefaultSignInScheme = SpotifyAuthenticationDefaults.AuthenticationScheme; 
+                })
                 .AddCookie()
                 .AddSpotify(opts =>
                 {
@@ -53,6 +58,12 @@ namespace SpotifyShuffler
                     opts.Scope.Add("user-library-modify");
                     opts.Scope.Add("user-library-read");
                 });
+
+
+            services.AddAuthorization(o =>
+            {
+                o.AddPolicy("RequireConfirmedEmail", x => x.AddRequirements(new ConfirmedEmailRequirement()));
+            });
 
             services.AddMvc(mvc => mvc.EnableEndpointRouting = false)
                 .AddNewtonsoftJson(o =>
@@ -106,6 +117,7 @@ namespace SpotifyShuffler
             services.AddScoped<IEmailSenderSecretProvider, EmailSenderSecretProvider>();
             
             services.AddSingleton(Configuration);
+            services.AddScoped<IAuthorizationHandler, RequireConfirmedEmailHandler>();
             services.AddScoped(typeof(OperationManager));
         }
 
