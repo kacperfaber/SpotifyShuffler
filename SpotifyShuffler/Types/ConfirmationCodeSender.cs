@@ -9,36 +9,39 @@ namespace SpotifyShuffler.Types
 {
     public class ConfirmationCodeSender : IConfirmationCodeSender
     {
-        public IConfiguration Configuration;
-        
-        
-        
+        public IEmailSenderCredentialsGenerator CredentialsGenerator;
+        public IEmailSenderSecretProvider SecretProvider;
+
+        public ConfirmationCodeSender(IEmailSenderSecretProvider secretProvider, IEmailSenderCredentialsGenerator credentialsGenerator)
+        {
+            SecretProvider = secretProvider;
+            CredentialsGenerator = credentialsGenerator;
+        }
+
         public Task SendAsync(ConfirmationCode confirmationCode)
         {
-            // return Task.Run(() =>
-            // {
-            //     SmtpClient client = new SmtpClient("smtp.gmail.com", 587)
-            //     {
-            //         UseDefaultCredentials = false,
-            //         Credentials = new NetworkCredential("noconkrystian484", ***),
-            //         DeliveryMethod = SmtpDeliveryMethod.Network,
-            //         EnableSsl = true
-            //     };
-            //
-            //     MailAddress senderAddress = new MailAddress();
-            //     MailAddress receiverAddress = new MailAddress(confirmationCode.Email);
-            //
-            //     MailMessage message = new MailMessage(senderAddress, receiverAddress)
-            //     {
-            //         IsBodyHtml = true,
-            //         Body = $"Hello, Your confirmation code is <strong>{confirmationCode.Code}</strong>",
-            //         Subject = "Confirm your email!"
-            //     };
-            //
-            //     client.Send(message);
-            // });
-
-            return Task.Run(() => { });
+            return Task.Run(() =>
+            {
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587)
+                {
+                    UseDefaultCredentials = false,
+                    Credentials = CredentialsGenerator.Generate(SecretProvider),
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    EnableSsl = true
+                };
+            
+                MailAddress senderAddress = new MailAddress(SecretProvider.GetEmailAddress());
+                MailAddress receiverAddress = new MailAddress(confirmationCode.Email);
+            
+                MailMessage message = new MailMessage(senderAddress, receiverAddress)
+                {
+                    IsBodyHtml = true,
+                    Body = $"Hello, Your confirmation code is <strong>{confirmationCode.Code}</strong>",
+                    Subject = "Confirm your email!"
+                };
+            
+                client.Send(message);
+            });
         }
     }
 }
