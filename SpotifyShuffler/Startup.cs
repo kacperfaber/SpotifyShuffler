@@ -25,7 +25,7 @@ namespace SpotifyShuffler
                 .SetBasePath(env.ContentRootPath)
                 .AddUserSecrets<Program>()
                 .AddConfiguration(configuration)
-                .AddJsonFile("configuration.json")
+                .AddJsonFile($"configuration.{Environment.GetEnvironmentVariable("ENVIRONMENT")}.json")
                 .Build();
         }
 

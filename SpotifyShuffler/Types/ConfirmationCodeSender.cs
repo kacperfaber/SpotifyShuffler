@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -11,15 +12,22 @@ namespace SpotifyShuffler.Types
     {
         public IEmailSenderCredentialsGenerator CredentialsGenerator;
         public IEmailSenderSecretProvider SecretProvider;
+        public IConfiguration Configuration;
 
-        public ConfirmationCodeSender(IEmailSenderSecretProvider secretProvider, IEmailSenderCredentialsGenerator credentialsGenerator)
+        public ConfirmationCodeSender(IEmailSenderSecretProvider secretProvider, IEmailSenderCredentialsGenerator credentialsGenerator, IConfiguration configuration)
         {
             SecretProvider = secretProvider;
             CredentialsGenerator = credentialsGenerator;
+            Configuration = configuration;
         }
 
         public Task SendAsync(ConfirmationCode confirmationCode)
         {
+            if (Configuration.IsDevelopment())
+            {
+                return Task.Run(() => { });
+            }
+            
             return Task.Run(() =>
             {
                 SmtpClient client = new SmtpClient("smtp.gmail.com", 587)
