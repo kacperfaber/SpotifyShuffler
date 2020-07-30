@@ -1,0 +1,28 @@
+﻿@model SpotifyShuffler.Models.DeleteAccountModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-10 col-xl-8 offset-md-1 offset-xl-2">
+            <h1 class="h3">Delete Account</h1>
+            <p>
+                You are deleting all of your account, including email address, relation with spotify account and operations (not playlists).
+                This operation cannot be undo.
+            </p>
+            
+            @using (Html.BeginForm("DeleteAccountPost", "DeleteAccount", FormMethod.Post))
+            {
+                <div class="form-group">
+                    <label class="form-text">Confirm your current email address</label>
+                    @Html.TextBoxFor(x => x.CurrentEmailAddress, new {@class = "form-control"})
+                    @Html.ValidationMessageFor(x => x.CurrentEmailAddress, "", new {@class = "text-danger"})
+                </div>
+                
+                <input class="btn btn-primary" type="submit"/>
+            }
+        </div>
+    </div>
+</div>

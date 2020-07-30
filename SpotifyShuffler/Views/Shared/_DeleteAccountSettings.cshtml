@@ -1,0 +1,13 @@
+﻿@model SpotifyShuffler.Database.User
+
+@{
+    Layout = "_SettingsLayout";
+}
+
+<h1 class="h3">
+    Delete Account
+</h1>
+
+<div class="m-3">
+    @Html.ActionLink("Delete Account", "DeleteAccount", "DeleteAccount", new {}, new {@class = "btn btn-danger"});
+</div>

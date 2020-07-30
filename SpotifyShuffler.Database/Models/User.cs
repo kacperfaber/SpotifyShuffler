@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace SpotifyShuffler.Database
 {
@@ -16,5 +18,9 @@ namespace SpotifyShuffler.Database
 
         [InverseProperty("User")]
         public List<EmailAddress> EmailAddresses { get; set; }
+        
+        public bool IsDeleted { get; set; }
+
+        public DateTime DeletedAt { get; set; }
     }
 }
