@@ -6,6 +6,8 @@
         Confirmed,
         BadCode,
         MissingEmail,
-        CodeSent
+        CodeSent,
+        Deactivated,
+        Deleted
     }
 }

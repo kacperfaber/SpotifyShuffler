@@ -18,7 +18,10 @@ namespace SpotifyShuffler.Types
         public ISpotifyEmailIsSameChecker SpotifyEmailIsSameChecker;
         public IEmailAddressConfirmator EmailAddressConfirmator;
 
-        public EmailAddressManager(IConfirmationCodeSender confirmationCodeSender, IConfirmationCodeProvider confirmationCodeProvider, IConfirmationCodeValidator confirmationCodeValidator, IConfirmationCodeGenerator confirmationCodeGenerator, IEmailAddressGenerator emailAddressGenerator, IEmailAddressProvider emailAddressProvider, SpotifyContext spotifyContext, IEmailAddressDeleter emailAddressDeleter)
+        public EmailAddressManager(IConfirmationCodeSender confirmationCodeSender, IConfirmationCodeProvider confirmationCodeProvider,
+            IConfirmationCodeValidator confirmationCodeValidator, IConfirmationCodeGenerator confirmationCodeGenerator,
+            IEmailAddressGenerator emailAddressGenerator, IEmailAddressProvider emailAddressProvider, SpotifyContext spotifyContext,
+            IEmailAddressDeleter emailAddressDeleter, IEmailAddressConfirmator emailAddressConfirmator, ISpotifyEmailIsSameChecker spotifyEmailIsSameChecker)
         {
             ConfirmationCodeSender = confirmationCodeSender;
             ConfirmationCodeProvider = confirmationCodeProvider;
@@ -28,6 +31,8 @@ namespace SpotifyShuffler.Types
             EmailAddressProvider = emailAddressProvider;
             SpotifyContext = spotifyContext;
             EmailAddressDeleter = emailAddressDeleter;
+            EmailAddressConfirmator = emailAddressConfirmator;
+            SpotifyEmailIsSameChecker = spotifyEmailIsSameChecker;
         }
 
         public async Task<EmailAddressResult> CreateEmail(User user, string email)
@@ -35,14 +40,11 @@ namespace SpotifyShuffler.Types
             // TODO Validate which email is taken.
 
             EmailAddress emailAddress = EmailAddressGenerator.Generate(user, email);
-            ConfirmationCode confirmationCode = ConfirmationCodeGenerator.Generate(email);
 
-            await ConfirmationCodeSender.SendAsync(confirmationCode);
-
-            await SpotifyContext.AddRangeAsync(emailAddress, confirmationCode);
+            await SpotifyContext.AddRangeAsync(emailAddress);
             await SpotifyContext.SaveChangesAsync();
 
-            return EmailAddressResult.CodeSent;
+            return EmailAddressResult.Created;
         }
 
         public async Task<EmailAddressResult> Confirm(string email, string code)
@@ -53,20 +55,7 @@ namespace SpotifyShuffler.Types
             if (isValid)
             {
                 EmailAddress emailAddress = EmailAddressProvider.Provide(email);
-
-                if (emailAddress == null)
-                {
-                    return EmailAddressResult.MissingEmail;
-                }
-
-                emailAddress.IsConfirmed = true;
-                emailAddress.ConfirmedAt = DateTime.Now;
-
-                confirmationCode.IsUsed = true;
-                confirmationCode.UsedAt = DateTime.Now;
-
-                SpotifyContext.UpdateRange(emailAddress, confirmationCode);
-                await SpotifyContext.SaveChangesAsync();
+                await EmailAddressConfirmator.ConfirmAsync(emailAddress, EmailConfirmationMethod.ConfirmationCode);
 
                 return EmailAddressResult.Confirmed;
             }
@@ -83,6 +72,47 @@ namespace SpotifyShuffler.Types
         {
             EmailAddress emailAddress = EmailAddressProvider.Provide(owner);
             await EmailAddressDeleter.DeleteAsync(emailAddress);
+        }
+
+        public async Task<EmailAddressResult> SendConfirmationLink(User user, string email)
+        {
+            EmailAddress emailAddress = EmailAddressProvider.Provide(user);
+
+            if (emailAddress == null)
+            {
+                return EmailAddressResult.MissingEmail;
+            }
+
+            else if (emailAddress.IsDeleted)
+            {
+                return EmailAddressResult.Deleted;
+            }
+
+            else if (emailAddress.IsDeactivated)
+            {
+                return EmailAddressResult.Deactivated;
+            }
+
+            else if (emailAddress.IsConfirmed)
+            {
+                return EmailAddressResult.Confirmed;
+            }
+
+            if (user.SpotifyAccount != null)
+            {
+                if (SpotifyEmailIsSameChecker.Check(emailAddress, user.SpotifyAccount))
+                {
+                    await EmailAddressConfirmator.ConfirmAsync(emailAddress, EmailConfirmationMethod.Spotify);
+                }
+            }
+
+            ConfirmationCode confirmationCode = ConfirmationCodeGenerator.Generate(email);
+            await ConfirmationCodeSender.SendAsync(confirmationCode);
+            
+            await SpotifyContext.AddAsync(confirmationCode);
+            await SpotifyContext.SaveChangesAsync();
+
+            return EmailAddressResult.CodeSent;
         }
     }
 }

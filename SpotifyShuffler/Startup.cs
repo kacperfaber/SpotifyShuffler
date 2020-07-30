@@ -97,7 +97,10 @@ namespace SpotifyShuffler
             services.AddScoped<IEmailAddressGenerator, EmailAddressGenerator>();
             services.AddScoped<ISpotifyEmailIsSameChecker, SpotifyEmailIsSameChecker>();
             services.AddScoped<EmailAddressManager>();
-
+            services.AddScoped<IEmailSenderCredentialsGenerator, EmailSenderCredentialsGenerator>();
+            services.AddScoped<IEmailSenderSecretProvider, EmailSenderSecretProvider>();
+            
+            services.AddSingleton(Configuration);
             services.AddScoped(typeof(OperationManager));
         }
 

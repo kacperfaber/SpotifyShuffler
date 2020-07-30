@@ -41,16 +41,33 @@ namespace SpotifyShuffler.Controllers
             // TODO there is need to be second verification page.
 
             User user = await UserManager.GetUserAsync(HttpContext.User);
+            model.CurrentUser = user;
 
             EmailAddress emailAddress = await EmailAddressManager.GetAsync(user);
 
             if (emailAddress != null)
             {
-                if (emailAddress.Email.ToLower() == model.Email)
+                if (emailAddress.Email.ToLower() == model.Email.ToLower())
                 {
-                    return View("ConfirmEmail", model);
+                    EmailAddressResult sendResult = await EmailAddressManager.SendConfirmationLink(user, model.Email);
+
+                    if (sendResult == EmailAddressResult.CodeSent)
+                    {
+                        return View("ConfirmEmail", model);
+                    }
+
+                    else if (sendResult == EmailAddressResult.Confirmed)
+                    {
+                        return View("Success", new ConfirmationSuccessModel {CurrentUser = user, Email = model.Email});
+                    }
+
+                    else
+                    {
+                        return Content("Unexpected result.");
+                    }
                 }
             }
+
 
             return BadRequest();
         }
@@ -91,8 +108,25 @@ namespace SpotifyShuffler.Controllers
             return View("ConfirmEmail", model);
         }
 
-        public IActionResult SendConfirmationLink()
+        public async Task<IActionResult> SendConfirmationLink(string email)
         {
+            User user = await UserManager.GetUserAsync(HttpContext.User);
+            EmailAddressResult sendResult = await EmailAddressManager.SendConfirmationLink(user, email);
+
+            if (sendResult == EmailAddressResult.CodeSent)
+            {
+                return View("CodeSent", new ConfirmationCodeSentModel {Email = email, CurrentUser = user});
+            }
+
+            else if (sendResult == EmailAddressResult.Confirmed)
+            {
+                return View("Success", new ConfirmationSuccessModel {CurrentUser = user, Email = email});
+            }
+
+            else
+            {
+                return Content("Unexpected result.");
+            }
         }
     }
 }

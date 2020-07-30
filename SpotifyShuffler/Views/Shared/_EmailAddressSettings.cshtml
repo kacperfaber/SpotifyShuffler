@@ -25,7 +25,7 @@
     
             else
             {
-                <label class="form-text">Email Address is not confirmed. @Html.ActionLink("Confirm Now", "Confirm", "ConfirmEmailAddress")</label>
+                <label class="form-text">Email Address is not confirmed. @Html.ActionLink("Confirm Now", "ConfirmEmail", "ConfirmEmailAddress", new {Model.Email})</label>
             }
         </div>
     
