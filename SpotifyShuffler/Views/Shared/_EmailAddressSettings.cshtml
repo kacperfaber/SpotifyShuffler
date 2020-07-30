@@ -1,5 +1,9 @@
 ﻿@model SpotifyShuffler.Database.EmailAddress
 
+@{
+    Layout = "_SettingsLayout";
+}
+
 <h1 class="h3">
     Email Address
 </h1>
@@ -9,26 +13,26 @@
     {
         @Html.ActionLink("Create Email", "CreateEmail", "CreateEmailAddress", new {}, new {@class = "btn btn-primary"})
     }
-    
+
     else
     {
         <div class="form-group">
             <label>Email Address</label>
             <input type="text" class="form-control" placeholder="@Model.Email" readonly>
         </div>
-    
+
         <div class="form-group">
             @if (Model.IsConfirmed)
             {
                 <label class="form-text">Email Address confirmed at @Model.ConfirmedAt.Value.ToString("g")</label>
             }
-    
+
             else
             {
                 <label class="form-text">Email Address is not confirmed. @Html.ActionLink("Confirm Now", "ConfirmEmail", "ConfirmEmailAddress", new {Model.Email})</label>
             }
         </div>
-    
+
         @Html.ActionLink("Delete", "Delete", "DeleteEmailAddress", new {}, new {@class = "btn btn-danger"})
     }
 </div>
