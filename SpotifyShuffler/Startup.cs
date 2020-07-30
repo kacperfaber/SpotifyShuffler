@@ -18,10 +18,15 @@ namespace SpotifyShuffler
     public class Startup
     {
         public IConfiguration Configuration;
-
-        public Startup(IConfiguration configuration)
+        
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            Configuration = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddUserSecrets<Program>()
+                .AddConfiguration(configuration)
+                .AddJsonFile("configuration.json")
+                .Build();
         }
 
         public void ConfigureServices(IServiceCollection services)
