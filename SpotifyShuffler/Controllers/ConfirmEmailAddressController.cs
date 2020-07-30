@@ -36,30 +36,63 @@ namespace SpotifyShuffler.Controllers
             }
         }
 
-        public async Task<IActionResult> Confirm()
+        public async Task<IActionResult> ConfirmEmail(ConfirmEmailModel model)
         {
             // TODO there is need to be second verification page.
-            
+
             User user = await UserManager.GetUserAsync(HttpContext.User);
 
             EmailAddress emailAddress = await EmailAddressManager.GetAsync(user);
 
-            if (emailAddress == null)
+            if (emailAddress != null)
             {
-                return RedirectToAction("CreateEmail", "CreateEmailAddress");
+                if (emailAddress.Email.ToLower() == model.Email)
+                {
+                    return View("ConfirmEmail", model);
+                }
             }
 
-            else if (emailAddress.IsConfirmed)
-            {
-                return View("AlreadyConfirmed", new ConfirmEmailAddressModel {CurrentUser = user, EmailAddress = emailAddress});
-            }
-            
-            else if (!emailAddress.IsConfirmed)
-            {
-                return RedirectToAction("CreateEmail", "CreateEmailAddress", new {emailAddress.Email});
-            }
-            
             return BadRequest();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmEmailPost(ConfirmEmailModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = await UserManager.GetUserAsync(HttpContext.User);
+                EmailAddressResult confirmationResult = await EmailAddressManager.Confirm(model.Email, model.Code);
+
+                if (confirmationResult == EmailAddressResult.Confirmed)
+                {
+                    return View("Success", new ConfirmationSuccessModel
+                    {
+                        CurrentUser = user,
+                        Email = model.Email
+                    });
+                }
+
+                else if (confirmationResult == EmailAddressResult.BadCode)
+                {
+                    ModelState.AddModelError("Code", "This is code incorrect, please check it again and try again.");
+                    return View("ConfirmEmail", model);
+                }
+
+                else if (confirmationResult == EmailAddressResult.MissingEmail)
+                {
+                    return View("MissingEmail", new ConfirmationMissingEmailModel
+                    {
+                        CurrentUser = user,
+                        Email = model.Email
+                    });
+                }
+            }
+
+            return View("ConfirmEmail", model);
+        }
+
+        public IActionResult SendConfirmationLink()
+        {
         }
     }
 }

@@ -1,0 +1,16 @@
+﻿@model SpotifyShuffler.Models.ConfirmationMissingEmailModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-10 col-xl-8 offset-md-1 offset-xl-2">
+            <h1 class="h3">Missing Email</h1>
+            <p>
+                We could not find email @Model.Email, check him again or @Html.ActionLink("Create Email", "CreateEmail", "CreateEmailAddress", new {Model.Email}, new {@class = "btn-link"})
+            </p>
+        </div>
+    </div>
+</div>

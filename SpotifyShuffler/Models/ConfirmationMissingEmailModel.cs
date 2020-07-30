@@ -1,8 +1,7 @@
 ﻿namespace SpotifyShuffler.Models
 {
-    public class ConfirmLinkModel : LayoutModel
+    public class ConfirmationMissingEmailModel : LayoutModel
     {
-        public string Code { get; set; }
         public string Email { get; set; }
     }
 }

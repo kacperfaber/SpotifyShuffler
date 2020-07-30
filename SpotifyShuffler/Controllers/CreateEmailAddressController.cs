@@ -22,10 +22,10 @@ namespace SpotifyShuffler.Controllers
         public async Task<IActionResult> CreateEmail(CreateEmailAddressModel model)
         {
             User user = await UserManager.GetUserAsync(HttpContext.User);
-            
+
             model ??= new CreateEmailAddressModel();
             model.CurrentUser = user;
-            
+
             return View("CreateEmail", model);
         }
 
@@ -36,34 +36,11 @@ namespace SpotifyShuffler.Controllers
 
             if (ModelState.IsValid)
             {
-                if (model.IsCodeSent)
+                EmailAddressResult createResult = await EmailAddressManager.CreateEmail(user, model.Email);
+
+                if (createResult == EmailAddressResult.Created)
                 {
-                    EmailAddressResult confirmResult = await EmailAddressManager.Confirm(model.Email, model.ConfirmationCode);
-
-                    if (confirmResult == EmailAddressResult.Confirmed)
-                    {
-                        return View("Success", model);
-                    }
-                }
-
-                else
-                {
-                    EmailAddressResult createResult = await EmailAddressManager.CreateEmail(user, model.Email);
-
-                    if (createResult == EmailAddressResult.CodeSent)
-                    {
-                        model.IsCodeSent = true;
-                    }
-                    
-                    else if (createResult == EmailAddressResult.Confirmed)
-                    {
-                        return View("Success", model);
-                    }
-
-                    else
-                    {
-                        return Content($"Unexcepted response. {createResult.ToString()}");
-                    }
+                    return RedirectToAction("ConfirmEmail", "ConfirmEmailAddress", new {model.Email});
                 }
             }
 
