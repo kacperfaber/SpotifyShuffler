@@ -20,6 +20,22 @@ namespace SpotifyShuffler.Controllers
             UserManager = userManager;
         }
 
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmLink(ConfirmLinkModel model)
+        {
+            EmailAddressResult confirmResult = await EmailAddressManager.Confirm(model.Email, model.Code);
+
+            if (confirmResult == EmailAddressResult.Confirmed)
+            {
+                return View("Success");
+            }
+
+            else
+            {
+                return View("BadData");
+            }
+        }
+
         public async Task<IActionResult> Confirm()
         {
             // TODO there is need to be second verification page.

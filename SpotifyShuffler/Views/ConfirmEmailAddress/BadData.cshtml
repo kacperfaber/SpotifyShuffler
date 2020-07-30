@@ -1,0 +1,20 @@
+﻿@model SpotifyShuffler.Models.ConfirmLinkModel 
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-xl-8 col-md-10 offset-xl-2 offset-md-1">
+            <h1 class="h3">Email is already confirmed.</h1>
+            <p>
+                Could not recognize this data. Please check confirmation email and try again here. 
+                @Html.ActionLink("Try Again Here", "Confirm")
+            </p>
+            
+            @await Html.PartialAsync("_HomeButton")
+        </div>
+    </div>
+</div>
+
