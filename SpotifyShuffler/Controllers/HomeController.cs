@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -36,13 +38,13 @@ namespace SpotifyShuffler.Controllers
                     AccessToken = await AccessTokenStore.GetAccessToken(user)
                 });
 
-                Paging<SimpleSpotifyPlaylist> paging = await playlistService.GetPlaylists();
-                SimpleSpotifyPlaylist[] playlists = paging.Items;
+                List<SimpleSpotifyPlaylist> playlists = await playlistService.GetAllPlaylists();
 
                 return View("Home", new HomeModel
                 {
                     CurrentUser = user,
-                    Playlists = Array.ConvertAll(playlists, p => new PlaylistModel {SpotifyPlaylist = p})
+                    Playlists = Array.ConvertAll(playlists.ToArray(), p => new PlaylistModel {SpotifyPlaylist = p}),
+                    TotalPlaylists = playlists.Count()
                 });
             }
 
