@@ -2,7 +2,7 @@
   "Emails":{
     "Sender": {
       "Settings": {
-        "Send": false
+        "Send": true
       }
     },
     "Confirmation":{

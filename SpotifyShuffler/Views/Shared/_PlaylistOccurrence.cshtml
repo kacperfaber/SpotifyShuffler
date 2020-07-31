@@ -1,0 +1,26 @@
+﻿@model SpotifyShuffler.Database.Operation
+
+<div class="w-100 p-2">
+    <span class="form-text">
+        @Model.PlaylistName
+    </span>
+    @if (Model.IsSubmitted)
+    {
+        <span class="form-text text-muted">
+            Submitted at @Model.CreatedAt.ToString("g")
+        </span>
+    }
+    else if (!Model.IsSubmitted && Model.IsCanceled)
+    {
+        <span class="form-text text-muted">
+            Created at @Model.CreatedAt.ToString("g"), canceled at @(Model.CanceledAt.Value.ToString("g"))
+        </span>
+    }
+
+    else if (!Model.IsSubmitted && !Model.IsCanceled)
+    {
+        <span class="form-text text-muted">
+            Created at @Model.CreatedAt.ToString("g"), not submitted
+        </span>
+    }
+</div>

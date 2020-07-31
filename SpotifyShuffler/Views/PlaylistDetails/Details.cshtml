@@ -1,0 +1,39 @@
+﻿@using SpotifyShuffler.Database
+@using SpotifyShuffler.Interface
+@using SpotifyShuffler.Models
+@using SpotifyShuffler.Types
+@model SpotifyShuffler.Models.PlaylistDetailsModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-10 col-xl-8 offset-md-1 offset-xl-2">
+            <h1 class="h3">Playlist Details</h1>
+
+            <div class="p-2">
+                @await Html.PartialAsync("_PlaylistAppearance", Model.Playlist)
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-md-10 col-xl-8 offset-md-1 offset-xl-2 mt-3">
+            <h1 class="h3">Occurrences</h1>
+
+            @foreach (Operation occurrence in Model.Occurrences)
+            {
+                @await Html.PartialAsync("_PlaylistOccurrence", occurrence)
+            }
+        </div>
+
+        <div class="col-xs-12 col-md-10 col-xl-8 offset-md-1 offset-xl-2 mt-3">
+            <h1 class="h3">Tracks (@Model.Tracks.Count())</h1>
+            
+            @foreach (TrackModel track in Model.Tracks)
+            {
+                @await Html.PartialAsync("_TrackModel", track)
+            }
+        </div>
+    </div>
+</div>

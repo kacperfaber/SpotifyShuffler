@@ -130,6 +130,8 @@ namespace SpotifyShuffler
             services.AddScoped<IEmailComparer, EmailComparer>();
             services.AddScoped<IPlaylistModelGenerator, PlaylistModelGenerator>();
             services.AddScoped<IPlaylistModelsGenerator, PlaylistModelsGenerator>();
+            services.AddScoped<ITrackModelGenerator, TrackModelGenerator>();
+            services.AddScoped<ITrackModelsGenerator, TrackModelsGenerator>();
             
             services.AddSingleton(Configuration);
             services.AddScoped<IAuthorizationHandler, RequireConfirmedEmailHandler>();

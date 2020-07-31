@@ -35,10 +35,10 @@ namespace SpotifyShuffler.Types
             return await SpotifyContext.Operations.FirstOrDefaultAsync(x => x.Id == operationId);
         }
 
-        public async Task<IEnumerable<SimpleOperation>> GetAsync(string originalPlaylistId)
+        public async Task<IEnumerable<Operation>> GetAsync(string originalPlaylistId)
         {
             IQueryable<Operation> operations = SpotifyContext.Operations.Where(x => x.OriginalPlaylistId == originalPlaylistId);
-            return await operations.Cast<SimpleOperation>().ToListAsync();
+            return await operations.ToListAsync();
         }
 
         public async Task<List<SimpleOperation>> GetAsync(User user)
