@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SpotifyShuffler.Migrations
 {
-    public partial class CodeMigration : Migration
+    public partial class IsDeleted : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -121,7 +121,9 @@ namespace SpotifyShuffler.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    SpotifyAccountId = table.Column<string>(nullable: true)
+                    SpotifyAccountId = table.Column<string>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedAt = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {

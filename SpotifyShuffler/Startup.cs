@@ -23,12 +23,19 @@ namespace SpotifyShuffler
         
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
-            Configuration = new ConfigurationBuilder()
+            IConfigurationBuilder builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddUserSecrets<Program>()
-                .AddConfiguration(configuration)
-                .AddJsonFile($"configuration.{Environment.GetEnvironmentVariable("ENVIRONMENT")}.json")
-                .Build();
+                .AddConfiguration(configuration);
+
+            string e = Environment.GetEnvironmentVariable("Environment");
+
+            if (!string.IsNullOrEmpty(e))
+            {
+                builder.AddJsonFile($"configuration.{e}.json");
+            }
+
+            Configuration = builder.Build();
         }
 
         public void ConfigureServices(IServiceCollection services)
