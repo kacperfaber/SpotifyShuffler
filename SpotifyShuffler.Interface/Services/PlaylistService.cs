@@ -37,6 +37,28 @@ namespace SpotifyShuffler.Interface
             return await SpotifyClient.SendAsync<Paging<SimpleSpotifyPlaylist>>(url, queryParameters, null, HttpMethod.Get, SpotifyAuthorization);
         }
 
+        public async Task<List<SimpleSpotifyPlaylist>> GetAllPlaylists()
+        {
+            const int loopSize = 20;
+            
+            Paging<SimpleSpotifyPlaylist> playlists = await GetPlaylists();
+            List<SimpleSpotifyPlaylist> output = new List<SimpleSpotifyPlaylist>(playlists.Total);
+            output.AddRange(playlists.Items);
+
+            int offset = 20;
+            int loops = (playlists.Total - offset) / loopSize;
+            int left = (playlists.Total) % loopSize;
+
+            for (int i = 0; i < loops; i++)
+            {
+                output.AddRange((await GetPlaylists(loopSize, (i * 20) + offset)).Items);
+            }
+            
+            output.AddRange((await GetPlaylists(left, (playlists.Total - left))).Items);
+
+            return output;
+        }
+
         public async Task<SpotifyPlaylist> GetPlaylist(string playlistId)
         {
             string url = $"https://api.spotify.com/v1/playlists/{playlistId}";
