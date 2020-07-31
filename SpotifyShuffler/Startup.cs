@@ -13,6 +13,7 @@ using SpotifyShuffler.Database;
 using SpotifyShuffler.Interface;
 using SpotifyShuffler.Interface.Extension;
 using SpotifyShuffler.Interfaces;
+using SpotifyShuffler.Models;
 using SpotifyShuffler.Types;
 
 namespace SpotifyShuffler
@@ -127,6 +128,8 @@ namespace SpotifyShuffler
             services.AddScoped<IDefaultPlaylistNameGenerator, DefaultPlaylistNameGenerator>();
             services.AddScoped<IDefaultOperationKindGenerator, DefaultOperationKindGenerator>();
             services.AddScoped<IEmailComparer, EmailComparer>();
+            services.AddScoped<IPlaylistModelGenerator, PlaylistModelGenerator>();
+            services.AddScoped<IPlaylistModelsGenerator, PlaylistModelsGenerator>();
             
             services.AddSingleton(Configuration);
             services.AddScoped<IAuthorizationHandler, RequireConfirmedEmailHandler>();

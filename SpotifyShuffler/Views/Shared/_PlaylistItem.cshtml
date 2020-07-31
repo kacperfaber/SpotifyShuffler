@@ -3,23 +3,19 @@
 <style>
     .playlist-item 
     {
-        height: 300px;
+        height: 200px;
     }
 </style>
 
-<div class="playlist-item col-xs-10 col-md-8 col-xl-4 my-2">
+<div class="playlist-item col-xs-4 col-md-3 col-xl-2 my-2">
     <div class="card bg-light w-100 h-100">
-        <span class="card-header font-weight-bold text-left">
-            @Model.SpotifyPlaylist.Name
-        </span>
-
-        <div class="card-body mx-0">
-            <div class="font-weight-bold">
-                @@@Model.SpotifyPlaylist.Owner.Name
+        <div class="card-body mx-0 w-100">
+            <div class="text-left font-weight-bold">
+                @Model.SpotifyPlaylist.Name
             </div>
-
-            <div>
-                @Model.SpotifyPlaylist.Description
+            
+            <div class="text-muted text-left w-100">
+                @Model.SpotifyPlaylist.Owner.Name
             </div>
         </div>
 

@@ -1,8 +1,10 @@
-﻿namespace SpotifyShuffler.Models
+﻿using System.Collections.Generic;
+
+namespace SpotifyShuffler.Models
 {
     public class HomeModel : LayoutModel
     {
-        public PlaylistModel[] Playlists { get; set; }
+        public IEnumerable<PlaylistModel> Playlists { get; set; }
         public int TotalPlaylists { get; set; }
     }
 }

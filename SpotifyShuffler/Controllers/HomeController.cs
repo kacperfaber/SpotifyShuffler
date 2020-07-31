@@ -18,12 +18,14 @@ namespace SpotifyShuffler.Controllers
         public IAccessTokenStore AccessTokenStore;
         public SpotifyService SpotifyService;
         public UserManager UserManager;
+        public IPlaylistModelsGenerator PlaylistModelsGenerator;
 
-        public HomeController(UserManager userManager, SpotifyService spotifyService, IAccessTokenStore accessTokenStore)
+        public HomeController(UserManager userManager, SpotifyService spotifyService, IAccessTokenStore accessTokenStore, IPlaylistModelsGenerator playlistModelsGenerator)
         {
             UserManager = userManager;
             SpotifyService = spotifyService;
             AccessTokenStore = accessTokenStore;
+            PlaylistModelsGenerator = playlistModelsGenerator;
         }
 
         [HttpGet("home", Name = "home/home")]
@@ -43,8 +45,8 @@ namespace SpotifyShuffler.Controllers
                 return View("Home", new HomeModel
                 {
                     CurrentUser = user,
-                    Playlists = Array.ConvertAll(playlists.ToArray(), p => new PlaylistModel {SpotifyPlaylist = p}),
-                    TotalPlaylists = playlists.Count()
+                    Playlists = PlaylistModelsGenerator.Generate(playlists),
+                    TotalPlaylists = playlists.Count
                 });
             }
 
