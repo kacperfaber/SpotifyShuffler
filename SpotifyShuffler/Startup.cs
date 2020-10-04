@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,6 +57,7 @@ namespace SpotifyShuffler
                     opts.ClientId = Configuration["Authentication:Spotify:ClientId"];
                     opts.ClientSecret = Configuration["Authentication:Spotify:ClientSecret"];
                     opts.SaveTokens = true;
+                    opts.ForwardSignIn = "/callback";
 
                     opts.Scope.Add("playlist-read-collaborative");
                     opts.Scope.Add("playlist-read-private");
