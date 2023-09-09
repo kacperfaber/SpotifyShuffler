@@ -1,3 +1,10 @@
 .idea/
 bin/
 obj/
+
+# other idea files
+**/*.DotSettings
+**.*.user
+
+# sqlite database
+**/*.db
