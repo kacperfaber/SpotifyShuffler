@@ -28,6 +28,12 @@ namespace SpotifyShuffler.Controllers
             PlaylistModelsGenerator = playlistModelsGenerator;
         }
 
+        [HttpGet("/")]
+        public IActionResult IndexHome()
+        {
+            return RedirectToAction("Home");
+        }
+
         [HttpGet("home", Name = "home/home")]
         public async Task<IActionResult> Home()
         {
